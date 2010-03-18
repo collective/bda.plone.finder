@@ -29,6 +29,7 @@ setup(name='bda.plone.finder',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'Plone',
           'simplejson',
           'plone.app.jquerytools',
           # -*- Extra requirements: -*
