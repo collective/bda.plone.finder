@@ -45,6 +45,10 @@ class Column(BrowserView):
                                 cut))
         return ret
     
+    @property
+    def batch(self):
+        return '&nbsp;'
+    
     def _item_selected(self, url):
         if self.request.get('_skip_selection_check', False):
             return False

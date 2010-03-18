@@ -173,9 +173,19 @@
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
 }
+.finder_columns div.items p.col_navigation {
+    margin:0;
+    font-size:10px;
+}
+.finder_columns div.items p.col_navigation img {
+    float:right;
+    margin:2px 0 2px 0;
+    cursor:pointer;
+}
 .finder_columns div.items ul {
     list-style-image: none;
     list-style-type: none;
+    margin:3px 0 3px 0;
 }
 .finder_columns div.items li {
     margin:0;

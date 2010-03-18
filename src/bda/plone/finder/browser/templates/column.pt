@@ -2,6 +2,12 @@
      tal:define="items view/items"
      tal:attributes="id view/uid">
   
+  <p class="col_navigation">
+    <tal:batch replace="structure view/batch" />
+    <img src="++resource++bda.plone.finder.images/up.gif" />
+    <img src="++resource++bda.plone.finder.images/first.gif" />
+  </p>
+  
   <ul class="columnitems"
       tal:condition="items">
     <tal:li repeat="item items">
@@ -35,5 +41,11 @@
       <strong i18n:translate="">No Items</strong>
     </li>
   </ul>
+  
+  <p class="col_navigation">
+    <tal:batch replace="structure view/batch" />
+    <img src="++resource++bda.plone.finder.images/down.gif" />
+    <img src="++resource++bda.plone.finder.images/last.gif" />
+  </p>
 
 </div>
