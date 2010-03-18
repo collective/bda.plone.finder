@@ -1,0 +1,14 @@
+README.txt
+setup.py
+src/bda/__init__.py
+src/bda.plone.finder.egg-info/PKG-INFO
+src/bda.plone.finder.egg-info/SOURCES.txt
+src/bda.plone.finder.egg-info/dependency_links.txt
+src/bda.plone.finder.egg-info/entry_points.txt
+src/bda.plone.finder.egg-info/namespace_packages.txt
+src/bda.plone.finder.egg-info/not-zip-safe
+src/bda.plone.finder.egg-info/requires.txt
+src/bda.plone.finder.egg-info/top_level.txt
+src/bda/plone/__init__.py
+src/bda/plone/finder/__init__.py
+src/bda/plone/finder/browser/__init__.py

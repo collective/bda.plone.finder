@@ -1,0 +1,57 @@
+<div class="finder_container">
+
+  <div class="finder_message"></div>
+  
+  <div class="finder_dialog">
+    <div class="text">
+    </div>
+    <div class="buttons">
+      <button class="submit">OK</button> 
+      <button class="cancel">Cancel</button> 
+    </div>
+  </div>
+
+  <div class="finder_controls">
+    <div class="buttonPrev">
+      <a class="prev browse left">&nbsp;</a>
+    </div>
+    <div class="buttonNext">
+      <a class="next browse right">&nbsp;</a>
+    </div>
+    
+    <div class="buttonSeperator">&nbsp;</div>
+    
+    <div class="action_view">
+      <a class="button disabled">&nbsp;</a>
+    </div>
+    <div class="action_edit">
+      <a class="button disabled">&nbsp;</a>
+    </div>
+    
+    <div class="buttonSeperator">&nbsp;</div>
+    
+    <div class="action_cut">
+      <a class="button disabled">&nbsp;</a>
+    </div>
+    <div class="action_copy">
+      <a class="button disabled">&nbsp;</a>
+    </div>
+    <div class="action_paste">
+      <a class="button disabled">&nbsp;</a>
+    </div>
+    <div class="action_delete">
+      <a class="button disabled">&nbsp;</a>
+    </div>
+  </div>
+  
+  <div class="visualClear"></div>
+  
+  <div class="finder_columns">
+    <div class="items">
+      <tal:column repeat="column view/columns">
+        <tal:column replace="structure column" />
+      </tal:column>
+    </div>
+  </div>
+
+</div>

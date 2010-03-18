@@ -1,0 +1,18 @@
+<div id=""
+     tal:define="items view/items"
+     tal:attributes="id view/uid">
+  
+  <ul class="columnitems"
+      tal:condition="items">
+    <tal:li repeat="item items">
+      <metal:macro use-macro="context/@@bda.plone.finder.macros/macros/item" />
+    </tal:li>
+  </ul>
+  
+  <ul tal:condition="not:items">
+    <li>
+      <strong i18n:translate="">No Items</strong>
+    </li>
+  </ul>
+
+</div>

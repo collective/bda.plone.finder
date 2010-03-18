@@ -1,0 +1,12 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+           	
+    <genericsetup:registerProfile
+        name="default"
+        title="bda.plone.finder"
+        directory="profile"
+        description='Extension profile for bda.plone.finder.'
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+    />
+	
+</configure>

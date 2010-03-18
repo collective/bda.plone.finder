@@ -1,0 +1,4 @@
+<div class="finder_overlay"
+     id="bda_finder_overlay"
+     tal:condition="view/show">
+</div>

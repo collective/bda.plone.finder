@@ -1,0 +1,3 @@
+<tal:item define="item view/item">
+  <metal:macro use-macro="context/@@bda.plone.finder.macros/macros/item" />
+</tal:item>

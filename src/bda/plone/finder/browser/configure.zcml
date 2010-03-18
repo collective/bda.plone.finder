@@ -1,0 +1,207 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser">
+
+    <adapter
+	  for="Products.Archetypes.interfaces.IBaseObject"
+	  name="action_cut"
+	  factory=".finder.CutAction"
+	/>
+	
+	<adapter
+      for="Products.Archetypes.interfaces.IBaseObject"
+      name="action_copy"
+      factory=".finder.CopyAction"
+    />
+	
+	<adapter
+      for="Products.Archetypes.interfaces.IBaseObject"
+      name="action_paste"
+      factory=".finder.PasteAction"
+    />
+	
+	<adapter
+      for="Products.Archetypes.interfaces.IBaseObject"
+      name="action_delete"
+      factory=".finder.DeleteAction"
+    />
+	
+	<browser:resource
+	    name="bda.plone.finder.js"
+		file="resources/finder.js"
+	/>
+	
+	<browser:resource
+        name="bda.plone.finder.css"
+        file="resources/finder.css"
+    />
+	
+	<browser:resourceDirectory
+	    name="bda.plone.finder.images"
+		directory="images"
+	/>
+	
+	<browser:viewlet
+        name="bda.plone.finder.overlay"
+        manager="plone.app.layout.viewlets.interfaces.IPortalTop"
+        class=".finder.OverlayViewlet"
+		layer="bda.plone.finder.interfaces.IFinderLayer"
+		permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+	    for="*"
+        name="bda.plone.finder"
+        class=".finder.Finder"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+		permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="*"
+        name="bda.plone.finder.actioninfo"
+        class=".finder.Actions"
+        attribute="actionInfo"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="*"
+        name="bda.plone.finder.execute"
+        class=".finder.Actions"
+        attribute="execute"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="*"
+        name="bda.plone.finder.expand"
+        class=".finder.AjaxColumn"
+		attribute="expandColumn"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="*"
+        name="bda.plone.finder.details"
+        class=".finder.AjaxColumn"
+        attribute="detailsColumn"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="*"
+        name="bda.plone.finder.item"
+        class=".finder.Item"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="*"
+        name="bda.plone.finder.macros"
+        template="templates/macros.pt"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="*"
+        name="finder_details"
+		class=".finder.Details"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="Products.Archetypes.interfaces.IBaseObject"
+        name="finder_details"
+        class=".finder.ATDetails"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="bda.plone.finder.interfaces.IPloneContent"
+        name="finder_details"
+        class=".finder.ContentDetails"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="bda.plone.finder.interfaces.IPloneControlPanel"
+        name="finder_details"
+        class=".finder.ControlPanelDetails"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="bda.plone.finder.interfaces.IPloneAddons"
+        name="finder_details"
+        class=".finder.AddOnDetails"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="bda.plone.finder.interfaces.IPloneAction"
+        name="finder_details"
+        class=".finder.ActionDetails"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        name="finder_column"
+        class=".finder.PloneColumn"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="bda.plone.finder.interfaces.IPloneContent"
+        name="finder_column"
+        class=".finder.PloneContent"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="bda.plone.finder.interfaces.IPloneRoot"
+        name="finder_column"
+        class=".finder.PloneRoot"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="bda.plone.finder.interfaces.IPloneControlPanel"
+        name="finder_column"
+        class=".finder.PloneControlPanel"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="bda.plone.finder.interfaces.IPloneAddons"
+        name="finder_column"
+        class=".finder.PloneAddons"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="Products.Archetypes.interfaces.IBaseFolder"
+        name="finder_column"
+        class=".finder.FolderColumn"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+
+</configure>

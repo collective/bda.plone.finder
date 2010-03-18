@@ -1,0 +1,3 @@
+<div id="" tal:attributes="id view/uid">
+  <tal:details replace="structure view/details" />
+</div>

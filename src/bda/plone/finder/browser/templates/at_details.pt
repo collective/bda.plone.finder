@@ -1,0 +1,36 @@
+<ul>
+  <li>
+    <strong i18n:translate="">Type</strong>
+    <span tal:replace="view/type">Folder</span>
+  </li>
+  <li>
+    <strong i18n:translate="">Size</strong>
+    <span tal:replace="view/size">1 kB</span>
+  </li>
+  <li>
+    <strong i18n:translate="">State</strong>
+    <span tal:replace="view/state">published</span>
+  </li>
+  <li>
+    <strong i18n:translate="">Author</strong>
+    <span tal:replace="view/author">Author</span>
+  </li>
+  <li>
+    <strong i18n:translate="">Created</strong>
+    <span tal:replace="view/created">2010.1.1</span>
+  </li>
+  <li>
+    <strong i18n:translate="">Modified</strong>
+    <span tal:replace="view/modified">2010.1.1</span>
+  </li>
+  <li>
+    <strong i18n:translate="">Effective</strong>
+    <span tal:replace="view/effective">2010.1.1</span>
+  </li>
+  <li>
+    <strong i18n:translate="">Expires</strong>
+    <span tal:replace="view/expires">2010.1.1</span>
+  </li>
+  <li tal:content="structure view/preview">
+  </li>
+</ul>

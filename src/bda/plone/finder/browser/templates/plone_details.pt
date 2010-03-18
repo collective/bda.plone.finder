@@ -1,0 +1,17 @@
+<ul>
+  <li>
+    <strong tal:content="view/title">Title</strong>
+  </li>
+  <li>
+    <p tal:content="view/description">
+      Description
+    </p>
+  </li>
+  <li>
+    <a href="#"
+       tal:attributes="href view/link"
+       i18n:translate="">
+      display
+    </a>
+  </li>
+</ul>
