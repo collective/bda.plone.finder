@@ -12,8 +12,6 @@ Another intention is to use this widget as reference browser.
 
 Note
 ====
-
-  * !This package is pre-alpha state!
   
   * Not all features are implemented yet.
   
