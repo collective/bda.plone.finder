@@ -1,2 +1,0 @@
-bda
-bda.plone
