@@ -1,6 +1,3 @@
-# Copyright 2010, BlueDynamics Alliance - http://bluedynamics.com
-# GNU General Public License Version 2 or later
-
 from setuptools import setup, find_packages
 import sys, os
 
@@ -23,7 +20,7 @@ setup(name='bda.plone.finder',
       keywords='',
       author='Robert Niederreiter',
       author_email='dev@bluedynamics.com',
-      url=u'',
+      url=u'https://svn.plone.org/svn/collective/bda.plone.finder',
       license='GNU General Public Licence',
       packages=find_packages('src'),
       package_dir = {'': 'src'},
