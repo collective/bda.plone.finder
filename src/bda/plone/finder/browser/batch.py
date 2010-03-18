@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from Products.Five import BrowserView
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 class Batch(object):
     
+    ellipsis = u'..'
+    template = ViewPageTemplateFile('templates/batch.pt')
     dummypage = {
         'page': '',
         'current': False,
@@ -10,17 +13,18 @@ class Batch(object):
         'url': '',
     }
     
-    ellipsis = u'..'
-    
-    render = ViewPageTemplateFile('templates/batch.pt')
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+        self.vocab = list()
     
     @property
-    def vocab(self):
-        return []
+    def render(self):
+        return self.template(self)
 
     @property
     def display(self):
-        return True
+        return len(self.vocab) > 0
     
     @property
     def batchrange(self):

@@ -6,6 +6,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.layout.icons.interfaces import IContentIcon
 from Products.CMFPlone import PloneMessageFactory as _
 from Products.CMFPlone.utils import typesToList
+from batch import Batch
 from utils import (
     col_id,
     item_id,
@@ -22,6 +23,8 @@ class Column(BrowserView):
     
     @property
     def items(self):
+        if hasattr(self, '_items'):
+            return self._items
         ret = list()
         context = aq_inner(self.context)
         brains = self.context.portal_catalog({
@@ -43,11 +46,43 @@ class Column(BrowserView):
                                 self._item_selected(brain.getURL()),
                                 brain.review_state,
                                 cut))
+        self._items = ret
         return ret
     
     @property
     def batch(self):
-        return '&nbsp;'
+        b = Batch(aq_inner(self.context), self.request)
+        if not hasattr(self, '_batch_vocab'):
+            self._batch_vocab = self.batchvocab
+        b.vocab = self._batch_vocab
+        return b
+    
+    @property
+    def batchvocab(self):
+        items = self.items
+        count = len(items)
+        slicesize = 20
+        if count <= slicesize:
+            return [{
+                'page': '1',
+                'current': False,
+                'visible': False,
+                'url': '',
+            }]
+        pagecount = count / slicesize
+        if count % slicesize != 0:
+            pagecount += 1
+        url = u''
+        vocab = list()
+        for i in range(pagecount):
+            vocab.append({
+                'page': str(i + 1),
+                'current': False,
+                'visible': True,
+                'url': url,
+            })
+        return vocab
+        return ret
     
     def _item_selected(self, url):
         if self.request.get('_skip_selection_check', False):

@@ -1,35 +1,7 @@
-<div tal:condition="context/display" class="batch">
-     
-  <span tal:define="firstpage context/firstpage"
-        tal:condition="firstpage">
-    <a href="#"
-       tal:condition="python: firstpage['visible'] and not firstpage['current']"
-       tal:attributes="href firstpage/url"
-      ><img src="leftmost.gif"
-            tal:attributes="name firstpage/url"
-            class="batchlink" /></a>
-    <span tal:condition="python: not firstpage['visible'] or firstpage['current']">
-      <img src="leftmost_invisible.gif" />
-    </span>
-  </span>
-  
-  <span tal:define="prevpage context/prevpage"
-        tal:condition="prevpage">
-    <a href="#"
-       tal:condition="python: prevpage['visible'] and not prevpage['current']"
-       tal:attributes="href prevpage/url"
-      ><img src="left.gif"
-            tal:attributes="name prevpage/url"
-            class="batchlink" /></a>
-    <span tal:condition="python: not prevpage['visible'] or prevpage['current']">
-      <img src="left_invisible.gif" />
-    </span>
-  </span>
-  
-  <span tal:content="context/leftellipsis"
+<tal:batch condition="view/display">
+  <span tal:content="view/leftellipsis"
         class="leftellipsis" />
-  
-  <tal:page repeat="page context/pages">
+  <tal:page repeat="page view/pages">
     <span>
       <a href="#"
          tal:condition="python: page['visible'] and not page['current']"
@@ -42,34 +14,6 @@
               class="current">X</strong>
     </span>
   </tal:page>
-  
-  <span tal:content="context/rightellipsis"
+  <span tal:content="view/rightellipsis"
         class="rightellipsis" />
-  
-  <span tal:define="nextpage context/nextpage"
-        tal:condition="nextpage">
-    <a href="#"
-       tal:condition="python: nextpage['visible'] and not nextpage['current']"
-       tal:attributes="href nextpage/url"
-      ><img src="right.gif"
-            tal:attributes="name nextpage/url"
-            class="batchlink" /></a>
-    <span tal:condition="python: not nextpage['visible'] or nextpage['current']">
-      <img src="right_invisible.gif" />
-    </span>
-  </span>
-  
-  <span tal:define="lastpage context/lastpage"
-        tal:condition="lastpage">
-    <a href="#"
-       tal:condition="python: lastpage['visible'] and not lastpage['current']"
-       tal:attributes="href lastpage/url"
-      ><img src="rightmost.gif"
-            tal:attributes="name lastpage/url"
-            class="batchlink" /></a>
-    <span tal:condition="python: not lastpage['visible'] or lastpage['current']">
-      <img src="rightmost_invisible.gif" />
-    </span>
-  </span>
-  
-</div>
+</tal:batch>
