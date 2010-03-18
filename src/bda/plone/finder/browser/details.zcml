@@ -1,0 +1,52 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser">
+
+    <browser:page
+        for="*"
+        name="finder_details"
+        class=".details.Details"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+    
+    <browser:page
+        for="Products.Archetypes.interfaces.IBaseObject"
+        name="finder_details"
+        class=".details.ATDetails"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+    
+    <browser:page
+        for="bda.plone.finder.interfaces.IPloneContent"
+        name="finder_details"
+        class=".details.ContentDetails"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+    
+    <browser:page
+        for="bda.plone.finder.interfaces.IPloneControlPanel"
+        name="finder_details"
+        class=".details.ControlPanelDetails"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+    
+    <browser:page
+        for="bda.plone.finder.interfaces.IPloneAddons"
+        name="finder_details"
+        class=".details.AddOnDetails"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+    
+    <browser:page
+        for="bda.plone.finder.interfaces.IPloneAction"
+        name="finder_details"
+        class=".details.ActionDetails"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+
+</configure>

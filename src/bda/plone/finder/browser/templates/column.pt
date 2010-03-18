@@ -5,7 +5,28 @@
   <ul class="columnitems"
       tal:condition="items">
     <tal:li repeat="item items">
-      <metal:macro use-macro="context/@@bda.plone.finder.macros/macros/item" />
+      <li tal:define="selected python: item['selected'] and 'selected' or '';
+	                  state python: item['state'] and 'state-%s' % item['state'] or '';
+	                  cut python: item['cut'] and 'cut' or '';
+	                  css python: ' '.join([state, selected, cut]).strip();"
+	      tal:attributes="id item/uid;
+	                      class python: css and css or None;">
+	    <img src=""
+	         tal:attributes="src item/icon" />
+	    <a rel="#"
+	       class=""
+	       tal:content="item/title"
+	       tal:attributes="rel python: '#%s' % view.uid;
+	                       class python: item['is_folderish'] \
+	                                     and 'column_expand nav_item_name' \
+	                                     or 'column_details nav_item_name'">
+	      Title
+	    </a>
+	    <a rel="#"
+	       class="column_details arrow_right"
+	       tal:condition="item/is_folderish"
+	       tal:attributes="rel python: '#%s' % view.uid">&nbsp;</a>
+	  </li>
     </tal:li>
   </ul>
   

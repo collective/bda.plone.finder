@@ -1,0 +1,46 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser">
+
+    <browser:page
+        for="*"
+        name="bda.plone.finder.actioninfo"
+        class=".actions.Actions"
+        attribute="actionInfo"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        for="*"
+        name="bda.plone.finder.execute"
+        class=".actions.Actions"
+        attribute="execute"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+
+    <adapter
+      for="Products.Archetypes.interfaces.IBaseObject"
+      name="action_cut"
+      factory=".actions.CutAction"
+    />
+    
+    <adapter
+      for="Products.Archetypes.interfaces.IBaseObject"
+      name="action_copy"
+      factory=".actions.CopyAction"
+    />
+    
+    <adapter
+      for="Products.Archetypes.interfaces.IBaseObject"
+      name="action_paste"
+      factory=".actions.PasteAction"
+    />
+    
+    <adapter
+      for="Products.Archetypes.interfaces.IBaseObject"
+      name="action_delete"
+      factory=".actions.DeleteAction"
+    />
+
+</configure>
