@@ -96,27 +96,23 @@ function PloneFinder() {
 	}
 	
 	this.bindColumnBatch = function(column) {
-		var col_id = jQuery(column).attr('id');
-		col_id = col_id.substring(14, col_id.length);
+		var column_uid = jQuery(column).attr('id');
+		column_uid = column_uid.substring(14, column_uid.length);
+		jQuery('p.col_navigation a', column).unbind();
         jQuery('p.col_navigation a', column).bind('click', function() {
 			var page = this.href.substring(this.href.lastIndexOf('/') + 1,
 			                               this.href.length);
-			var url = 'bda.plone.finder.expand?uid=' + col_id + '&b=' + page;
-            alert(url);
+			var url = 'bda.plone.finder.expand?uid=';
+			url += column_uid + '&b=' + page;
+			jQuery.get(url, function(data) {
+                for (var i = 0; i < ploneFinder.columns.length; i++) {
+                    if (ploneFinder.columns[i] == column_uid) {
+						var after = ploneFinder.columns[i - 1]
+                        ploneFinder.applyColumn(after, data, i - 1);
+                    }
+                }
+            });
 			return false;
-			
-			/*
-			var url = 'bda.plone.finder.expand?uid=' + uid;
-		    jQuery.get(url, function(data) {
-		        for (var i = 0; i < ploneFinder.columns.length; i++) {
-		            if (ploneFinder.columns[i] == container) {
-		                ploneFinder.initActions(uid, container);
-		                ploneFinder.applyColumn(container, data, i);
-		            }
-		        }
-		    });
-		    */
-			
         });
     }
 	

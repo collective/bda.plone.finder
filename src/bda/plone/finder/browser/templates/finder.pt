@@ -42,6 +42,8 @@
     <div class="action_delete">
       <a class="button disabled">&nbsp;</a>
     </div>
+    
+    <input type="text" class="column_filter" />
   </div>
   
   <div class="visualClear"></div>
