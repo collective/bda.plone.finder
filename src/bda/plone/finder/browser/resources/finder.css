@@ -3,7 +3,7 @@
     /*z-index:10000;*/
     background-color:#999;
     width:924px;
-    min-height:400px;
+    min-height:412px;
     border:1px solid #666;
     -moz-box-shadow:0 0 90px 5px #bbb;
     -webkit-box-shadow: 0 0 90px #bbb;
@@ -21,7 +21,7 @@
 }
 .finder_container {
     width:920px;
-    min-height:400px;
+    min-height:412px;
     margin-left:2px;
     margin-right:2px;
 }
@@ -168,7 +168,7 @@
     background-color:#fff;
     margin:0 2px 4px 2px;
     width: 224px;
-    min-height:380px;
+    min-height:392px;
     border:1px solid #666;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
@@ -176,9 +176,14 @@
 .finder_columns div.items p.col_navigation {
     margin:0;
     font-size:10px;
+    text-align:right;
+}
+.finder_columns div.items p.col_navigation a {
+    color:#333;
+    border:none;
+    text-decoration:none;
 }
 .finder_columns div.items p.col_navigation img {
-    float:right;
     margin:2px 0 2px 0;
     cursor:pointer;
 }

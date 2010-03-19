@@ -17,6 +17,8 @@ class Column(BrowserView):
     
     __call__ = ViewPageTemplateFile('templates/column.pt')
     
+    slicesize = 20
+    
     @property
     def uid(self):
         return col_id(self.context.UID())
@@ -50,6 +52,12 @@ class Column(BrowserView):
         return ret
     
     @property
+    def itemslice(self):
+        cur = int(self.request.get('b', 0))
+        slicesize = self.slicesize
+        return self.items[cur * slicesize:cur * slicesize + slicesize]
+    
+    @property
     def batch(self):
         b = Batch(aq_inner(self.context), self.request)
         if not hasattr(self, '_batch_vocab'):
@@ -61,28 +69,22 @@ class Column(BrowserView):
     def batchvocab(self):
         items = self.items
         count = len(items)
-        slicesize = 20
-        if count <= slicesize:
-            return [{
-                'page': '1',
-                'current': False,
-                'visible': False,
-                'url': '',
-            }]
-        pagecount = count / slicesize
-        if count % slicesize != 0:
+        if count <= self.slicesize:
+            return list()
+        pagecount = count / self.slicesize
+        if count % self.slicesize != 0:
             pagecount += 1
-        url = u''
+        url = u'?b=%i'
+        cur = int(self.request.get('b', 0))
         vocab = list()
         for i in range(pagecount):
             vocab.append({
                 'page': str(i + 1),
-                'current': False,
+                'current': cur == i and True or False,
                 'visible': True,
-                'url': url,
+                'url': url % i,
             })
         return vocab
-        return ret
     
     def _item_selected(self, url):
         if self.request.get('_skip_selection_check', False):

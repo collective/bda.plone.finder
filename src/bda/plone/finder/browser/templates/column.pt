@@ -1,22 +1,12 @@
 <div id=""
-     tal:define="items view/items;
+     tal:define="items view/itemslice;
                  batch nocall:view/batch"
      tal:attributes="id view/uid">
   
   <p class="col_navigation">
+    <img src="++resource++bda.plone.finder.images/blank.gif" />
+  
     <tal:batch replace="structure batch/render" />
-    <tal:page define="prevpage batch/prevpage"
-              condition="prevpage">
-      <a href="#"
-         tal:condition="python: prevpage['visible'] and not prevpage['current']"
-         tal:attributes="href prevpage/url">
-        <img src="++resource++bda.plone.finder.images/up.gif"
-             tal:attributes="name prevpage/url"
-             class="batchlink" />
-      </a>
-      <img src="left_invisible.gif"
-           tal:condition="python: not prevpage['visible'] or prevpage['current']" />
-    </tal:page>
     
     <tal:page define="firstpage batch/firstpage"
               condition="firstpage">
@@ -29,6 +19,19 @@
       </a>
       <img src="++resource++bda.plone.finder.images/first_invisible.gif"
            tal:condition="python: not firstpage['visible'] or firstpage['current']" />
+    </tal:page>
+    
+    <tal:page define="prevpage batch/prevpage"
+              condition="prevpage">
+      <a href="#"
+         tal:condition="python: prevpage['visible'] and not prevpage['current']"
+         tal:attributes="href prevpage/url">
+        <img src="++resource++bda.plone.finder.images/up.gif"
+             tal:attributes="name prevpage/url"
+             class="batchlink" />
+      </a>
+      <img src="++resource++bda.plone.finder.images/up_invisible.gif"
+           tal:condition="python: not prevpage['visible'] or prevpage['current']" />
     </tal:page>
   </p>
   
@@ -67,19 +70,9 @@
   </ul>
   
   <p class="col_navigation">
+    <img src="++resource++bda.plone.finder.images/blank.gif" />
+    
     <tal:batch replace="structure batch/render" />
-    <tal:page define="nextpage batch/nextpage"
-              condition="nextpage">
-      <a href="#"
-         tal:condition="python: nextpage['visible'] and not nextpage['current']"
-         tal:attributes="href nextpage/url">
-        <img src="++resource++bda.plone.finder.images/down.gif"
-             tal:attributes="name nextpage/url"
-             class="batchlink" />
-      </a>
-      <img src="++resource++bda.plone.finder.images/down_invisible.gif"
-           tal:condition="python: not nextpage['visible'] or nextpage['current']" />
-    </tal:page>
     
     <tal:page define="lastpage batch/lastpage"
               condition="lastpage">
@@ -92,6 +85,19 @@
       </a>
       <img src="++resource++bda.plone.finder.images/last_invisible.gif"
            tal:condition="python: not lastpage['visible'] or lastpage['current']" />
+    </tal:page>
+    
+    <tal:page define="nextpage batch/nextpage"
+              condition="nextpage">
+      <a href="#"
+         tal:condition="python: nextpage['visible'] and not nextpage['current']"
+         tal:attributes="href nextpage/url">
+        <img src="++resource++bda.plone.finder.images/down.gif"
+             tal:attributes="name nextpage/url"
+             class="batchlink" />
+      </a>
+      <img src="++resource++bda.plone.finder.images/down_invisible.gif"
+           tal:condition="python: not nextpage['visible'] or nextpage['current']" />
     </tal:page>
   </p>
 
