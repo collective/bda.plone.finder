@@ -74,7 +74,6 @@ class Column(BrowserView):
         pagecount = count / self.slicesize
         if count % self.slicesize != 0:
             pagecount += 1
-        url = u'?b=%i'
         cur = int(self.request.get('b', 0))
         vocab = list()
         for i in range(pagecount):
@@ -82,7 +81,7 @@ class Column(BrowserView):
                 'page': str(i + 1),
                 'current': cur == i and True or False,
                 'visible': True,
-                'url': url % i,
+                'url': str(i),
             })
         return vocab
     

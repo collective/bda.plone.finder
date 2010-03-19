@@ -76,6 +76,7 @@ function PloneFinder() {
 			}
 			ploneFinder.columns[idx] = id;
 			ploneFinder.bindNavItems(this);
+			ploneFinder.bindColumnBatch(this);
 			idx++;
 		});
 		this.initActions(ploneFinder.columns[lastidx],
@@ -93,6 +94,31 @@ function PloneFinder() {
             ploneFinder.renderColumn(this, 'bda.plone.finder.details');
         });
 	}
+	
+	this.bindColumnBatch = function(column) {
+		var col_id = jQuery(column).attr('id');
+		col_id = col_id.substring(14, col_id.length);
+        jQuery('p.col_navigation a', column).bind('click', function() {
+			var page = this.href.substring(this.href.lastIndexOf('/') + 1,
+			                               this.href.length);
+			var url = 'bda.plone.finder.expand?uid=' + col_id + '&b=' + page;
+            alert(url);
+			return false;
+			
+			/*
+			var url = 'bda.plone.finder.expand?uid=' + uid;
+		    jQuery.get(url, function(data) {
+		        for (var i = 0; i < ploneFinder.columns.length; i++) {
+		            if (ploneFinder.columns[i] == container) {
+		                ploneFinder.initActions(uid, container);
+		                ploneFinder.applyColumn(container, data, i);
+		            }
+		        }
+		    });
+		    */
+			
+        });
+    }
 	
 	this.initActions = function(uid, column) {
         this.actions = new PloneFinderActions();
@@ -141,6 +167,7 @@ function PloneFinder() {
 		this.resetColumns(index);
 		this.setSelected(after_col, column_uid);
 		this.bindNavItems(new_col);
+		this.bindColumnBatch(new_col);
 		this.scrollable_api.reload().end(1);
 	}
 	
@@ -291,14 +318,14 @@ function PloneFinderDialog() {
 	}
 }
 
-// before action hooks
+/* before action hooks */
 
 ploneFinderConfirmDelete = function(uid, container, callback) {
     ploneFinder.dialog.msg = 'Do you really want to delete this item?';
     ploneFinder.dialog.show(callback);
 }
 
-// after action hooks
+/* after action hooks */
 
 ploneFinderCutDeleteEntry = function(uid, container, data) {
 	var overlay = ploneFinder.overlay_api.getOverlay()
