@@ -137,8 +137,12 @@ class ControlPanelColumn(Column):
         for item in configlets:
             if not item['available'] or not item['allowed']:
                 continue
+            try:
+                icon = pu.getIconFor('controlpanel', item['id'])
+            except KeyError, e:
+                icon = ''
             ret.append(nav_item(item_id(item['id']),
-                                pu.getIconFor('controlpanel', item['id']),
+                                icon,
                                 item['title'],
                                 False,
                                 False)) # XXX selected.
