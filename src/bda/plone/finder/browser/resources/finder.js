@@ -79,10 +79,20 @@ function PloneFinder() {
 			ploneFinder.bindColumnBatch(this);
 			idx++;
 		});
+		this.bindFilter(ploneFinder.columns[lastidx]);
 		this.initActions(ploneFinder.columns[lastidx],
 		                 ploneFinder.columns[lastidx - 1]);
 		this.scrollable_api.end(1);
     }
+	
+	this.bindFilter = function(column) {
+		// XXX extract column info
+		var overlay = this.overlay_api.getOverlay();
+		jQuery('input.column_filter', overlay).bind('focus', function() {
+			this.value = '';
+			jQuery(this).css('color', '#000');
+		});
+	}
 	
 	this.bindNavItems = function(column) {
 		jQuery('a.column_expand', column).bind('click', function() {
@@ -105,7 +115,7 @@ function PloneFinder() {
 			jQuery.get(url, function(data) {
                 for (var i = 0; i < ploneFinder.columns.length; i++) {
                     if (ploneFinder.columns[i] == column_uid) {
-						var after = ploneFinder.columns[i - 1]
+						var after = ploneFinder.columns[i - 1];
                         ploneFinder.applyColumn(after, data, i - 1);
                     }
                 }
@@ -169,7 +179,7 @@ function PloneFinder() {
         var new_columns = [];
         var count = index + 1;
         if (count < 3) {
-            count = 3
+            count = 3;
         }
         for (var i = 0; i <= count; i++) {
             new_columns[i] = this.columns[i];
@@ -304,7 +314,7 @@ function PloneFinderDialog() {
 		jQuery('button.cancel', dialog).bind('click', function() {
 			dialog.hide();
 		});
-		dialog.fadeIn('fast')
+		dialog.fadeIn('fast');
 	}
 	
 	this.hide = function() {
@@ -322,7 +332,7 @@ ploneFinderConfirmDelete = function(uid, container, callback) {
 /* after action hooks */
 
 ploneFinderCutDeleteEntry = function(uid, container, data) {
-	var overlay = ploneFinder.overlay_api.getOverlay()
+	var overlay = ploneFinder.overlay_api.getOverlay();
 	var selector = '#finder_nav_item_' + container + ' a.column_expand';
 	var elem = jQuery(selector, overlay).get(0);
 	ploneFinder.renderColumn(elem, 'bda.plone.finder.expand');

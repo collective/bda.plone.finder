@@ -43,7 +43,9 @@
       <a class="button disabled">&nbsp;</a>
     </div>
     
-    <input type="text" class="column_filter" />
+    <input type="text"
+           value="Filter focused column"
+           class="column_filter" />
   </div>
   
   <div class="visualClear"></div>
