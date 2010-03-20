@@ -28,7 +28,7 @@ class Batch(object):
     
     @property
     def batchrange(self):
-        return 10
+        return 9
     
     @property
     def currentpage(self):

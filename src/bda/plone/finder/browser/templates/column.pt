@@ -69,7 +69,7 @@
     </li>
   </ul>
   
-  <p class="col_navigation">
+  <p class="col_navigation bottom_nav">
     <img src="++resource++bda.plone.finder.images/blank.gif" />
     
     <tal:batch replace="structure batch/render" />

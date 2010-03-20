@@ -156,14 +156,15 @@
     background:url('++resource++bda.plone.finder.images/delete_disabled.png') 50% 50% no-repeat;
 }
 .finder_columns { 
-    position:relative; 
+    position:relative;
     overflow:hidden; 
 }
 .finder_columns div.items { 
     width:20000em; 
     position:relative;
 }
-.finder_columns div.items div { 
+.finder_columns div.items div {
+    position:relative;
     float:left;
     background-color:#fff;
     margin:0 2px 4px 2px;
@@ -177,6 +178,11 @@
     margin:0;
     font-size:10px;
     text-align:right;
+}
+.finder_columns div.items p.bottom_nav {
+    position:absolute;
+    bottom:0px;
+    right:0px;
 }
 .finder_columns div.items p.col_navigation a {
     color:#333;
@@ -194,6 +200,9 @@
 }
 .finder_columns div.items li {
     margin:0;
+}
+.finder_columns div.items li a {
+    font-weight: normal;
 }
 .finder_columns div.items li.selected {
     background-color:#ddd;

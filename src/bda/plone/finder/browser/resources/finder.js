@@ -85,11 +85,9 @@ function PloneFinder() {
     }
 	
 	this.bindNavItems = function(column) {
-		//jQuery('a.column_expand', column).unbind();
 		jQuery('a.column_expand', column).bind('click', function() {
             ploneFinder.renderColumn(this, 'bda.plone.finder.expand');
         });
-		//jQuery('a.column_details', column).unbind();
         jQuery('a.column_details', column).bind('click', function() {
             ploneFinder.renderColumn(this, 'bda.plone.finder.details');
         });
