@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import simplejson as json
 from zope.interface import (
     directlyProvides,
     noLongerProvides,
@@ -13,7 +12,6 @@ from bda.plone.finder.interfaces import (
     IPloneControlPanel,
     IPloneAddons,
     IPloneAction,
-    IActionExecution,
 )
 from bda.plone.finder.browser.column import Column
 

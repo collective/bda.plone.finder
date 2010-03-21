@@ -39,6 +39,11 @@ Credits
 Chnages
 =======
 
+1.0.2a
+------
+
+  * remove unused imports from source files [rnix]
+
 1.0.1a
 ------
 
@@ -48,7 +53,7 @@ Chnages
   
   * self-contained buildout for plone 3 and plone 4 [jensens]
 
-1.0
----
+1.0a
+----
 
   * make it work [rnix]

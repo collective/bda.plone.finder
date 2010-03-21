@@ -3,14 +3,6 @@ from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.memoize.instance import memoize
 from Products.CMFPlone import PloneMessageFactory as _
-from bda.plone.finder.interfaces import (
-    IPloneRoot,
-    IPloneContent,
-    IPloneControlPanel,
-    IPloneAddons,
-    IPloneAction,
-    IActionExecution,
-)
 from utils import col_id
 
 DETAILS = """

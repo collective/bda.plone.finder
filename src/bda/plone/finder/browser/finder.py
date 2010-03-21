@@ -1,46 +1,20 @@
 # -*- coding: utf-8 -*-
-import simplejson as json
 from zope.interface import (
-    implements,
     directlyProvides,
     noLongerProvides,
 )
-from zope.component import (
-    getAdapter,
-    getMultiAdapter,
-)
-from zope.component.interfaces import ComponentLookupError
-from ZODB.POSException import ConflictError
-from OFS.CopySupport import CopyError
-from AccessControl import (
-    getSecurityManager,
-    Unauthorized,
-)
+from zope.component import getMultiAdapter
+from AccessControl import getSecurityManager
 from Acquisition import (
     aq_inner,
     aq_parent,
 )
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from plone.memoize.instance import memoize
 from plone.app.layout.viewlets.common import ViewletBase
-from plone.app.layout.icons.interfaces import IContentIcon
-from Products.CMFPlone import PloneMessageFactory as _
 from Products.CMFPlone.interfaces import IPloneSiteRoot
-from Products.CMFPlone.utils import (
-    typesToList,
-    transaction_note,
-    safe_unicode,
-)
 from Products.Archetypes.interfaces import IBaseFolder
-from bda.plone.finder.interfaces import (
-    IPloneRoot,
-    IPloneContent,
-    IPloneControlPanel,
-    IPloneAddons,
-    IPloneAction,
-    IActionExecution,
-)
+from bda.plone.finder.interfaces import IPloneContent
 
 class OverlayViewlet(ViewletBase):
     
