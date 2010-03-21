@@ -15,40 +15,26 @@ from bda.plone.finder.interfaces import (
 )
 from bda.plone.finder.browser.column import Column
 
-class AjaxColumn(BrowserView):
-    """Class to render a navigation or details column by uid via XML HTTP
-    request.
-    """
+class AjaxContext(BrowserView):
     
-    def expandColumn(self):
-        self.request['_skip_selection_check'] = True
-        return self._render('finder_column')
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
     
-    def detailsColumn(self):
-        return self._render('finder_details')
-    
-    def _render(self, view):
+    @property
+    def current_context(self):
         uid = self.request.get('uid')
-        for name, iface in [('plone_content', IPloneContent),
-                            ('plone_control_panel', IPloneControlPanel),
-                            ('plone_addons', IPloneAddons)]:
+        for name in ['plone_content', 'plone_control_panel', 'plone_addons']:
             if uid == name:
                 context = self.context.portal_url.getPortalObject()
-                return self._render_marked(context, iface, view)
+                return aq_inner(context)
         if uid in self._cp_actions + self._ac_actions:
             context = self.context.portal_url.getPortalObject()
-            return self._render_marked(context, IPloneAction, view)
+            return aq_inner(context)
         brains = self.context.portal_catalog(UID=uid)
         if not brains:
-            return u'<div>%s</div>' % _(u'Unknown Column')
-        return brains[0].getObject().restrictedTraverse(view)()
-    
-    def _render_marked(self, context, iface, view):
-        context = aq_inner(context)
-        directlyProvides(context, iface)
-        rendered = context.restrictedTraverse(view)()
-        noLongerProvides(context, iface)
-        return rendered
+            return None
+        return aq_inner(brains[0].getObject())
     
     @property
     def _cp_actions(self):
@@ -62,6 +48,38 @@ class AjaxColumn(BrowserView):
         context = self.context
         configlets = context.portal_controlpanel.enumConfiglets(group=group)
         return [item['id'] for item in configlets]
+
+class AjaxColumn(AjaxContext):
+    """Class to render a navigation or details column by uid via XML HTTP
+    request.
+    """
+    
+    def expandColumn(self):
+        self.request['_skip_selection_check'] = True
+        return self._render('finder_column')
+    
+    def detailsColumn(self):
+        return self._render('finder_details')
+    
+    def _render(self, view):
+        uid = self.request.get('uid')
+        context = self.current_context
+        for name, iface in [('plone_content', IPloneContent),
+                            ('plone_control_panel', IPloneControlPanel),
+                            ('plone_addons', IPloneAddons)]:
+            if uid == name:
+                return self._render_marked(context, iface, view)
+        if uid in self._cp_actions + self._ac_actions:
+            return self._render_marked(context, IPloneAction, view)
+        if not context:
+            return u'<div>%s</div>' % _(u'Unknown Column')
+        return context.restrictedTraverse(view)()
+    
+    def _render_marked(self, context, iface, view):
+        directlyProvides(context, iface)
+        rendered = context.restrictedTraverse(view)()
+        noLongerProvides(context, iface)
+        return rendered
 
 class PloneColumn(Column):
     """Dispatcher view for IPloneSiteRoot.

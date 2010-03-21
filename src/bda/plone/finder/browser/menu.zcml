@@ -1,0 +1,12 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser">
+
+    <browser:page
+        for="*"
+        name="bda.plone.finder.additemsmenu"
+        class=".menu.AddItemsMenu"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
+
+</configure>

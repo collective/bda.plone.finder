@@ -1,0 +1,10 @@
+<tal:li repeat="item view/items">
+  <li class="action_dropdown_item">
+    <a href=""
+       class="action_dropdown_link"
+       tal:attributes="href item/url"
+       tal:content="item/title">
+      Title
+    </a>
+  </li>
+</tal:li>

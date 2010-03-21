@@ -5,6 +5,7 @@
     <include file="actions.zcml" />
 	<include file="column.zcml" />
 	<include file="details.zcml" />
+	<include file="menu.zcml" />
 
 	<browser:resource
 	    name="bda.plone.finder.js"
