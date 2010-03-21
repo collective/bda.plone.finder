@@ -117,6 +117,26 @@
 .finder_controls a.disabled {
     cursor:default;
 }
+.finder_controls div {
+    position:relative;
+}
+.finder_controls .action_dropdown {
+    display:none;
+    position:absolute;
+    margin-top:0px;
+    z-index:10000;
+    width:200px;
+    list-style-type:none;
+    list-style-image:none;
+    border:#000 1px solid;
+    background-color:#eee;
+    width:200px;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+}
+.finder_controls .action_dropdown li {
+    margin:0;
+}
 .finder_controls div.buttonSeperator {
     width:50px;
 }
@@ -125,6 +145,12 @@
 }
 .finder_controls div.action_edit a {
     background:url('++resource++bda.plone.finder.images/edit.png') 50% 50% no-repeat;
+}
+.finder_controls div.action_change_state a {
+    background:url('++resource++bda.plone.finder.images/change_state.png') 50% 50% no-repeat;
+}
+.finder_controls div.action_add_item a {
+    background:url('++resource++bda.plone.finder.images/add.png') 50% 50% no-repeat;
 }
 .finder_controls div.action_cut a {
     background:url('++resource++bda.plone.finder.images/cut.png') 50% 50% no-repeat;
@@ -143,6 +169,12 @@
 }
 .finder_controls div.action_edit a.disabled {
     background:url('++resource++bda.plone.finder.images/edit_disabled.png') 50% 50% no-repeat;
+}
+.finder_controls div.action_change_state a.disabled {
+    background:url('++resource++bda.plone.finder.images/change_state_disabled.png') 50% 50% no-repeat;
+}
+.finder_controls div.action_add_item a.disabled {
+    background:url('++resource++bda.plone.finder.images/add_disabled.png') 50% 50% no-repeat;
 }
 .finder_controls div.action_cut a.disabled {
     background:url('++resource++bda.plone.finder.images/cut_disabled.png') 50% 50% no-repeat;

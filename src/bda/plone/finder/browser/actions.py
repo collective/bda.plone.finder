@@ -22,7 +22,10 @@ class Actions(BrowserView):
     
     def actionInfo(self):
         data = dict()
-        for name in ['action_view', 'action_edit']:
+        for name in ['action_view',
+                     'action_edit',
+                     'action_change_state',
+                     'action_add_item']:
             data[name] = self._create_action()
         for name in ['action_cut',
                      'action_copy',
@@ -39,7 +42,9 @@ class Actions(BrowserView):
         for name in ['action_cut',
                      'action_copy',
                      'action_paste',
-                     'action_delete']:
+                     'action_delete',
+                     'action_change_state',
+                     'action_add_item']:
             data[name]['enabled'] = True
         url = brains[0].getURL()
         data['action_view']['url'] = url

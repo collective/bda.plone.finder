@@ -42,20 +42,22 @@ Chnages
 1.0.2a
 ------
 
-  * remove unused imports from source files [rnix]
+  * Remove unused imports from source files [rnix]
   
-  * implement column filtering [rnix]
+  * Implement column filtering [rnix]
+  
+  * Titles for finder controls [rnix]
 
 1.0.1a
 ------
 
-  * basic code cleanup [rnix]
+  * Basic code cleanup [rnix]
   
-  * implement column batching [rnix]
+  * Implement column batching [rnix]
   
-  * self-contained buildout for plone 3 and plone 4 [jensens]
+  * Self-contained buildout for plone 3 and plone 4 [jensens]
 
 1.0a
 ----
 
-  * make it work [rnix]
+  * Make it work [rnix]

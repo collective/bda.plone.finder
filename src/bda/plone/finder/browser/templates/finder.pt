@@ -13,34 +13,58 @@
 
   <div class="finder_controls">
     <div class="buttonPrev">
-      <a class="prev browse left">&nbsp;</a>
+      <a class="prev browse left"
+         title="Back">&nbsp;</a>
     </div>
     <div class="buttonNext">
-      <a class="next browse right">&nbsp;</a>
+      <a class="next browse right"
+         title="Next">&nbsp;</a>
     </div>
     
     <div class="buttonSeperator">&nbsp;</div>
     
     <div class="action_view">
-      <a class="button disabled">&nbsp;</a>
+      <a class="button disabled"
+         title="View">&nbsp;</a>
     </div>
     <div class="action_edit">
-      <a class="button disabled">&nbsp;</a>
+      <a class="button disabled"
+         title="Edit">&nbsp;</a>
+    </div>
+    <div class="action_change_state">
+      <a class="button disabled"
+         title="Change state">&nbsp;</a>
+      <ul class="action_dropdown">
+        <li class="action_dropdown_item">No transitions available</li>
+      </ul>
+    </div>
+    <div class="action_add_item">
+      <a class="button disabled"
+         title="Add new Item">&nbsp;</a>
+      <ul class="action_dropdown">
+        <li class="action_dropdown_item">foo</li>
+        <li class="action_dropdown_item">bar</li>
+        <li class="action_dropdown_item">baz</li>
+      </ul>
     </div>
     
     <div class="buttonSeperator">&nbsp;</div>
     
     <div class="action_cut">
-      <a class="button disabled">&nbsp;</a>
+      <a class="button disabled"
+         title="Cut">&nbsp;</a>
     </div>
     <div class="action_copy">
-      <a class="button disabled">&nbsp;</a>
+      <a class="button disabled"
+         title="Copy">&nbsp;</a>
     </div>
     <div class="action_paste">
-      <a class="button disabled">&nbsp;</a>
+      <a class="button disabled"
+         title="Paste">&nbsp;</a>
     </div>
     <div class="action_delete">
-      <a class="button disabled">&nbsp;</a>
+      <a class="button disabled"
+         title="Delete">&nbsp;</a>
     </div>
     
     <input type="text"

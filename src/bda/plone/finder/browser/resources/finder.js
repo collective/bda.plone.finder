@@ -64,6 +64,7 @@ function PloneFinder() {
 	this.dialog = null;
 	this.current_filter = null;
 	this.current_focused = null;
+	this.transitions = null;
 	
     this.load = function() {
 		this.dialog = new PloneFinderDialog();
@@ -83,6 +84,8 @@ function PloneFinder() {
 		});
 		this.initActions(ploneFinder.columns[lastidx],
 		                 ploneFinder.columns[lastidx - 1]);
+		this.transitions = new PloneFinderTransitions();
+		this.transitions.overlay_api = this.overlay_api;
 		this.bindFilter();
 		this.scrollable_api.end(1);
     }
@@ -256,6 +259,9 @@ function PloneFinderActions() {
 					});
 				}
 			}
+			// XXX: make after load calls hookable
+			ploneFinder.transitions.bind();
+			ploneFinderRebindAddAction(actions);
         });
 	}
 	
@@ -348,6 +354,38 @@ function PloneFinderDialog() {
 	}
 }
 
+/* after load hooks */
+
+ploneFinderRebindAddAction = function(actions) {
+	var overlay = actions.overlay_api.getOverlay();
+    var action = jQuery('div.action_add_item a', overlay);
+    action.unbind();
+    action.bind('click', function() {
+        var parent = jQuery(this).parent();
+		var dropdown = jQuery('.action_dropdown', parent);
+		jQuery(document).bind('mousedown', function(event) {
+			if (!event) {
+                var event = window.event;
+            }
+            if (event.target) {
+                var target = event.target;
+            } else if (event.srcElement) {
+                var target = event.srcElement;
+            }
+            if (jQuery(target).hasClass('action_dropdown')
+              || jQuery(target).hasClass('action_dropdown_item')) {
+                return true;
+            }
+            if (jQuery(target).hasClass('action_dropdown_link')) {
+                alert('follow add link');
+            }
+            dropdown.css('display', 'none');
+		});
+		dropdown.css('display', 'block');
+        return false;
+    });
+}
+
 /* before action hooks */
 
 ploneFinderConfirmDelete = function(uid, container, callback) {
@@ -374,4 +412,28 @@ ploneFinderPasteEntry = function(uid, container, data) {
             }
         }
     });
+}
+
+function PloneFinderTransitions() {
+	
+	this.overlay_api = null;
+
+    this.bind = function() {
+		var overlay = this.overlay_api.getOverlay();
+		var action = jQuery('div.action_change_state a', overlay);
+		action.unbind();
+		action.bind('click', function() {
+			ploneFinder.transitions.queryTransitions();
+			return false;
+		});
+	}
+	
+	this.queryTransitions = function() {
+		alert('query');
+	}
+	
+	this.doTransition = function() {
+		
+	}
+
 }
