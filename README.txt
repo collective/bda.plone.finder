@@ -43,6 +43,8 @@ Chnages
 ------
 
   * remove unused imports from source files [rnix]
+  
+  * implement column filtering [rnix]
 
 1.0.1a
 ------

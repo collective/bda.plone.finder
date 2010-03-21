@@ -62,6 +62,8 @@ function PloneFinder() {
 	this.actions = null;
 	this.columns = [];
 	this.dialog = null;
+	this.current_filter = null;
+	this.current_focused = null;
 	
     this.load = function() {
 		this.dialog = new PloneFinderDialog();
@@ -79,23 +81,39 @@ function PloneFinder() {
 			ploneFinder.bindColumnBatch(this);
 			idx++;
 		});
-		this.bindFilter(ploneFinder.columns[lastidx]);
 		this.initActions(ploneFinder.columns[lastidx],
 		                 ploneFinder.columns[lastidx - 1]);
+		this.bindFilter();
 		this.scrollable_api.end(1);
     }
 	
-	this.bindFilter = function(column) {
-		// XXX extract column info
+	this.bindFilter = function() {
 		var overlay = this.overlay_api.getOverlay();
 		jQuery('input.column_filter', overlay).bind('focus', function() {
+			ploneFinder.current_filter = null;
 			this.value = '';
 			jQuery(this).css('color', '#000');
 		});
+		jQuery('input.column_filter', overlay).bind('keyup', function() {
+            ploneFinder.current_filter = this.value;
+			var url = 'bda.plone.finder.expand?uid=';
+			url += ploneFinder.current_focused + '&f=';
+			url += ploneFinder.current_filter;
+			jQuery.get(url, function(data) {
+				var uid = ploneFinder.current_focused;
+                for (var i = 0; i < ploneFinder.columns.length; i++) {
+                    if (ploneFinder.columns[i] == uid) {
+                        var after = ploneFinder.columns[i - 1];
+                        ploneFinder.applyColumn(after, data, i - 1);
+                    }
+                }
+            });
+        });
 	}
 	
 	this.bindNavItems = function(column) {
 		jQuery('a.column_expand', column).bind('click', function() {
+			ploneFinder.current_focused = ploneFinder.columnUid(this);
             ploneFinder.renderColumn(this, 'bda.plone.finder.expand');
         });
         jQuery('a.column_details', column).bind('click', function() {
@@ -112,6 +130,10 @@ function PloneFinder() {
 			                               this.href.length);
 			var url = 'bda.plone.finder.expand?uid=';
 			url += column_uid + '&b=' + page;
+			if (ploneFinder.current_filter
+			 && ploneFinder.current_focused == column_uid) {
+				url += '&f=' + ploneFinder.current_filter;
+			}
 			jQuery.get(url, function(data) {
                 for (var i = 0; i < ploneFinder.columns.length; i++) {
                     if (ploneFinder.columns[i] == column_uid) {
@@ -131,8 +153,7 @@ function PloneFinder() {
     }
 	
 	this.renderColumn = function(elem, view) {
-		var obj_uid = jQuery(elem).parent().attr('id');
-        obj_uid = obj_uid.substring(16, obj_uid.length);
+		var obj_uid = this.columnUid(elem);
 		var column_uid = elem.rel.substring(15, elem.rel.length);
         var url = view + '?uid=' + obj_uid;
         jQuery.get(url, function(data) {
@@ -190,6 +211,11 @@ function PloneFinder() {
 	this.setSelected = function(column, uid) {
 		jQuery('li.selected', column).toggleClass('selected');
 		jQuery('#finder_nav_item_' + uid, column).toggleClass('selected');
+	}
+	
+	this.columnUid = function(navitem) {
+		var uid = jQuery(navitem).parent().attr('id');
+        return uid.substring(16, uid.length);
 	}
 }
 

@@ -52,10 +52,25 @@ class Column(BrowserView):
         return ret
     
     @property
+    def filtereditems(self):
+        if hasattr(self, '_filtereditems'):
+            return self._filtereditems
+        items = self.items
+        filter = self.request.get('f', '').lower()
+        if not filter:
+            return items
+        filtered = list()
+        for item in items:
+            if item['title'].lower().startswith(filter):
+                filtered.append(item)
+        self._filtereditems = filtered
+        return filtered
+    
+    @property
     def itemslice(self):
         cur = int(self.request.get('b', 0))
         slicesize = self.slicesize
-        return self.items[cur * slicesize:cur * slicesize + slicesize]
+        return self.filtereditems[cur * slicesize:cur * slicesize + slicesize]
     
     @property
     def batch(self):
@@ -67,7 +82,7 @@ class Column(BrowserView):
     
     @property
     def batchvocab(self):
-        items = self.items
+        items = self.filtereditems
         count = len(items)
         if count <= self.slicesize:
             return list()
