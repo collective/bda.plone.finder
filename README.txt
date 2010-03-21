@@ -42,9 +42,13 @@ Chnages
 1.0.2a
 ------
 
-  * Remove unused imports from source files [rnix]
-  
+  * Implement change state dropdown [rnix]
+
+  * Implement add dropdown [rnix]
+
   * Implement column filtering [rnix]
+
+  * Remove unused imports from source files [rnix]
   
   * Titles for finder controls [rnix]
 

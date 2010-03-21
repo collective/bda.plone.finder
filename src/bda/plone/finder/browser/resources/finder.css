@@ -124,6 +124,7 @@
     display:none;
     position:absolute;
     margin-top:0px;
+    padding:5px;
     z-index:10000;
     width:200px;
     list-style-type:none;
@@ -136,6 +137,11 @@
 }
 .finder_controls .action_dropdown li {
     margin:0;
+}
+.finder_controls .action_dropdown li a {
+    padding-left:18px;
+    text-decoration:none;
+    border:none;
 }
 .finder_controls div.buttonSeperator {
     width:50px;

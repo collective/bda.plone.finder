@@ -358,8 +358,13 @@ function PloneFinderDropdown(dropdown) {
 	
 	this.dropdown = dropdown;
 	
-	this.show = function(callback) {
+	this.show = function(view, uid, callback) {
 		var dropdown = this.dropdown;
+		var url = view + '?uid=' + uid;
+		jQuery.get(url, function(data) {
+			dropdown.html(data);
+			jQuery('a', dropdown).unbind();
+		});
 		jQuery(document).bind('mousedown', function(event) {
             if (!event) {
                 var event = window.event;
@@ -377,6 +382,7 @@ function PloneFinderDropdown(dropdown) {
                 callback(target);
             }
             dropdown.css('display', 'none');
+			dropdown.empty();
         });
         dropdown.css('display', 'block');
 	}
@@ -391,8 +397,10 @@ ploneFinderRebindAddAction = function(actions) {
     action.bind('click', function() {
         var parent = jQuery(this).parent();
 		var dropdown = jQuery('.action_dropdown', parent);
-		new PloneFinderDropdown(dropdown).show(function(target) {
-			alert(target);
+		var uid = 'plone_content'; // XXX
+		var menu = new PloneFinderDropdown(dropdown);
+		menu.show('bda.plone.finder.additemsmenu', uid, function(target) {
+			document.location.href = target.href;
 		});
         return false;
     });

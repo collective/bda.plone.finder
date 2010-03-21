@@ -35,16 +35,12 @@
       <a class="button disabled"
          title="Change state">&nbsp;</a>
       <ul class="action_dropdown">
-        <li class="action_dropdown_item">No transitions available</li>
       </ul>
     </div>
     <div class="action_add_item">
       <a class="button disabled"
          title="Add new Item">&nbsp;</a>
       <ul class="action_dropdown">
-        <li class="action_dropdown_item">foo</li>
-        <li class="action_dropdown_item">bar</li>
-        <li class="action_dropdown_item">baz</li>
       </ul>
     </div>
     
