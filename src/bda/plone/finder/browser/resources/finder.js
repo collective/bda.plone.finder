@@ -1,24 +1,33 @@
 jQuery(document).ready(function() {
+	ploneFinderActionHooks = {
+        action_cut: {
+            before: null,
+            after: ploneFinderCutDeleteEntry
+        },
+        action_delete: {
+            before: ploneFinderConfirmDelete,
+            after: ploneFinderCutDeleteEntry
+        },
+        action_paste: {
+            before: null,
+            after: ploneFinderPasteEntry
+        }
+    };
 	var link = jQuery('#siteaction-bda_plone_finder');
 	link.attr('rel', '#bda_finder_overlay');
 	link.bind('click', function() {
         link.plonefinder();
         return false;
     });
-	ploneFinderActionHooks = {
-		action_cut: {
-			before: null,
-			after: ploneFinderCutDeleteEntry
-		},
-		action_delete: {
-            before: ploneFinderConfirmDelete,
-            after: ploneFinderCutDeleteEntry
-        },
-		action_paste: {
-            before: null,
-            after: ploneFinderPasteEntry
+	var cookie = readCookie('bda.plone.finder');
+    if (cookie == 'autoload') {
+		var cur_url = document.location.href;
+		if (cur_url.indexOf('/portal_factory/') == -1
+		 && cur_url.substring(cur_url.lastIndexOf('/') + 1,
+		                      cur_url.length) != 'edit') {
+            link.plonefinder();
         }
-	};
+	}
 });
 
 jQuery.fn.plonefinder = function() {
@@ -44,6 +53,7 @@ jQuery.fn.plonefinder = function() {
             }
         },
 		onClose: function() {
+			createCookie('bda.plone.finder', '');
 			jQuery('.finder_container', overlay).remove();
 		},
 		closeOnClick: false,
@@ -335,6 +345,7 @@ function PloneFinderActions() {
 				var url = actions.actions[action_name]['url'];
 				var enabled = actions.actions[action_name]['enabled'];
                 var ajax = actions.actions[action_name]['ajax'];
+				var autoload = actions.actions[action_name]['autoload'];
                 action.attr('href', url);
 				if (enabled) {
 					actions.enable(action);
@@ -342,10 +353,15 @@ function PloneFinderActions() {
 					actions.disable(action);
 				}
 				if (ajax && enabled) {
-					action.bind('click', function() {
+					action.bind('click', function(event) {
 						actions.execute(this);
-						return false;
+						event.preventDefault();
 					});
+				}
+				if (!ajax && enabled && autoload) {
+					action.bind('click', function() {
+                        createCookie('bda.plone.finder', 'autoload');
+                    });
 				}
 			}
 			// XXX: make after load calls hookable
@@ -425,6 +441,7 @@ ploneFinderRebindAddAction = function(actions) {
 		if (jQuery(this).hasClass('disabled')) {
 			return false;
 		}
+        createCookie('bda.plone.finder', 'autoload');
         var parent = jQuery(this).parent();
 		var dropdown = jQuery('.action_dropdown', parent);
 		var uid = ploneFinder.current_focused;

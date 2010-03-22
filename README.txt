@@ -42,6 +42,8 @@ Chnages
 1.0.2a
 ------
 
+  * Implement auto loading after editing or adding items out of finder [rnix]
+
   * Implement change state dropdown [rnix]
 
   * Implement add dropdown [rnix]
