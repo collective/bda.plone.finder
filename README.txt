@@ -39,8 +39,8 @@ Credits
 Chnages
 =======
 
-1.0.2a
-------
+1.0a3
+-----
 
   * Implement auto loading after editing or adding items out of finder [rnix]
 
@@ -54,8 +54,8 @@ Chnages
   
   * Titles for finder controls [rnix]
 
-1.0.1a
-------
+1.0a2
+-----
 
   * Basic code cleanup [rnix]
   
@@ -63,7 +63,7 @@ Chnages
   
   * Self-contained buildout for plone 3 and plone 4 [jensens]
 
-1.0a
-----
+1.0a1
+-----
 
   * Make it work [rnix]
