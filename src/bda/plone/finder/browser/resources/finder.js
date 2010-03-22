@@ -222,6 +222,95 @@ function PloneFinder() {
 	}
 }
 
+function PloneFinderDialog() {
+
+    this.overlay_api = null;
+    this.msg = 'You see a dialog with an unset message';
+    
+    this.dialog = function() {
+        return jQuery('div.finder_dialog', this.overlay_api.getOverlay());
+    }
+    
+    this.show = function(callback) {
+        var dialog = this.dialog();
+        jQuery('.text', dialog).html(this.msg);
+        jQuery('button', dialog).unbind();
+        jQuery('button.submit', dialog).bind('click', function() {
+            dialog.hide();
+            callback();
+        });
+        jQuery('button.cancel', dialog).bind('click', function() {
+            dialog.hide();
+        });
+        dialog.fadeIn('fast');
+    }
+    
+    this.hide = function() {
+        this.dialog().fadeOut('fast');
+    }
+}
+
+function PloneFinderDropdown(dropdown) {
+    
+    this.dropdown = dropdown;
+    
+    this.show = function(view, uid, callback) {
+        var dropdown = this.dropdown;
+        var url = view + '?uid=' + uid;
+        jQuery.get(url, function(data) {
+            dropdown.html(data);
+            jQuery('a', dropdown).unbind();
+        });
+        jQuery(document).bind('mousedown', function(event) {
+            if (!event) {
+                var event = window.event;
+            }
+            if (event.target) {
+                var target = event.target;
+            } else if (event.srcElement) {
+                var target = event.srcElement;
+            }
+            if (jQuery(target).hasClass('action_dropdown')
+              || jQuery(target).hasClass('action_dropdown_item')) {
+                return true;
+            }
+            if (jQuery(target).hasClass('action_dropdown_link')) {
+                callback(target);
+            }
+            dropdown.css('display', 'none');
+            dropdown.empty();
+        });
+        dropdown.css('display', 'block');
+    }
+}
+
+function PloneFinderTransitions() {
+    
+    this.overlay_api = null;
+
+    this.bind = function() {
+        var overlay = this.overlay_api.getOverlay();
+        var action = jQuery('div.action_change_state a', overlay);
+        action.unbind();
+        action.bind('click', function() {
+			if (jQuery(this).hasClass('disabled')) {
+                return false;
+            }
+            ploneFinder.transitions.queryTransitions();
+            return false;
+        });
+    }
+    
+    this.queryTransitions = function() {
+        alert('query');
+    }
+    
+    this.doTransition = function() {
+        
+    }
+
+}
+
 var ploneFinderActionHooks = {};
 
 function PloneFinderActions() {
@@ -326,68 +415,6 @@ function PloneFinderActions() {
 	}
 }
 
-function PloneFinderDialog() {
-
-	this.overlay_api = null;
-	this.msg = 'You see a dialog with an unset message';
-	
-	this.dialog = function() {
-		return jQuery('div.finder_dialog', this.overlay_api.getOverlay());
-	}
-	
-	this.show = function(callback) {
-		var dialog = this.dialog();
-		jQuery('.text', dialog).html(this.msg);
-		jQuery('button', dialog).unbind();
-		jQuery('button.submit', dialog).bind('click', function() {
-			dialog.hide();
-			callback();
-		});
-		jQuery('button.cancel', dialog).bind('click', function() {
-			dialog.hide();
-		});
-		dialog.fadeIn('fast');
-	}
-	
-	this.hide = function() {
-		this.dialog().fadeOut('fast');
-	}
-}
-
-function PloneFinderDropdown(dropdown) {
-	
-	this.dropdown = dropdown;
-	
-	this.show = function(view, uid, callback) {
-		var dropdown = this.dropdown;
-		var url = view + '?uid=' + uid;
-		jQuery.get(url, function(data) {
-			dropdown.html(data);
-			jQuery('a', dropdown).unbind();
-		});
-		jQuery(document).bind('mousedown', function(event) {
-            if (!event) {
-                var event = window.event;
-            }
-            if (event.target) {
-                var target = event.target;
-            } else if (event.srcElement) {
-                var target = event.srcElement;
-            }
-            if (jQuery(target).hasClass('action_dropdown')
-              || jQuery(target).hasClass('action_dropdown_item')) {
-                return true;
-            }
-            if (jQuery(target).hasClass('action_dropdown_link')) {
-                callback(target);
-            }
-            dropdown.css('display', 'none');
-			dropdown.empty();
-        });
-        dropdown.css('display', 'block');
-	}
-}
-
 /* after load hooks */
 
 ploneFinderRebindAddAction = function(actions) {
@@ -395,9 +422,12 @@ ploneFinderRebindAddAction = function(actions) {
     var action = jQuery('div.action_add_item a', overlay);
     action.unbind();
     action.bind('click', function() {
+		if (jQuery(this).hasClass('disabled')) {
+			return false;
+		}
         var parent = jQuery(this).parent();
 		var dropdown = jQuery('.action_dropdown', parent);
-		var uid = 'plone_content'; // XXX
+		var uid = ploneFinder.current_focused;
 		var menu = new PloneFinderDropdown(dropdown);
 		menu.show('bda.plone.finder.additemsmenu', uid, function(target) {
 			document.location.href = target.href;
@@ -432,28 +462,4 @@ ploneFinderPasteEntry = function(uid, container, data) {
             }
         }
     });
-}
-
-function PloneFinderTransitions() {
-	
-	this.overlay_api = null;
-
-    this.bind = function() {
-		var overlay = this.overlay_api.getOverlay();
-		var action = jQuery('div.action_change_state a', overlay);
-		action.unbind();
-		action.bind('click', function() {
-			ploneFinder.transitions.queryTransitions();
-			return false;
-		});
-	}
-	
-	this.queryTransitions = function() {
-		alert('query');
-	}
-	
-	this.doTransition = function() {
-		
-	}
-
 }

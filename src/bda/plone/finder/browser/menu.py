@@ -21,9 +21,14 @@ class AddItemsMenu(AjaxContext):
         menu = getUtility(IBrowserMenu, name=u'plone_contentmenu_factory')
         ret = list()
         for item in menu.getMenuItems(self.current_context, self.request):
+            icon = item['icon']
+            if icon:
+                icon = 'background:url(\'' + icon + '\') no-repeat;'
+            else:
+                icon = 'background:none;'
             ret.append({
                 'title': item['title'],
                 'url': item['action'],
-                'style': 'background:url(\'' + item['icon'] + '\') no-repeat;',
+                'style': icon,
             })
         return ret

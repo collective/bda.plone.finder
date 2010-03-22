@@ -95,12 +95,16 @@ class Actions(BrowserView):
         if uid in ['plone_content',
                    'plone_control_panel',
                    'plone_addons']:
+            purl = self.context.portal_url.getPortalObject().absolute_url()
             data['action_view']['enabled'] = True
-            data['action_view']['url'] = \
-                self.context.portal_url.getPortalObject().absolute_url()
+            data['action_view']['url'] = purl
+            if uid == 'plone_content':
+                data['action_add_item']['enabled'] = True
+                data['action_edit']['enabled'] = True
+                data['action_edit']['url'] = purl + '/edit'
             if uid in ['plone_control_panel',
                        'plone_addons']:
-                data['action_view']['url'] += '/plone_control_panel'
+                data['action_view']['url'] = purl + '/plone_control_panel'
         return data
     
     @property
