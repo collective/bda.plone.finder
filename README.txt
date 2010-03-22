@@ -36,7 +36,7 @@ Credits
   
   * Thanks to the Sprinters at Cathedral Sprint 2010 for ideas and feedback
 
-Chnages
+Changes
 =======
 
 1.0a3
