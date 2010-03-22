@@ -15,9 +15,9 @@ jQuery(document).ready(function() {
     };
 	var link = jQuery('#siteaction-bda_plone_finder');
 	link.attr('rel', '#bda_finder_overlay');
-	link.bind('click', function() {
+	link.bind('click', function(event) {
         link.plonefinder();
-        return false;
+		event.preventDefault();
     });
 	var cookie = readCookie('bda.plone.finder');
     if (cookie == 'autoload') {
@@ -73,7 +73,8 @@ function PloneFinder() {
 	this.columns = [];
 	this.dialog = null;
 	this.current_filter = null;
-	this.current_focused = null;
+	this.current_focused = null; /* current focused column uid */
+	this.current_item = null; /* current selected item uid */
 	this.transitions = null;
 	
     this.load = function() {
@@ -126,10 +127,13 @@ function PloneFinder() {
 	
 	this.bindNavItems = function(column) {
 		jQuery('a.column_expand', column).bind('click', function() {
-			ploneFinder.current_focused = ploneFinder.columnUid(this);
+			var uid = ploneFinder.columnUid(this);
+			ploneFinder.current_focused = uid;
+			ploneFinder.current_item = uid;
             ploneFinder.renderColumn(this, 'bda.plone.finder.expand');
         });
         jQuery('a.column_details', column).bind('click', function() {
+			ploneFinder.current_item = ploneFinder.columnUid(this);
             ploneFinder.renderColumn(this, 'bda.plone.finder.details');
         });
 	}
@@ -138,7 +142,7 @@ function PloneFinder() {
 		var column_uid = jQuery(column).attr('id');
 		column_uid = column_uid.substring(14, column_uid.length);
 		jQuery('p.col_navigation a', column).unbind();
-        jQuery('p.col_navigation a', column).bind('click', function() {
+        jQuery('p.col_navigation a', column).bind('click', function(event) {
 			var page = this.href.substring(this.href.lastIndexOf('/') + 1,
 			                               this.href.length);
 			var url = 'bda.plone.finder.expand?uid=';
@@ -155,7 +159,7 @@ function PloneFinder() {
                     }
                 }
             });
-			return false;
+			event.preventDefault();
         });
     }
 	
@@ -306,19 +310,26 @@ function PloneFinderTransitions() {
 			if (jQuery(this).hasClass('disabled')) {
                 return false;
             }
-            ploneFinder.transitions.queryTransitions();
+            ploneFinder.transitions.queryTransitions(this);
             return false;
         });
     }
     
-    this.queryTransitions = function() {
-        alert('query');
+    this.queryTransitions = function(action) {
+        if (jQuery(action).hasClass('disabled')) {
+            return false;
+        }
+        createCookie('bda.plone.finder', 'autoload');
+        var parent = jQuery(action).parent();
+        var dropdown = jQuery('.action_dropdown', parent);
+        var uid = ploneFinder.current_item;
+		var view = 'bda.plone.finder.transitionsmenu';
+        var menu = new PloneFinderDropdown(dropdown);
+        menu.show(view, uid, function(target) {
+			// XXX: ajaxify
+            document.location.href = target.href;
+        });
     }
-    
-    this.doTransition = function() {
-        
-    }
-
 }
 
 var ploneFinderActionHooks = {};

@@ -8,5 +8,13 @@
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="cmf.ManagePortal"
     />
+	
+	<browser:page
+        for="*"
+        name="bda.plone.finder.transitionsmenu"
+        class=".menu.TransitionsMenu"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="cmf.ManagePortal"
+    />
 
 </configure>

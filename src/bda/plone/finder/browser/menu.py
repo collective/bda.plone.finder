@@ -14,7 +14,7 @@ class AddItemsMenu(AjaxContext):
     
     @property
     def noitems(self):
-        return _('Nothing to add')
+        return u'Nothing to add'
     
     @property
     def items(self):
@@ -30,5 +30,26 @@ class AddItemsMenu(AjaxContext):
                 'title': item['title'],
                 'url': item['action'],
                 'style': icon,
+            })
+        return ret
+
+class TransitionsMenu(AjaxContext):
+    
+    __call__ = ViewPageTemplateFile(u'templates/dropdown.pt')
+    
+    @property
+    def noitems(self):
+        return u'No transitions available'
+    
+    @property
+    def items(self):
+        pactions = self.context.portal_actions
+        actions = pactions.listFilteredActionsFor(self.current_context)
+        ret = list()
+        for transition in actions['workflow']:
+            ret.append({
+                'title': transition['title'],
+                'url': transition['url'],
+                'style': 'background:none;',
             })
         return ret
