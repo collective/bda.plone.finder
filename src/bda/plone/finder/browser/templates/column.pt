@@ -1,9 +1,10 @@
 <div id=""
+     class="finder_column"
      tal:define="items view/itemslice;
                  batch nocall:view/batch"
      tal:attributes="id view/uid">
   
-  <p class="col_navigation">
+  <p class="col_navigation" tal:condition="nothing">
     <img src="++resource++bda.plone.finder.images/blank.gif" />
   
     <tal:batch replace="structure batch/render" />
@@ -34,6 +35,18 @@
            tal:condition="python: not prevpage['visible'] or prevpage['current']" />
     </tal:page>
   </p>
+  
+  <div class="finder_scrollbar">
+    <div class="scoll_up">
+      <img src="++resource++bda.plone.finder.images/up_invisible.gif" />
+    </div>
+    <div class="slider_area">
+      <div class="slider"></div>
+    </div>
+    <div class="scoll_down">
+      <img src="++resource++bda.plone.finder.images/down_invisible.gif" />
+    </div>
+  </div>
   
   <ul class="columnitems"
       tal:condition="items">
@@ -68,37 +81,5 @@
       <strong i18n:translate="">No Items</strong>
     </li>
   </ul>
-  
-  <p class="col_navigation bottom_nav">
-    <img src="++resource++bda.plone.finder.images/blank.gif" />
-    
-    <tal:batch replace="structure batch/render" />
-    
-    <tal:page define="lastpage batch/lastpage"
-              condition="lastpage">
-      <a href="#"
-         tal:condition="python: lastpage['visible'] and not lastpage['current']"
-         tal:attributes="href lastpage/url">
-        <img src="++resource++bda.plone.finder.images/last.gif"
-             tal:attributes="name lastpage/url"
-             class="batchlink" />
-      </a>
-      <img src="++resource++bda.plone.finder.images/last_invisible.gif"
-           tal:condition="python: not lastpage['visible'] or lastpage['current']" />
-    </tal:page>
-    
-    <tal:page define="nextpage batch/nextpage"
-              condition="nextpage">
-      <a href="#"
-         tal:condition="python: nextpage['visible'] and not nextpage['current']"
-         tal:attributes="href nextpage/url">
-        <img src="++resource++bda.plone.finder.images/down.gif"
-             tal:attributes="name nextpage/url"
-             class="batchlink" />
-      </a>
-      <img src="++resource++bda.plone.finder.images/down_invisible.gif"
-           tal:condition="python: not nextpage['visible'] or nextpage['current']" />
-    </tal:page>
-  </p>
 
 </div>

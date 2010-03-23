@@ -3,7 +3,7 @@
     /*z-index:10000;*/
     background-color:#999;
     width:924px;
-    min-height:412px;
+    height:408px;
     border:1px solid #666;
     -moz-box-shadow:0 0 90px 5px #bbb;
     -webkit-box-shadow: 0 0 90px #bbb;
@@ -21,7 +21,7 @@
 }
 .finder_container {
     width:920px;
-    min-height:412px;
+    height:408px;
     margin-left:2px;
     margin-right:2px;
 }
@@ -212,56 +212,88 @@
     width:20000em; 
     position:relative;
 }
-.finder_columns div.items div {
+.finder_columns div.finder_column {
     position:relative;
     float:left;
     background-color:#fff;
     margin:0 2px 4px 2px;
     width: 224px;
-    min-height:392px;
+    height:362px;
     border:1px solid #666;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
 }
-.finder_columns div.items p.col_navigation {
-    margin:0;
-    font-size:10px;
-    text-align:right;
-}
-.finder_columns div.items p.bottom_nav {
+.finder_columns div.finder_scrollbar {
     position:absolute;
-    bottom:0px;
     right:0px;
+    width:15px;
+    height:362px;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
 }
-.finder_columns div.items p.col_navigation a {
-    color:#333;
-    border:none;
-    text-decoration:none;
-}
-.finder_columns div.items p.col_navigation img {
-    margin:2px 0 2px 0;
+.finder_columns div.scoll_up {
     cursor:pointer;
+    height:15px;
+    border-left:#bbb 1px solid;
+    border-bottom:#bbb 1px solid;
 }
-.finder_columns div.items ul {
+.finder_columns div.scoll_up img {
+    padding-top:2px;
+    padding-left:3px;
+}
+.finder_columns div.scoll_down {
+    position: absolute;
+    cursor:pointer;
+    bottom:0px;
+    width:14px;
+    height:15px;
+    border-top:#bbb 1px solid;
+    border-left:#bbb 1px solid;
+}
+.finder_columns div.scoll_down img {
+    padding-top:3px;
+    padding-left:3px;
+}
+.finder_columns div.slider_area {
+    position:relative;
+    border-left:#bbb 1px solid;
+    height:332px;
+}
+.finder_columns div.slider {
+    position:absolute;
+    cursor:pointer;
+    top:0;
+    left:0;
+    width:14px;
+    height:40px;
+    margin-left:-1px;
+    margin-top:-1px;
+    border:#666 1px solid;
+    background-color:#bbb;
+    -moz-border-radius:2px;
+    -webkit-border-radius:2px;
+}
+.finder_columns div.finder_column ul {
     list-style-image: none;
     list-style-type: none;
     margin:3px 0 3px 0;
+    padding-right:15px;
 }
-.finder_columns div.items li {
+.finder_columns div.finder_column li {
     margin:0;
 }
-.finder_columns div.items li a {
+.finder_columns div.finder_column li a {
     font-weight: normal;
 }
-.finder_columns div.items li.selected {
+.finder_columns div.finder_column li.selected {
     background-color:#ddd;
     border:666 1px solid;
 }
-.finder_columns div.items li.cut {
+.finder_columns div.finder_column li.cut {
     background-color:#fff !important;
     border:none !important;
 }
-.finder_columns div.items li.cut a {
+.finder_columns div.finder_column li.cut a {
     text-decoration: none;
     border: none;
     color: #ddd !important;

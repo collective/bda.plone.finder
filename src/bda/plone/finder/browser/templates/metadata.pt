@@ -1,8 +1,0 @@
-<ul>
-  <li>
-    <strong>Type</strong>
-    <p tal:content="view/type">
-      Typename
-    </p>
-  </li>
-</ul>

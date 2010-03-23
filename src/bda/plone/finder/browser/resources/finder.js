@@ -80,6 +80,7 @@ function PloneFinder() {
     this.load = function() {
 		this.dialog = new PloneFinderDialog();
 		this.dialog.overlay_api = this.overlay_api;
+		this.slider = new PloneFinderSlider();
 		var idx = 0;
 		var lastidx = 0;
 		var items = this.scrollable_api.getItems();
@@ -161,6 +162,7 @@ function PloneFinder() {
             });
 			event.preventDefault();
         });
+		this.slider.load(column);
     }
 	
 	this.initActions = function(uid, column) {
@@ -188,7 +190,7 @@ function PloneFinder() {
 		this.scrollable_api.begin(1);
 		var items = this.scrollable_api.getItems();
 		var finder_columns = this.scrollable_api.getItemWrap();
-		var empty_column = '<div>&nbsp;</div>';
+		var empty_column = '<div class="finder_column">&nbsp;</div>';
 		var to_remove = [];
 		for (var i = index; i < this.columns.length - 1; i++) {
 			var col = items.get(i + 1);
@@ -233,6 +235,49 @@ function PloneFinder() {
 	this.columnUid = function(navitem) {
 		var uid = jQuery(navitem).parent().attr('id');
         return uid.substring(16, uid.length);
+	}
+}
+
+function PloneFinderSlider() {
+	
+	this.slider = null;
+	this.offset = 0;
+	this.mousedown = 0;
+	
+	this.load = function(column) {
+		var api = this;
+		var sliderarea = jQuery('div.slider_area', column);
+		var slider = jQuery('div.slider', sliderarea);
+		slider.unbind();
+		slider.bind('mousedown', function(event) {
+			api.mousedown = 1;
+			api.slider = jQuery(this);
+			api.offset = event.clientY - slider.offset().top;
+			jQuery([document, slider]).one('mouseup', function(event) {
+	            api.mousedown = 0;
+	            jQuery(document).unbind('mousemove');
+	        });
+			jQuery(document).bind('mousemove', function(event) {
+				if (api.mousedown != 1) {
+					api.slider.unbind('mouseup');
+                    jQuery(document).unbind('mousemove');
+					event.preventDefault();
+					return;
+				}
+				var slider = api.slider;
+				var area = slider.parent();
+				var orgin = area.offset().top;
+				var mouse = event.clientY;
+				var area_height = area.height();
+				var slider_height = slider.height();
+				var min = orgin;
+				var max = orgin + area_height - slider_height + api.offset;
+				if (mouse - api.offset >= min && mouse <= max) {
+					slider.css('top', mouse - orgin - api.offset);
+				}
+				event.preventDefault();
+			});
+		});
 	}
 }
 

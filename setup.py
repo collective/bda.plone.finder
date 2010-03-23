@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '1.0a3'
+version = '1.0a4'
 shortdesc ="Mac Finder like view for browsing plone sites."
 longdesc = open(os.path.join(os.path.dirname(__file__), 'README.txt')).read()
 

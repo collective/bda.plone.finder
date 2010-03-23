@@ -35,7 +35,7 @@ class Finder(BrowserView):
             ret.append(obj.restrictedTraverse('finder_column'))
         ret.reverse()
         while len(ret) < 4:
-            ret.append('<div>&nbsp;</div>')
+            ret.append('<div class="finder_column">&nbsp;</div>')
         return ret
     
     @property

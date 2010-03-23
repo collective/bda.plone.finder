@@ -72,7 +72,7 @@ class AjaxColumn(AjaxContext):
         if uid in self._cp_actions + self._ac_actions:
             return self._render_marked(context, IPloneAction, view)
         if not context:
-            return u'<div>%s</div>' % _(u'Unknown Column')
+            return u'<div class="finder_column"></div>'
         return context.restrictedTraverse(view)()
     
     def _render_marked(self, context, iface, view):
@@ -97,4 +97,4 @@ class PloneColumn(Column):
                 rendered = context.restrictedTraverse('finder_column')()
                 noLongerProvides(context, iface)
                 return rendered
-        return u'<div>%s</div>' % _(u'Unknown Column')
+        return u'<div class="finder_column"></div>'

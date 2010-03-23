@@ -6,7 +6,8 @@ from Products.CMFPlone import PloneMessageFactory as _
 from utils import col_id
 
 DETAILS = """
-<div id="%(id)s">
+<div id="%(id)s"
+     class="finder_column">
   %(details)s
 </div>
 """

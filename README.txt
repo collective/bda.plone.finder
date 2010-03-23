@@ -42,6 +42,12 @@ Changes
 1.0a3
 -----
 
+  * Change look and feel of batching column pages. Its a vertical slider now
+    [rnix]
+
+1.0a3
+-----
+
   * Implement auto loading after editing or adding items out of finder [rnix]
 
   * Implement change state dropdown [rnix]
