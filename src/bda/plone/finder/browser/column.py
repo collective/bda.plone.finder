@@ -6,7 +6,6 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.layout.icons.interfaces import IContentIcon
 from Products.CMFPlone import PloneMessageFactory as _
 from Products.CMFPlone.utils import typesToList
-from batch import Batch
 from utils import (
     col_id,
     item_id,
@@ -73,15 +72,7 @@ class Column(BrowserView):
         return self.filtereditems[cur * slicesize:cur * slicesize + slicesize]
     
     @property
-    def batch(self):
-        b = Batch(aq_inner(self.context), self.request)
-        if not hasattr(self, '_batch_vocab'):
-            self._batch_vocab = self.batchvocab
-        b.vocab = self._batch_vocab
-        return b
-    
-    @property
-    def batchvocab(self):
+    def slicepages(self):
         items = self.filtereditems
         count = len(items)
         if count <= self.slicesize:
@@ -95,8 +86,6 @@ class Column(BrowserView):
             vocab.append({
                 'page': str(i + 1),
                 'current': cur == i and True or False,
-                'visible': True,
-                'url': str(i),
             })
         return vocab
     

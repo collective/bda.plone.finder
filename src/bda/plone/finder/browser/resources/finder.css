@@ -277,6 +277,8 @@
     list-style-image: none;
     list-style-type: none;
     margin:3px 0 3px 0;
+}
+.finder_columns div.finder_column ul.sliced {
     padding-right:15px;
 }
 .finder_columns div.finder_column li {

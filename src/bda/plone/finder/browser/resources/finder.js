@@ -256,12 +256,13 @@ function PloneFinderSlider() {
 			jQuery([document, slider]).one('mouseup', function(event) {
 	            api.mousedown = 0;
 	            jQuery(document).unbind('mousemove');
+				api.snap();
 	        });
 			jQuery(document).bind('mousemove', function(event) {
 				if (api.mousedown != 1) {
-					api.slider.unbind('mouseup');
                     jQuery(document).unbind('mousemove');
 					event.preventDefault();
+					api.snap();
 					return;
 				}
 				var slider = api.slider;
@@ -278,6 +279,10 @@ function PloneFinderSlider() {
 				event.preventDefault();
 			});
 		});
+	}
+	
+	this.snap = function() {
+		alert('snap');
 	}
 }
 
