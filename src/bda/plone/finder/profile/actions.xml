@@ -2,11 +2,11 @@
 <object name="portal_actions"
         meta_type="Plone Actions Tool"
         xmlns:i18n="http://xml.zope.org/namespaces/i18n">
-    <object name="site_actions" meta_type="CMF Action Category">
+    <object name="object" meta_type="CMF Action Category">
 	    <object name="bda_plone_finder" meta_type="CMF Action" i18n:domain="plone">
 	        <property name="title" i18n:translate="">Finder</property>
 	        <property name="description" i18n:translate=""></property>
-	        <property name="url_expr">string:${portal_url}/finder</property>
+	        <property name="url_expr">string:${globals_view/getCurrentFolderUrl}/finder</property>
 	        <property name="icon_expr"></property>
 	        <property name="available_expr"></property>
 	        <property name="permissions">

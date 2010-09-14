@@ -13,11 +13,11 @@ jQuery(document).ready(function() {
             after: ploneFinderPasteEntry
         }
     };
-	var link = jQuery('#siteaction-bda_plone_finder');
+	var link = jQuery('#contentview-bda_plone_finder');
 	link.attr('rel', '#bda_finder_overlay');
 	link.bind('click', function(event) {
-        link.plonefinder();
 		event.preventDefault();
+        link.plonefinder();
     });
 	var cookie = readCookie('bda.plone.finder');
     if (cookie == 'autoload') {
@@ -33,34 +33,34 @@ jQuery(document).ready(function() {
 jQuery.fn.plonefinder = function() {
 	ploneFinder = new PloneFinder();
 	var overlay = jQuery('#bda_finder_overlay');
-    var overlay_api = jQuery(this).overlay({
-        target: overlay,
-        expose: {
-            color: '#eee',
+	var elem = jQuery(this);
+    elem.overlay({
+		target: overlay,
+		mask: {
+			color: '#eee',
             loadSpeed: 200,
-            onBeforeLoad: function() {
-                jQuery.get('bda.plone.finder', function(data) {
-					overlay.append(data);
-					scrollable_api = jQuery('div.finder_columns',
-					                        overlay).scrollable({
-						size: 4,
-                        api: true,
-                        clickable: false
-					});
-					ploneFinder.scrollable_api = scrollable_api;
-					ploneFinder.load();
-				});
-            }
         },
-		onClose: function() {
+        onBeforeLoad: function() {
+            jQuery.get('bda.plone.finder', function(data) {
+                overlay.append(data);
+				var scrollelem = jQuery('div.finder_columns', overlay);
+                scrollelem.scrollable({
+                    size: 4,
+                    clickable: false
+                });
+                ploneFinder.scrollable_api = scrollelem.data('scrollable');
+                ploneFinder.load();
+            });
+        },
+        onClose: function() {
 			createCookie('bda.plone.finder', '');
-			jQuery('.finder_container', overlay).remove();
-		},
-		closeOnClick: false,
-        api: true
+            jQuery('.finder_container', overlay).remove();
+        },
+		oneInstance: false,
+        closeOnClick: false
     });
-	ploneFinder.overlay_api = overlay_api;
-	overlay_api.load();
+	ploneFinder.overlay_api = elem.data('overlay');
+	ploneFinder.overlay_api.load();
 }
 
 var ploneFinder = null;

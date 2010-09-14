@@ -1,6 +1,6 @@
 .finder_overlay {
     display:none;
-    /*z-index:10000;*/
+    z-index:5000;
     background-color:#999;
     width:924px;
     height:408px;
