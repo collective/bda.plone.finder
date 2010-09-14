@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '1.0a4'
-shortdesc ="Mac Finder like view for browsing plone sites."
+version = '1.0b1'
+shortdesc ="Mac Finder like view for Plone."
 longdesc = open(os.path.join(os.path.dirname(__file__), 'README.txt')).read()
 
 setup(name='bda.plone.finder',
@@ -10,7 +10,7 @@ setup(name='bda.plone.finder',
       description=shortdesc,
       long_description=longdesc,
       classifiers=[
-            'Development Status :: 3 - Alpha',
+            'Development Status :: 4 - Beta',
             'Environment :: Web Environment',
             'License :: OSI Approved :: GNU General Public License (GPL)',
             'Operating System :: OS Independent',
@@ -31,7 +31,7 @@ setup(name='bda.plone.finder',
           'setuptools',
           'Plone',
           'simplejson',
-          'plone.app.jquerytools',
+          'bda.plone.ajax',
           # -*- Extra requirements: -*
       ],
       extras_require = dict(

@@ -20,27 +20,27 @@
     />
 
     <adapter
-      for="Products.Archetypes.interfaces.IBaseObject"
-      name="action_cut"
-      factory=".actions.CutAction"
+        for="Products.Archetypes.interfaces.IBaseObject"
+        name="action_cut"
+        factory=".actions.CutAction"
     />
     
     <adapter
-      for="Products.Archetypes.interfaces.IBaseObject"
-      name="action_copy"
-      factory=".actions.CopyAction"
+        for="Products.Archetypes.interfaces.IBaseObject"
+        name="action_copy"
+        factory=".actions.CopyAction"
     />
     
     <adapter
-      for="Products.Archetypes.interfaces.IBaseObject"
-      name="action_paste"
-      factory=".actions.PasteAction"
+        for="Products.Archetypes.interfaces.IBaseObject"
+        name="action_paste"
+        factory=".actions.PasteAction"
     />
     
     <adapter
-      for="Products.Archetypes.interfaces.IBaseObject"
-      name="action_delete"
-      factory=".actions.DeleteAction"
+        for="Products.Archetypes.interfaces.IBaseObject"
+        name="action_delete"
+        factory=".actions.DeleteAction"
     />
 
 </configure>

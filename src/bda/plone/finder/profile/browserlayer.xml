@@ -1,6 +1,7 @@
+<?xml version="1.0"?>
 <layers>
- <layer
-     name="bda.plone.finder"
-     interface="bda.plone.finder.interfaces.IFinderLayer"
- />
+   <layer
+       name="bda.plone.finder"
+       interface="bda.plone.finder.interfaces.IFinderLayer"
+   />
 </layers>

@@ -1,6 +1,6 @@
 <configure xmlns="http://namespaces.zope.org/zope">
 	
-	<include package="plone.app.jquerytools" />
+	<include package="bda.plone.ajax" />
 	<include package=".browser" />
     <include file="profile.zcml" />
 	
