@@ -65,6 +65,9 @@
     -moz-border-radius:2px;
     -webkit-border-radius:2px;
 }
+.finder_container li {
+	display:block;
+}
 .finder_controls {
     position:relative;
 }
@@ -217,7 +220,7 @@
     float:left;
     background-color:#fff;
     margin:0 2px 4px 2px;
-    width: 224px;
+    width:224px;
     height:362px;
     border:1px solid #666;
     -moz-border-radius:4px;

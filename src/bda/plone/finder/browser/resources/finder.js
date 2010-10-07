@@ -45,8 +45,8 @@ jQuery.fn.plonefinder = function() {
                 overlay.append(data);
 				var scrollelem = jQuery('div.finder_columns', overlay);
                 scrollelem.scrollable({
-                    size: 4,
-                    clickable: false
+                    clickable: false,
+					speed: 150
                 });
                 ploneFinder.scrollable_api = scrollelem.data('scrollable');
                 ploneFinder.load();
@@ -80,7 +80,7 @@ function PloneFinder() {
     this.load = function() {
 		this.dialog = new PloneFinderDialog();
 		this.dialog.overlay_api = this.overlay_api;
-		this.slider = new PloneFinderSlider();
+		//this.slider = new PloneFinderSlider();
 		var idx = 0;
 		var lastidx = 0;
 		var items = this.scrollable_api.getItems();
@@ -99,7 +99,9 @@ function PloneFinder() {
 		this.transitions = new PloneFinderTransitions();
 		this.transitions.overlay_api = this.overlay_api;
 		this.bindFilter();
-		this.scrollable_api.end(1);
+		// seekTo(index, speed)
+		bdajax.message(this.scrollable_api.getIndex());
+		// this.scrollable_api.end(1);
     }
 	
 	this.bindFilter = function() {
@@ -162,7 +164,7 @@ function PloneFinder() {
             });
 			event.preventDefault();
         });
-		this.slider.load(column);
+		//this.slider.load(column);
     }
 	
 	this.initActions = function(uid, column) {
@@ -235,54 +237,6 @@ function PloneFinder() {
 	this.columnUid = function(navitem) {
 		var uid = jQuery(navitem).parent().attr('id');
         return uid.substring(16, uid.length);
-	}
-}
-
-function PloneFinderSlider() {
-	
-	this.slider = null;
-	this.offset = 0;
-	this.mousedown = 0;
-	
-	this.load = function(column) {
-		var api = this;
-		var sliderarea = jQuery('div.slider_area', column);
-		var slider = jQuery('div.slider', sliderarea);
-		slider.unbind();
-		slider.bind('mousedown', function(event) {
-			api.mousedown = 1;
-			api.slider = jQuery(this);
-			api.offset = event.clientY - slider.offset().top;
-			jQuery([document, slider]).one('mouseup', function(event) {
-	            api.mousedown = 0;
-	            jQuery(document).unbind('mousemove');
-				api.snap();
-	        });
-			jQuery(document).bind('mousemove', function(event) {
-				if (api.mousedown != 1) {
-                    jQuery(document).unbind('mousemove');
-					event.preventDefault();
-					api.snap();
-					return;
-				}
-				var slider = api.slider;
-				var area = slider.parent();
-				var orgin = area.offset().top;
-				var mouse = event.clientY;
-				var area_height = area.height();
-				var slider_height = slider.height();
-				var min = orgin;
-				var max = orgin + area_height - slider_height + api.offset;
-				if (mouse - api.offset >= min && mouse <= max) {
-					slider.css('top', mouse - orgin - api.offset);
-				}
-				event.preventDefault();
-			});
-		});
-	}
-	
-	this.snap = function() {
-		alert('snap');
 	}
 }
 
