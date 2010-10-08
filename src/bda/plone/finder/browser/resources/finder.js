@@ -22,21 +22,22 @@ jQuery.fn.finder = function(){
                 scrollable.scrollable({
                     clickable: false,
                     speed: 150,
-					onBeforeSeek: function(event, index) {
-						var size = finder.columns.length;
-						if (index > size - 4) {
-							return false;
-						}
-					},
-					onSeek: function(event, index){
-					    var size = finder.columns.length;
+                    onBeforeSeek: function(event, index){
+                        var size = finder.columns.length;
+                        if (index > size - 4) {
+                            return false;
+                        }
+                    },
+                    onSeek: function(event, index){
+                        var size = finder.columns.length;
                         var button = jQuery('a.next', finder.overlay());
                         if ((size <= 4) || (index == size - 4)) {
                             button.addClass('disabled');
-                        } else {
+                        }
+                        else {
                             button.removeClass('disabled');
                         }
-					}
+                    }
                 });
                 finder.scroll_api = scrollable.data('scrollable');
                 finder.load();
@@ -197,7 +198,7 @@ finder = {
         });
         finder.init_actions(finder.columns[lastidx], finder.columns[lastidx - 1]);
         finder.bind_filter();
-		var index = finder.scroll_api.getSize() - 4;
+        var index = finder.scroll_api.getSize() - 4;
         finder.scroll_api.seekTo(index, 1);
     },
     
@@ -252,10 +253,10 @@ finder = {
         var url = view + '?uid=' + obj_uid;
         jQuery.get(url, function(data){
             for (var i = 0; i < finder.scroll_api.getSize(); i++) {
-				if (finder.columns[i] == column_uid) {
-					finder.init_actions(obj_uid, column_uid);
+                if (finder.columns[i] == column_uid) {
+                    finder.init_actions(obj_uid, column_uid);
                     finder.apply_column(column_uid, data, i);
-					break;
+                    break;
                 }
             }
         });
@@ -264,77 +265,77 @@ finder = {
     // apply finder column
     apply_column: function(after, data, index){
         var scroll_api = finder.scroll_api;
-		var items = scroll_api.getItems();
-		
-		// detect after position
-		var after_uid;
-		var after_position = 0;
-		for (var i = 0; i < items.length; i++) {
-		    after_uid = jQuery(items.get(i)).attr('id');
+        var items = scroll_api.getItems();
+        
+        // detect after position
+        var after_uid;
+        var after_position = 0;
+        for (var i = 0; i < items.length; i++) {
+            after_uid = jQuery(items.get(i)).attr('id');
             after_uid = after_uid.substring(14, after_uid.length);
-			if (after_uid == after) {
-				after_position = i;
-				break;
-			}
-		}
-		
-		// set column uid's in finder.columns and detect after_col
-		var column_uid = jQuery(data).get(0).id;
+            if (after_uid == after) {
+                after_position = i;
+                break;
+            }
+        }
+        
+        // set column uid's in finder.columns and detect after_col
+        var column_uid = jQuery(data).get(0).id;
         column_uid = column_uid.substring(14, column_uid.length);
-		var count = items.length;
-		count = count < after_position + 2 ? after_position + 2 : count;
-		var col, after_col;
-		for (var i = 0; i < count; i++) {
-			col = items.get(i);
-			if (i == after_position) {
-				after_col = jQuery(col);
-			} else if (i == after_position + 1) {
-				finder.columns[i] = column_uid;
-			} else if (i > after_position + 1) {
-				finder.columns[i] = null;
-			}
-		}
-		
-		// append new column after after_col
-		after_col.after(data);
-		
-		// replace remaining columns with empty column or collect
-		// them to be removed 
-		var to_remove = [];
-		var remove_count = 0;
-		var empty_column = '<div class="finder_column">&nbsp;</div>';
-		items = scroll_api.getItems();
-		for (var i = after_position; i < scroll_api.getSize(); i++) {
-		    col = items.get(i);
-			if (i > after_position + 1 && i <= 3) {
-				jQuery(col).replaceWith(empty_column);
-			} else if (i > after_position + 1 && i > 3) {
-				to_remove[remove_count] = col;
-				remove_count++;
-			}
-		}
-		
-		// remove superfluos columns and finalize
-		jQuery(to_remove).remove();
+        var count = items.length;
+        count = count < after_position + 2 ? after_position + 2 : count;
+        var col, after_col;
+        for (var i = 0; i < count; i++) {
+            col = items.get(i);
+            if (i == after_position) {
+                after_col = jQuery(col);
+            } else if (i == after_position + 1) {
+                finder.columns[i] = column_uid;
+            } else if (i > after_position + 1) {
+                finder.columns[i] = null;
+            }
+        }
+        
+        // append new column after after_col
+        after_col.after(data);
+        
+        // replace remaining columns with empty column or collect
+        // them to be removed 
+        var to_remove = [];
+        var remove_count = 0;
+        var empty_column = '<div class="finder_column">&nbsp;</div>';
+        items = scroll_api.getItems();
+        for (var i = after_position; i < scroll_api.getSize(); i++) {
+            col = items.get(i);
+            if (i > after_position + 1 && i <= 3) {
+                jQuery(col).replaceWith(empty_column);
+            } else if (i > after_position + 1 && i > 3) {
+                to_remove[remove_count] = col;
+                remove_count++;
+            }
+        }
+        
+        // remove superfluos columns and finalize
+        jQuery(to_remove).remove();
         finder.reset_columns(after_position + 1);
-		finder.set_selected(after_col, column_uid);
-		var new_col = jQuery('#finder_column_' + column_uid, finder.scrollable());
+        finder.set_selected(after_col, column_uid);
+        var new_col = jQuery('#finder_column_' + column_uid, finder.scrollable());
         finder.bind_nav_items(new_col);
-		var index = finder.scroll_api.getSize() - 4;
-		index = index < 0 ? 0 : index;
+        var index = finder.scroll_api.getSize() - 4;
+        index = index < 0 ? 0 : index;
         finder.scroll_api.seekTo(index, 1);
     },
     
     // reset finder.columns
     reset_columns: function(count){
         var new_columns = [];
-		if (count < 3) {
+        if (count < 3) {
             count = 3;
         }
         for (var i = 0; i <= count; i++) {
             new_columns[i] = finder.columns[i];
         }
-		finder.columns = new_columns;
+        finder.columns = new_columns;
     },
     
     // set selected nav item
