@@ -1,34 +1,10 @@
 <div id=""
      class="finder_column"
-     tal:define="items view/itemslice;
-                 slicepages view/slicepages"
+     tal:define="items view/filtereditems"
      tal:attributes="id view/uid">
   
-  <div class="finder_scrollbar"
-       tal:condition="nothing">
-    <div class="scoll_up">
-      <img src="++resource++bda.plone.finder.images/up_invisible.gif" />
-    </div>
-    <div class="slider_area"
-         tal:define="style python: 'height:' + str(332 / len(slicepages)) + 'px'">
-      <div class="slider"
-           style=""
-           tal:attributes="style style"></div>
-      <div class="slicepage"
-           tal:repeat="slicepage slicepages"
-           tal:attributes="style style;
-                           class python: slicepage['current'] \
-                                         and 'slicepage current' or 'slicepage'"
-           tal:content="slicepage/page">1</div>
-    </div>
-    <div class="scoll_down">
-      <img src="++resource++bda.plone.finder.images/down_invisible.gif" />
-    </div>
-  </div>
-  
   <ul class="columnitems"
-      tal:condition="items"
-      tal:attributes="class python: slicepages and 'columnitems sliced' or 'columnitems'">
+      tal:condition="items">
     <tal:li repeat="item items">
       <li tal:define="selected python: item['selected'] and 'selected' or '';
 	                  state python: item['state'] and 'state-%s' % item['state'] or '';

@@ -65,30 +65,6 @@ class Column(BrowserView):
         self._filtereditems = filtered
         return filtered
     
-    @property
-    def itemslice(self):
-        cur = int(self.request.get('b', 0))
-        slicesize = self.slicesize
-        return self.filtereditems[cur * slicesize:cur * slicesize + slicesize]
-    
-    @property
-    def slicepages(self):
-        items = self.filtereditems
-        count = len(items)
-        if count <= self.slicesize:
-            return list()
-        pagecount = count / self.slicesize
-        if count % self.slicesize != 0:
-            pagecount += 1
-        cur = int(self.request.get('b', 0))
-        vocab = list()
-        for i in range(pagecount):
-            vocab.append({
-                'page': str(i + 1),
-                'current': cur == i and True or False,
-            })
-        return vocab
-    
     def _item_selected(self, url):
         if self.request.get('_skip_selection_check', False):
             return False

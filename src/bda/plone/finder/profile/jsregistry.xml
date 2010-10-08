@@ -2,19 +2,6 @@
 <object name="portal_javascripts">
 	<javascript
         expression="not:portal/portal_membership/isAnonymousUser"
-        id="++resource++jquery.mousewheel.js"
-        inline="False"
-    />
-	
-	<javascript
-        expression="not:portal/portal_membership/isAnonymousUser"
-        id="++resource++jquery.jscrollpane.min.js"
-		insert-after="++resource++jquery.mousewheel.js"
-    />
-	
-	<javascript
-        expression="not:portal/portal_membership/isAnonymousUser"
         id="++resource++bda.finder.js"
-		insert-after="++resource++jquery.jscrollpane.min.js"
     />
 </object>

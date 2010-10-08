@@ -6,26 +6,11 @@
 	<include file="column.zcml" />
 	<include file="details.zcml" />
 	<include file="menu.zcml" />
-
-	<browser:resource
-        name="jquery.mousewheel.js"
-        file="resources/jquery.mousewheel.js"
-    />
-	
-	<browser:resource
-        name="jquery.jscrollpane.min.js"
-        file="resources/jquery.jscrollpane.min.js"
-    />
 	
 	<browser:resource
 	    name="bda.finder.js"
 		file="resources/finder.js"
 	/>
-	
-	<browser:resource
-        name="jquery.jscrollpane.css"
-        file="resources/jquery.jscrollpane.css"
-    />
 	
 	<browser:resource
         name="bda.finder.css"
