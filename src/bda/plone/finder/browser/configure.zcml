@@ -39,7 +39,7 @@
 	
 	<browser:viewlet
         name="bda.plone.finder.overlay"
-        manager="plone.app.layout.viewlets.interfaces.IPortalTop"
+        manager="plone.app.layout.viewlets.interfaces.IPortalFooter"
         class=".finder.OverlayViewlet"
 		layer="bda.plone.finder.interfaces.IFinderLayer"
 		permission="cmf.ManagePortal"

@@ -5,6 +5,9 @@
     width:924px;
     height:408px;
     border:1px solid #666;
+	
+	border:red 3px solid;
+	
     -moz-box-shadow:0 0 90px 5px #bbb;
     -webkit-box-shadow: 0 0 90px #bbb;
     -moz-border-radius:6px;
@@ -225,7 +228,10 @@
     border:1px solid #666;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
+	overflow-y:auto;
 }
+
+/* old scrollbar */
 .finder_columns div.finder_scrollbar {
     position:absolute;
     right:0px;
@@ -276,6 +282,9 @@
     -moz-border-radius:2px;
     -webkit-border-radius:2px;
 }
+/* end old scrollbar */
+
+
 .finder_columns div.finder_column ul {
     list-style-image: none;
     list-style-type: none;

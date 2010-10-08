@@ -25,7 +25,7 @@ jQuery(document).ready(function() {
 		if (cur_url.indexOf('/portal_factory/') == -1
 		 && cur_url.substring(cur_url.lastIndexOf('/') + 1,
 		                      cur_url.length) != 'edit') {
-            link.plonefinder();
+            link.finder();
         }
 	}
 });
@@ -54,7 +54,7 @@ finder = {
         }
         return finder._scrollable;
 	}
-}
+};
 
 /* jQuery finder extension. initialize finder */
 jQuery.fn.finder = function() {
@@ -66,6 +66,7 @@ jQuery.fn.finder = function() {
 		mask: {
 			color: '#eee',
             loadSpeed: 200,
+			fixed: true
         },
         onBeforeLoad: function() {
             jQuery.get('bda.plone.finder', function(data) {
@@ -169,34 +170,6 @@ function PloneFinder() {
             ploneFinder.renderColumn(this, 'bda.plone.finder.details');
         });
 	}
-	
-	/*
-	this.bindColumnBatch = function(column) {
-		var column_uid = jQuery(column).attr('id');
-		column_uid = column_uid.substring(14, column_uid.length);
-		jQuery('p.col_navigation a', column).unbind();
-        jQuery('p.col_navigation a', column).bind('click', function(event) {
-			var page = this.href.substring(this.href.lastIndexOf('/') + 1,
-			                               this.href.length);
-			var url = 'bda.plone.finder.expand?uid=';
-			url += column_uid + '&b=' + page;
-			if (ploneFinder.current_filter
-			 && ploneFinder.current_focused == column_uid) {
-				url += '&f=' + ploneFinder.current_filter;
-			}
-			jQuery.get(url, function(data) {
-                for (var i = 0; i < ploneFinder.columns.length; i++) {
-                    if (ploneFinder.columns[i] == column_uid) {
-						var after = ploneFinder.columns[i - 1];
-                        ploneFinder.applyColumn(after, data, i - 1);
-                    }
-                }
-            });
-			event.preventDefault();
-        });
-		//this.slider.load(column);
-    }
-    */
 	
 	this.initActions = function(uid, column) {
         this.actions = new PloneFinderActions();
