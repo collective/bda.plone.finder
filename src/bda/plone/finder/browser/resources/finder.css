@@ -1,6 +1,7 @@
 .finder_overlay {
     display:none;
-    z-index:5000;
+    position:relative;
+	z-index:5000;
     background-color:#999;
     width:924px;
     height:408px;
@@ -70,6 +71,7 @@
 }
 .finder_controls {
     position:relative;
+	z-index:7500;
 }
 .finder_controls div {
     float: left;
