@@ -21,7 +21,22 @@ jQuery.fn.finder = function(){
                 var scrollable = finder.scrollable();
                 scrollable.scrollable({
                     clickable: false,
-                    speed: 150
+                    speed: 150,
+					onBeforeSeek: function(event, index) {
+						var size = finder.columns.length;
+						if (index > size - 4) {
+							return false;
+						}
+					},
+					onSeek: function(event, index){
+					    var size = finder.columns.length;
+                        var button = jQuery('a.next', finder.overlay());
+                        if ((size <= 4) || (index == size - 4)) {
+                            button.addClass('disabled');
+                        } else {
+                            button.removeClass('disabled');
+                        }
+					}
                 });
                 finder.scroll_api = scrollable.data('scrollable');
                 finder.load();
@@ -38,7 +53,7 @@ jQuery.fn.finder = function(){
     finder.overlay_api.load();
 };
 
-// action hooks for finder_actions
+// action hooks for finder.actions
 action_hooks = {
 
     // before action hooks
