@@ -10,7 +10,7 @@ setup(name='bda.plone.finder',
       description=shortdesc,
       long_description=longdesc,
       classifiers=[
-            'Development Status :: 4 - Beta',
+            'Development Status :: 3 - Alpha',
             'Environment :: Web Environment',
             'License :: OSI Approved :: GNU General Public License (GPL)',
             'Operating System :: OS Independent',
