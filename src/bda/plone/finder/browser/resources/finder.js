@@ -172,11 +172,11 @@ finder = {
         var lastidx = 0;
         var items = finder.scroll_api.getItems();
         items.each(function(){
-            var id = this.id.substring(14, this.id.length);
-            if (id) {
+            var uid = this.id.substring(14, this.id.length);
+            if (uid) {
                 lastidx = idx;
             }
-            finder.columns[idx] = id;
+            finder.columns[idx] = uid;
             finder.bind_nav_items(this);
             idx++;
         });
@@ -236,13 +236,11 @@ finder = {
         var column_uid = elem.rel.substring(15, elem.rel.length);
         var url = view + '?uid=' + obj_uid;
         jQuery.get(url, function(data){
-            for (var i = 0; i < finder.columns.length; i++) {
-				
-				// alert('stored uid: ' + finder.columns[i]);
-                
+            for (var i = 0; i < finder.scroll_api.getSize(); i++) {
 				if (finder.columns[i] == column_uid) {
-                    finder.init_actions(obj_uid, column_uid);
+					finder.init_actions(obj_uid, column_uid);
                     finder.apply_column(column_uid, data, i);
+					break;
                 }
             }
         });
@@ -251,30 +249,27 @@ finder = {
     // apply finder column
     apply_column: function(after, data, index){
         var scroll_api = finder.scroll_api;
-        
-		// alert('stored cols: ' + finder.columns.length);
-		
 		var items = scroll_api.getItems();
 		
-		// alert('existing cols: ' + items.length);
-		
-		var uid;
+		// detect after position
+		var after_uid;
 		var after_position = 0;
 		for (var i = 0; i < items.length; i++) {
-		    uid = jQuery(items.get(i)).attr('id');
-            uid = uid.substring(14, uid.length);
-			if (uid == after) {
+		    after_uid = jQuery(items.get(i)).attr('id');
+            after_uid = after_uid.substring(14, after_uid.length);
+			if (after_uid == after) {
 				after_position = i;
 				break;
 			}
 		}
 		
-		// alert('after position: ' + after_position);
-		
-		var col, after_col;
+		// set column uid's in finder.columns and detect after_col
 		var column_uid = jQuery(data).get(0).id;
         column_uid = column_uid.substring(14, column_uid.length);
-		for (var i = 0; i < items.length; i++) {
+		var count = items.length;
+		count = count < after_position + 2 ? after_position + 2 : count;
+		var col, after_col;
+		for (var i = 0; i < count; i++) {
 			col = items.get(i);
 			if (i == after_position) {
 				after_col = jQuery(col);
@@ -284,62 +279,46 @@ finder = {
 				finder.columns[i] = null;
 			}
 		}
+		
+		// append new column after after_col
 		after_col.after(data);
+		
+		// replace remaining columns with empty column or collect
+		// them to be removed 
 		var to_remove = [];
 		var remove_count = 0;
 		var empty_column = '<div class="finder_column">&nbsp;</div>';
 		items = scroll_api.getItems();
-		
-		// alert('scroll size: ' + scroll_api.getSize());
-		
 		for (var i = after_position; i < scroll_api.getSize(); i++) {
 		    col = items.get(i);
 			if (i > after_position + 1 && i <= 3) {
-				
-				// alert('replace with empty: ' + i);
-				
 				jQuery(col).replaceWith(empty_column);
 			} else if (i > after_position + 1 && i > 3) {
-				
-				// alert('remove me: ' + i);
-				
 				to_remove[remove_count] = col;
 				remove_count++;
 			}
 		}
 		
-		// alert('to_remove ' + to_remove.length);
-		
+		// remove superfluos columns and finalize
 		jQuery(to_remove).remove();
         finder.reset_columns(after_position + 1);
 		finder.set_selected(after_col, column_uid);
 		var new_col = jQuery('#finder_column_' + column_uid, finder.scrollable());
         finder.bind_nav_items(new_col);
-        //scroll_api.reload().end(1);
-		
 		var index = finder.scroll_api.getSize() - 4;
 		index = index < 0 ? 0 : index;
         finder.scroll_api.seekTo(index, 1);
-		
-		// alert('done');
     },
     
     // reset finder.columns
     reset_columns: function(count){
         var new_columns = [];
-		
-		// alert('column count old: ' + count);
-        
 		if (count < 3) {
             count = 3;
         }
         for (var i = 0; i <= count; i++) {
             new_columns[i] = finder.columns[i];
         }
-		
-		// alert('column count: ' + count);
-		// alert('new columns: ' + new_columns.length);
-        
 		finder.columns = new_columns;
     },
     
