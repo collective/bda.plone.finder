@@ -5,7 +5,7 @@
      tal:attributes="id view/uid">
   
   <div class="finder_scrollbar"
-       tal:condition="slicepages">
+       tal:condition="nothing">
     <div class="scoll_up">
       <img src="++resource++bda.plone.finder.images/up_invisible.gif" />
     </div>

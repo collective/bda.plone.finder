@@ -17,7 +17,7 @@ jQuery(document).ready(function() {
 	link.attr('rel', '#bda_finder_overlay');
 	link.bind('click', function(event) {
 		event.preventDefault();
-        link.plonefinder();
+        link.finder();
     });
 	var cookie = readCookie('bda.plone.finder');
     if (cookie == 'autoload') {
@@ -30,9 +30,36 @@ jQuery(document).ready(function() {
 	}
 });
 
-jQuery.fn.plonefinder = function() {
+/* finder object */
+finder = {
+	
+	/* set by jQuery finder extension */
+	overlay_api: null,
+	
+	/* return overlay dom elem as jQuery object */
+	overlay: function() {
+		if (!finder._overlay) {
+			finder._overlay = jQuery('#bda_finder_overlay');
+		}
+		return finder._overlay;
+	},
+	
+	/* set by jQuery finder extension */
+	scroll_api: null,
+	
+	/* return column scrollable as jQuery object */
+	scrollable: function() {
+		if (!finder._scrollable) {
+            finder._scrollable = jQuery('div.finder_columns', finder.overlay());
+        }
+        return finder._scrollable;
+	}
+}
+
+/* jQuery finder extension. initialize finder */
+jQuery.fn.finder = function() {
 	ploneFinder = new PloneFinder();
-	var overlay = jQuery('#bda_finder_overlay');
+	var overlay = finder.overlay();
 	var elem = jQuery(this);
     elem.overlay({
 		target: overlay,
@@ -43,12 +70,13 @@ jQuery.fn.plonefinder = function() {
         onBeforeLoad: function() {
             jQuery.get('bda.plone.finder', function(data) {
                 overlay.append(data);
-				var scrollelem = jQuery('div.finder_columns', overlay);
-                scrollelem.scrollable({
+				var scrollable = finder.scrollable();
+                scrollable.scrollable({
                     clickable: false,
 					speed: 150
                 });
-                ploneFinder.scrollable_api = scrollelem.data('scrollable');
+				finder.scrollable_api = scrollable.data('scrollable');
+                ploneFinder.scrollable_api = scrollable.data('scrollable');
                 ploneFinder.load();
             });
         },
@@ -59,6 +87,7 @@ jQuery.fn.plonefinder = function() {
 		oneInstance: false,
         closeOnClick: false
     });
+	finder.overlay_api = elem.data('overlay');
 	ploneFinder.overlay_api = elem.data('overlay');
 	ploneFinder.overlay_api.load();
 }
@@ -91,7 +120,7 @@ function PloneFinder() {
 			}
 			ploneFinder.columns[idx] = id;
 			ploneFinder.bindNavItems(this);
-			ploneFinder.bindColumnBatch(this);
+			//ploneFinder.bindColumnBatch(this);
 			idx++;
 		});
 		this.initActions(ploneFinder.columns[lastidx],
@@ -100,7 +129,7 @@ function PloneFinder() {
 		this.transitions.overlay_api = this.overlay_api;
 		this.bindFilter();
 		// seekTo(index, speed)
-		bdajax.message(this.scrollable_api.getIndex());
+		// bdajax.message(this.scrollable_api.getIndex());
 		// this.scrollable_api.end(1);
     }
 	
@@ -141,6 +170,7 @@ function PloneFinder() {
         });
 	}
 	
+	/*
 	this.bindColumnBatch = function(column) {
 		var column_uid = jQuery(column).attr('id');
 		column_uid = column_uid.substring(14, column_uid.length);
@@ -166,6 +196,7 @@ function PloneFinder() {
         });
 		//this.slider.load(column);
     }
+    */
 	
 	this.initActions = function(uid, column) {
         this.actions = new PloneFinderActions();
@@ -213,7 +244,7 @@ function PloneFinder() {
 		this.resetColumns(index);
 		this.setSelected(after_col, column_uid);
 		this.bindNavItems(new_col);
-		this.bindColumnBatch(new_col);
+		//this.bindColumnBatch(new_col);
 		this.scrollable_api.reload().end(1);
 	}
 	

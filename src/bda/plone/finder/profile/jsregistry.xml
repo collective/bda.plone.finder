@@ -1,12 +1,20 @@
 <?xml version="1.0"?>
 <object name="portal_javascripts">
-    <javascript
-        cacheable="True"
-        compression="safe"
-        cookable="True"
-        enabled="True"
+	<javascript
         expression="not:portal/portal_membership/isAnonymousUser"
-        id="++resource++bda.plone.finder.js"
+        id="++resource++jquery.mousewheel.js"
         inline="False"
+    />
+	
+	<javascript
+        expression="not:portal/portal_membership/isAnonymousUser"
+        id="++resource++jquery.jscrollpane.min.js"
+		insert-after="++resource++jquery.mousewheel.js"
+    />
+	
+	<javascript
+        expression="not:portal/portal_membership/isAnonymousUser"
+        id="++resource++bda.finder.js"
+		insert-after="++resource++jquery.jscrollpane.min.js"
     />
 </object>
