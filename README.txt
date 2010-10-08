@@ -8,17 +8,6 @@ It uses the column browsing metaphor of MacOS finder.
 The intention was to speed up content management issues, and fast content
 browsing in Plone.
 
-Another intention is to use this widget as reference browser.
-
-Note
-====
-  
-  * Not all features are implemented yet.
-  
-  * Its only tested in Firefox yet.
-  
-  * Still not works in plone 4.
-
 Installation
 ============
 
@@ -26,7 +15,7 @@ Installation
   
   * apply corresponsing GS profile
   
-  * now you have a link named 'Finder' in the portal Actions which triggers the
+  * now you have a link named 'Finder' in the document Actions which trigger the
     widget
 
 Credits
@@ -36,17 +25,32 @@ Credits
   
   * Thanks to the Sprinters at Cathedral Sprint 2010 for ideas and feedback
 
+Note
+====
+
+  * Plone 4 only
+  
+  * Firefox, IE7
+
 Changes
 =======
+
+1.0a4
+-----
+
+  * Remove column batching. instead use css overflow [rnix]
+  
+  * adopt to new jQuery tools scrollable [rnix]
+  
+  * make me basically work in IE7 [rnix]
+  
+  * JS refactoring [rnix]
 
 1.0a3
 -----
 
   * Change look and feel of batching column pages. Its a vertical slider now
     [rnix]
-
-1.0a3
------
 
   * Implement auto loading after editing or adding items out of finder [rnix]
 

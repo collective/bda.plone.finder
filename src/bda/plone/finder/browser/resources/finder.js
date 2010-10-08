@@ -33,8 +33,7 @@ jQuery.fn.finder = function(){
                         var button = jQuery('a.next', finder.overlay());
                         if ((size <= 4) || (index == size - 4)) {
                             button.addClass('disabled');
-                        }
-                        else {
+                        } else {
                             button.removeClass('disabled');
                         }
                     }
@@ -47,7 +46,7 @@ jQuery.fn.finder = function(){
             createCookie('bda.plone.finder', '');
             jQuery('.finder_container', overlay).remove();
         },
-        oneInstance: false,
+        oneInstance: true,
         closeOnClick: false
     });
     finder.overlay_api = elem.data('overlay');
@@ -158,12 +157,23 @@ finder = {
         return finder._scrollable;
     },
     
-    // bind finder trigger element
+    // reset
+	reset: function(){
+        finder.overlay_api = null;
+        finder.scroll_api = null;
+        finder.columns = [];
+        finder.current_filter = null;
+        finder.current_focused = null;
+        finder.current_item = null;
+	},
+	
+	// bind finder trigger element
     bind_trigger: function(sel){
         var link = jQuery(sel);
         link.attr('rel', '#bda_finder_overlay');
         link.bind('click', function(event){
             event.preventDefault();
+			finder.reset();
             link.finder();
         });
     },
@@ -175,8 +185,9 @@ finder = {
         if (cookie == 'autoload') {
             var cur_url = document.location.href;
             if (cur_url.indexOf('/portal_factory/') == -1 &&
-            cur_url.substring(cur_url.lastIndexOf('/') + 1, cur_url.length) !=
-            'edit') {
+              cur_url.substring(cur_url.lastIndexOf('/') + 1, cur_url.length) !=
+              'edit') {
+			  	finder.reset();
                 link.finder();
             }
         }
