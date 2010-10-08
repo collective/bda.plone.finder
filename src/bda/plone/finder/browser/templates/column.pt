@@ -13,7 +13,8 @@
 	      tal:attributes="id item/uid;
 	                      class python: css and css or None;">
 	    <img src=""
-	         tal:attributes="src item/icon" />
+	         tal:attributes="src item/icon"
+	         tal:condition="item/icon" />
 	    <a rel="#"
 	       class=""
 	       tal:content="item/title"

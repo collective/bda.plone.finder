@@ -182,9 +182,8 @@ finder = {
         });
         finder.init_actions(finder.columns[lastidx], finder.columns[lastidx - 1]);
         finder.bind_filter();
-        // seekTo(index, speed)
-        // bdajax.message(this.scroll_api.getIndex());
-        // this.scroll_api.end(1);
+		var index = finder.scroll_api.getSize() - 4;
+        finder.scroll_api.seekTo(index, 1);
     },
     
     // bind column filter
@@ -238,7 +237,10 @@ finder = {
         var url = view + '?uid=' + obj_uid;
         jQuery.get(url, function(data){
             for (var i = 0; i < finder.columns.length; i++) {
-                if (finder.columns[i] == column_uid) {
+				
+				// alert('stored uid: ' + finder.columns[i]);
+                
+				if (finder.columns[i] == column_uid) {
                     finder.init_actions(obj_uid, column_uid);
                     finder.apply_column(column_uid, data, i);
                 }
@@ -248,47 +250,97 @@ finder = {
     
     // apply finder column
     apply_column: function(after, data, index){
-        // XXX check if scroll back and do exact seek.
         var scroll_api = finder.scroll_api;
-        scroll_api.begin(1);
-        var items = scroll_api.getItems();
-        var finder_columns = scroll_api.getItemWrap();
-        var empty_column = '<div class="finder_column">&nbsp;</div>';
-        var to_remove = [];
-        for (var i = index; i < finder.columns.length - 1; i++) {
-            var col = items.get(i + 1);
-            if (i < 2) {
-                jQuery(col).replaceWith(empty_column);
-            }
-            else {
-                to_remove[i] = col;
-            }
-            this.columns[i + 1] = null;
-        }
-        jQuery(to_remove).remove();
-        var after_col = jQuery('#finder_column_' + after, finder_columns);
-        after_col.after(data);
-        var column_uid = jQuery(data).get(0).id;
+        
+		// alert('stored cols: ' + finder.columns.length);
+		
+		var items = scroll_api.getItems();
+		
+		// alert('existing cols: ' + items.length);
+		
+		var uid;
+		var after_position = 0;
+		for (var i = 0; i < items.length; i++) {
+		    uid = jQuery(items.get(i)).attr('id');
+            uid = uid.substring(14, uid.length);
+			if (uid == after) {
+				after_position = i;
+				break;
+			}
+		}
+		
+		// alert('after position: ' + after_position);
+		
+		var col, after_col;
+		var column_uid = jQuery(data).get(0).id;
         column_uid = column_uid.substring(14, column_uid.length);
-        var new_col = jQuery('#finder_column_' + column_uid, finder_columns);
-        finder.columns[index + 1] = column_uid;
-        finder.reset_columns(index);
-        finder.set_selected(after_col, column_uid);
+		for (var i = 0; i < items.length; i++) {
+			col = items.get(i);
+			if (i == after_position) {
+				after_col = jQuery(col);
+			} else if (i == after_position + 1) {
+				finder.columns[i] = column_uid;
+			} else if (i > after_position + 1) {
+				finder.columns[i] = null;
+			}
+		}
+		after_col.after(data);
+		var to_remove = [];
+		var remove_count = 0;
+		var empty_column = '<div class="finder_column">&nbsp;</div>';
+		items = scroll_api.getItems();
+		
+		// alert('scroll size: ' + scroll_api.getSize());
+		
+		for (var i = after_position; i < scroll_api.getSize(); i++) {
+		    col = items.get(i);
+			if (i > after_position + 1 && i <= 3) {
+				
+				// alert('replace with empty: ' + i);
+				
+				jQuery(col).replaceWith(empty_column);
+			} else if (i > after_position + 1 && i > 3) {
+				
+				// alert('remove me: ' + i);
+				
+				to_remove[remove_count] = col;
+				remove_count++;
+			}
+		}
+		
+		// alert('to_remove ' + to_remove.length);
+		
+		jQuery(to_remove).remove();
+        finder.reset_columns(after_position + 1);
+		finder.set_selected(after_col, column_uid);
+		var new_col = jQuery('#finder_column_' + column_uid, finder.scrollable());
         finder.bind_nav_items(new_col);
-        scroll_api.reload().end(1);
+        //scroll_api.reload().end(1);
+		
+		var index = finder.scroll_api.getSize() - 4;
+		index = index < 0 ? 0 : index;
+        finder.scroll_api.seekTo(index, 1);
+		
+		// alert('done');
     },
     
     // reset finder.columns
-    reset_columns: function(index){
+    reset_columns: function(count){
         var new_columns = [];
-        var count = index + 1;
-        if (count < 3) {
+		
+		// alert('column count old: ' + count);
+        
+		if (count < 3) {
             count = 3;
         }
         for (var i = 0; i <= count; i++) {
             new_columns[i] = finder.columns[i];
         }
-        finder.columns = new_columns;
+		
+		// alert('column count: ' + count);
+		// alert('new columns: ' + new_columns.length);
+        
+		finder.columns = new_columns;
     },
     
     // set selected nav item
