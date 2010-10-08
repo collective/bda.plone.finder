@@ -1,7 +1,7 @@
 // finder stuff when document ready
 jQuery(document).ready(function() {
 	finder.bind_trigger('#contentview-bda_plone_finder');
-	finder.auto_load();
+	finder.auto_load('#contentview-bda_plone_finder');
 });
 
 // jQuery finder extension. initialize finder
@@ -67,6 +67,30 @@ action_hooks = {
 	            }
 	        }
 	    });
+	},
+	
+	/* after load hooks */
+
+	rebind_add_action: function(actions) {
+	    var overlay = finder.overlay();
+	    var action = jQuery('div.action_add_item a', overlay);
+	    action.unbind();
+	    action.bind('click', function() {
+	        if (jQuery(this).hasClass('disabled')) {
+	            return false;
+	        }
+	        createCookie('bda.plone.finder', 'autoload');
+	        var parent = jQuery(this).parent();
+	        var dropdown = jQuery('.action_dropdown', parent);
+	        var uid = finder.current_focused;
+	        finder.dropdown.elem = dropdown;
+	        finder.dropdown.show('bda.plone.finder.additemsmenu',
+	                             uid,
+	                             function(target) {
+	            document.location.href = target.href;
+	        });
+	        return false;
+	    });
 	}
 };
 
@@ -79,15 +103,12 @@ finder = {
     overlay_api: null,
 	// set by jQuery finder extension
     scroll_api: null,
-    actions: null,
     columns: [],
-    dialog: null,
     current_filter: null,
 	// current focused column uid
     current_focused: null,
 	// current selected item uid
     current_item: null,
-    transitions: null,
 	
 	// action hooks configuration
     action_hooks: {
@@ -134,7 +155,8 @@ finder = {
 	},
 	
 	// autoload finder if set in cookie
-	auto_load: function() {
+	auto_load: function(sel) {
+		var link = jQuery(sel);
 		var cookie = readCookie('bda.plone.finder');
 	    if (cookie == 'autoload') {
 	        var cur_url = document.location.href;
@@ -161,9 +183,7 @@ finder = {
             idx++;
         });
         finder.init_actions(finder.columns[lastidx],
-                           finder.columns[lastidx - 1]);
-        finder.transitions = new finderTransitions();
-        finder.transitions.overlay_api = finder.overlay_api;
+                            finder.columns[lastidx - 1]);
         finder.bind_filter();
         // seekTo(index, speed)
         // bdajax.message(this.scroll_api.getIndex());
@@ -211,8 +231,6 @@ finder = {
 	
 	// initialize finder actions
 	init_actions: function(uid, column) {
-        finder.actions = new finderActions();
-        finder.actions.overlay_api = finder.overlay_api;
         finder.actions.load(uid, column);
     },
 	
@@ -319,203 +337,196 @@ finder = {
 	    hide: function() {
 	        finder.dialog.elem().fadeOut('fast');
 	    }
+	},
+	
+	// dropdown menu
+	dropdown: {
+		
+		// dropdown dom element. set before triggered
+		elem: null,
+	    
+	    // show dropdown menu
+		show: function(view, uid, callback) {
+	        var dropdown = finder.dropdown.elem;
+	        var url = view + '?uid=' + uid;
+	        jQuery.get(url, function(data) {
+	            dropdown.html(data);
+	            jQuery('a', dropdown).unbind();
+	        });
+	        jQuery(document).bind('mousedown', function(event) {
+	            if (!event) {
+	                var event = window.event;
+	            }
+	            if (event.target) {
+	                var target = event.target;
+	            } else if (event.srcElement) {
+	                var target = event.srcElement;
+	            }
+	            if (jQuery(target).hasClass('action_dropdown')
+	              || jQuery(target).hasClass('action_dropdown_item')) {
+	                return true;
+	            }
+	            if (jQuery(target).hasClass('action_dropdown_link')) {
+	                callback(target);
+	            }
+	            dropdown.css('display', 'none');
+	            dropdown.empty();
+	        });
+	        dropdown.css('display', 'block');
+	    }
+	},
+	
+	// transitions
+	transitions: {
+		
+	    // bind change state action
+		bind: function() {
+	        var overlay = finder.overlay();
+	        var action = jQuery('div.action_change_state a', overlay);
+	        action.unbind();
+	        action.bind('click', function() {
+	            if (jQuery(this).hasClass('disabled')) {
+	                return false;
+	            }
+	            finder.transitions.query_transitions(this);
+	            return false;
+	        });
+	    },
+	    
+		// query transitions and display dropdown
+	    query_transitions: function(action) {
+	        if (jQuery(action).hasClass('disabled')) {
+	            return false;
+	        }
+	        createCookie('bda.plone.finder', 'autoload');
+	        var parent = jQuery(action).parent();
+	        var dropdown = jQuery('.action_dropdown', parent);
+	        var uid = finder.current_item;
+	        var view = 'bda.plone.finder.transitionsmenu';
+	        finder.dropdown.elem = dropdown;
+	        finder.dropdown.show(view, uid, function(target) {
+	            // XXX: ajaxify
+	            document.location.href = target.href;
+	        });
+	    }
+	},
+	
+	// actions
+	actions: {
+		
+		// actions object members
+		uid: null,
+	    column: null,
+	    actions: null,
+	    url: null,
+	    name: null,
+	    
+		// actions object functions
+		
+	    // load actions
+		load: function(uid, column) {
+	        finder.actions.uid = uid;
+	        finder.actions.column = column;
+	        var container = finder.overlay();
+	        var url = 'bda.plone.finder.actioninfo?uid=' + uid;
+	        var actions = finder.actions;
+	        jQuery.getJSON(url, function(data) {
+	            actions.actions = data;
+	            for (var action_name in actions.actions) {
+	                var action = jQuery('.' + action_name + ' a', container);
+	                var url = actions.actions[action_name]['url'];
+	                var enabled = actions.actions[action_name]['enabled'];
+	                var ajax = actions.actions[action_name]['ajax'];
+	                var autoload = actions.actions[action_name]['autoload'];
+	                action.attr('href', url);
+	                if (enabled) {
+	                    actions.enable(action);
+	                } else {
+	                    actions.disable(action);
+	                }
+	                if (ajax && enabled) {
+	                    action.bind('click', function(event) {
+	                        actions.execute(this);
+	                        event.preventDefault();
+	                    });
+	                }
+	                if (!ajax && enabled && autoload) {
+	                    action.bind('click', function() {
+	                        createCookie('bda.plone.finder', 'autoload');
+	                    });
+	                }
+	            }
+	            // XXX: make after load calls hookable
+	            finder.transitions.bind();
+	            action_hooks.rebind_add_action(actions);
+	        });
+	    },
+	    
+		// enable action
+	    enable: function(action) {
+	        if (action.hasClass('disabled')) {
+	            action.removeClass('disabled');
+	        }
+	        action.unbind();
+	    },
+	    
+		// disable action
+	    disable: function(action) {
+	        if (!action.hasClass('disabled')) {
+	            action.addClass('disabled');
+	        }
+	        action.attr('href', '#');
+	        action.unbind();
+	        action.bind('click', function() {
+	            return false;
+	        });
+	    },
+	    
+	    // execute action
+		execute: function(action) {
+	        action = jQuery(action);
+	        finder.actions.name = action.parent().attr('class');
+	        finder.actions.url = 
+			    'bda.plone.finder.execute?uid=' + finder.actions.uid;
+	        finder.actions.url += '&name=' + finder.actions.name;
+	        var hook = finder.action_hooks[finder.actions.name];
+	        if (hook) {
+	            var func = hook['before'];
+	            if (func) {
+	                func(finder.actions.uid,
+					     finder.actions.column,
+						 finder.actions.perform_action);
+	                return;
+	            }
+	        }
+	        finder.actions.perform_action();
+	    },
+	    
+		// perform action
+	    perform_action: function() {
+	        var actions = finder.actions;
+	        var url = finder.actions.url;
+	        jQuery.getJSON(url, function(data) {
+	            var container = finder.overlay();
+	            var message = jQuery('div.finder_message', container);
+	            message.html(data.msg);
+	            if (!data.err) {
+	                var hook = finder.action_hooks[actions.name];
+	                if (hook) {
+	                    var func = hook['after'];
+	                    if (func) {
+	                        func(actions.uid, actions.column, data);
+	                    }
+	                }
+	            }
+	            message.fadeIn('slow', function() {
+	                setTimeout(function() {
+	                    message.fadeOut('slow', function() {
+	                        message.empty();
+	                    });
+	                }, 1000);
+	            });
+	        });
+	    }
 	}
 };
-
-function finderDropdown(dropdown) {
-    
-    this.dropdown = dropdown;
-    
-    this.show = function(view, uid, callback) {
-        var dropdown = this.dropdown;
-        var url = view + '?uid=' + uid;
-        jQuery.get(url, function(data) {
-            dropdown.html(data);
-            jQuery('a', dropdown).unbind();
-        });
-        jQuery(document).bind('mousedown', function(event) {
-            if (!event) {
-                var event = window.event;
-            }
-            if (event.target) {
-                var target = event.target;
-            } else if (event.srcElement) {
-                var target = event.srcElement;
-            }
-            if (jQuery(target).hasClass('action_dropdown')
-              || jQuery(target).hasClass('action_dropdown_item')) {
-                return true;
-            }
-            if (jQuery(target).hasClass('action_dropdown_link')) {
-                callback(target);
-            }
-            dropdown.css('display', 'none');
-            dropdown.empty();
-        });
-        dropdown.css('display', 'block');
-    }
-}
-
-function finderTransitions() {
-    
-    this.overlay_api = null;
-
-    this.bind = function() {
-        var overlay = this.overlay_api.getOverlay();
-        var action = jQuery('div.action_change_state a', overlay);
-        action.unbind();
-        action.bind('click', function() {
-			if (jQuery(this).hasClass('disabled')) {
-                return false;
-            }
-            finder.transitions.queryTransitions(this);
-            return false;
-        });
-    }
-    
-    this.queryTransitions = function(action) {
-        if (jQuery(action).hasClass('disabled')) {
-            return false;
-        }
-        createCookie('bda.plone.finder', 'autoload');
-        var parent = jQuery(action).parent();
-        var dropdown = jQuery('.action_dropdown', parent);
-        var uid = finder.current_item;
-		var view = 'bda.plone.finder.transitionsmenu';
-        var menu = new finderDropdown(dropdown);
-        menu.show(view, uid, function(target) {
-			// XXX: ajaxify
-            document.location.href = target.href;
-        });
-    }
-}
-
-function finderActions() {
-    
-    this.uid = null;
-	this.column = null;
-	this.actions = null;
-	this.overlay_api = null;
-	this.url = null;
-	this.name = null;
-	
-    this.load = function(uid, column) {
-		this.uid = uid;
-		this.column = column;
-		var container = this.overlay_api.getOverlay();
-		var url = 'bda.plone.finder.actioninfo?uid=' + uid;
-		var actions = this;
-        jQuery.getJSON(url, function(data) {
-		    actions.actions = data;
-			for (var action_name in actions.actions) {
-				var action = jQuery('.' + action_name + ' a', container);
-				var url = actions.actions[action_name]['url'];
-				var enabled = actions.actions[action_name]['enabled'];
-                var ajax = actions.actions[action_name]['ajax'];
-				var autoload = actions.actions[action_name]['autoload'];
-                action.attr('href', url);
-				if (enabled) {
-					actions.enable(action);
-				} else {
-					actions.disable(action);
-				}
-				if (ajax && enabled) {
-					action.bind('click', function(event) {
-						actions.execute(this);
-						event.preventDefault();
-					});
-				}
-				if (!ajax && enabled && autoload) {
-					action.bind('click', function() {
-                        createCookie('bda.plone.finder', 'autoload');
-                    });
-				}
-			}
-			// XXX: make after load calls hookable
-			finder.transitions.bind();
-			finderRebindAddAction(actions);
-        });
-	}
-	
-	this.enable = function(action) {
-		if (action.hasClass('disabled')) {
-			action.removeClass('disabled');
-		}
-		action.unbind();
-	}
-	
-	this.disable = function(action) {
-        if (!action.hasClass('disabled')) {
-            action.addClass('disabled');
-        }
-		action.attr('href', '#');
-        action.unbind();
-        action.bind('click', function() {
-			return false;
-		});
-    }
-	
-	this.execute = function(action) {
-		action = jQuery(action);
-		this.name = action.parent().attr('class');
-		this.url = 'bda.plone.finder.execute?uid=' + this.uid;
-		this.url += '&name=' + this.name;
-		var hook = finder.action_hooks[this.name];
-        if (hook) {
-            var func = hook['before'];
-            if (func) {
-                func(this.uid, this.column, this.performAction);
-                return;
-            }
-        }
-        this.performAction();
-	}
-	
-	this.performAction = function() {
-		var actions = finder.actions;
-		var url = finder.actions.url;
-		jQuery.getJSON(url, function(data) {
-            var container = actions.overlay_api.getOverlay();
-            var message = jQuery('div.finder_message', container);
-            message.html(data.msg);
-            if (!data.err) {
-                var hook = finder.action_hooks[actions.name];
-		        if (hook) {
-		            var func = hook['after'];
-		            if (func) {
-		                func(actions.uid, actions.column, data);
-		            }
-		        }
-            }
-            message.fadeIn('slow', function() {
-                setTimeout(function() {
-                    message.fadeOut('slow', function() {
-                        message.empty();
-                    });
-                }, 1000);
-            });
-        });
-	}
-}
-
-/* after load hooks */
-
-finderRebindAddAction = function(actions) {
-	var overlay = actions.overlay_api.getOverlay();
-    var action = jQuery('div.action_add_item a', overlay);
-    action.unbind();
-    action.bind('click', function() {
-		if (jQuery(this).hasClass('disabled')) {
-			return false;
-		}
-        createCookie('bda.plone.finder', 'autoload');
-        var parent = jQuery(this).parent();
-		var dropdown = jQuery('.action_dropdown', parent);
-		var uid = finder.current_focused;
-		var menu = new finderDropdown(dropdown);
-		menu.show('bda.plone.finder.additemsmenu', uid, function(target) {
-			document.location.href = target.href;
-		});
-        return false;
-    });
-}
