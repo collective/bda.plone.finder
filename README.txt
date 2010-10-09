@@ -35,6 +35,13 @@ Note
 Changes
 =======
 
+1.0b1-svn
+---------
+
+  * IE7 CSS fix for column items [rnix]
+  
+  * Remove dependencies to ``bda.plone.ajax`` [rnix]
+
 1.0a4
 -----
 

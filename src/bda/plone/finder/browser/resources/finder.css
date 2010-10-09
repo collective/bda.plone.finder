@@ -234,18 +234,16 @@
     list-style-type: none;
     margin:3px 0 3px 0;
 }
-.finder_columns div.finder_column ul.sliced {
-    padding-right:15px;
-}
 .finder_columns div.finder_column li {
     margin:0;
+	clear:both;
+	min-height:1.1em;
 }
 .finder_columns div.finder_column li a {
     font-weight: normal;
 }
 .finder_columns div.finder_column li.selected {
     background-color:#ddd;
-    border:666 1px solid;
 }
 .finder_columns div.finder_column li.cut {
     background-color:#fff !important;
@@ -278,12 +276,16 @@
 .finder_columns a.column_details:hover {
     text-decoration:underline;
 }
+.finder_columns div.finder_column li img {
+	float:left;
+}
 .finder_columns a.nav_item_name,
 .finder_columns a.nav_item_name {
     overflow:hidden;
+	float:left;
 }
 .finder_columns a.arrow_right {
-    float:right;
+	float:right;
     background:url('++resource++bda.plone.finder.images/arrow_right.png') no-repeat;
     display:block;
     width:8px;
