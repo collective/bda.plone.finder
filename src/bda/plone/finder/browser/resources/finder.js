@@ -46,7 +46,7 @@ jQuery.fn.finder = function(){
             createCookie('bda.plone.finder', '');
             jQuery('.finder_container', overlay).remove();
         },
-        oneInstance: true,
+        oneInstance: false,
         closeOnClick: false
     });
     finder.overlay_api = elem.data('overlay');

@@ -3,5 +3,6 @@
 	<javascript
         expression="not:portal/portal_membership/isAnonymousUser"
         id="++resource++bda.finder.js"
+		insert-after="++resource++plone.app.jquerytools.plugins.js"
     />
 </object>
