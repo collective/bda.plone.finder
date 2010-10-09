@@ -46,6 +46,13 @@ Credits
 Changes
 =======
 
+1.0b2
+-----
+  
+  * initially render context column when opening finder on plone root [rnix]
+  
+  * JS cleanup and documentation [rnix]
+
 1.0b1
 -----
 

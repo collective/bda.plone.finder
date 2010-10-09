@@ -86,7 +86,7 @@ class PloneRoot(Column):
     
     @property
     def items(self):
-        uid = self.request.get('uid', 'plone_root')
+        uid = self.request.get('uid', 'plone_content')
         ret = list()
         if self.request.getURL()[:-17] != self.context.absolute_url():
             uid = 'plone_content'

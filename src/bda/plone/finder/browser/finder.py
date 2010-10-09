@@ -32,8 +32,11 @@ class Finder(BrowserView):
     def columns(self):
         ret = list()
         for obj in self._next_parent:
-            ret.append(obj.restrictedTraverse('finder_column'))
+            ret.append(obj.restrictedTraverse('finder_column')())
         ret.reverse()
+        if len(ret) == 1:
+            self.request['uid'] = 'plone_content'
+            ret.append(obj.restrictedTraverse('finder_column')())
         while len(ret) < 4:
             ret.append('<div class="finder_column">&nbsp;</div>')
         return ret

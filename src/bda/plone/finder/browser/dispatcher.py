@@ -33,7 +33,7 @@ class AjaxContext(BrowserView):
             return aq_inner(context)
         brains = self.context.portal_catalog(UID=uid)
         if not brains:
-            return None
+            return aq_inner(self.context)
         return aq_inner(brains[0].getObject())
     
     @property
