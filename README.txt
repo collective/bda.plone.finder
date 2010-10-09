@@ -3,27 +3,31 @@ Overview
 
 This package provides an AJAX browser for Plone sites.
 
-It uses the column browsing metaphor of MacOS finder.
+It uses the column browsing metaphor of OSX finder.
 
 The intention was to speed up content management issues, and fast content
 browsing in Plone.
 
+.. image:: http://bluedynamics.com/bda.plone.finder.png
+
 Installation
 ============
 
-  * make egg available in your plone site
+  * make egg available in your Plone site
   
-  * apply corresponsing GS profile
+  * apply corresponding GS profile
   
-  * now you have a link named 'Finder' in the document Actions which trigger the
+  * now you have a link named 'Finder' in the document actions which trigger the
     widget
 
-Credits
-=======
+Development and evaluation
+==========================
 
-  * Written by Robert Niederreiter <rnix@squarewave.at>
-  
-  * Thanks to the Sprinters at Cathedral Sprint 2010 for ideas and feedback
+you can checkout and install from source code. Plone 4 buildout configuration
+is included.
+::
+
+    http://svn.plone.org/svn/collective/bda.plone.finder/trunk/
 
 Note
 ====
@@ -32,12 +36,21 @@ Note
   
   * Firefox, IE7
 
+Credits
+=======
+
+  * Written by Robert Niederreiter <rnix@squarewave.at>
+  
+  * Thanks to the Sprinters at Cathedral Sprint 2010 for ideas and feedback
+
 Changes
 =======
 
 1.0b1
 -----
 
+  * Improve dialog styles [rnix]
+  
   * Remove auto fading status message when performing actions. Instead write
     this information to status bar below columns now [rnix]
   
