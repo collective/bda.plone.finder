@@ -5,11 +5,29 @@
 // license: GPL2
 
 jQuery(document).ready(function(){
-    finder.bind_trigger('#contentview-bda_plone_finder');
-    finder.auto_load('#contentview-bda_plone_finder');
+	var selector = '#contentview-bda_plone_finder';
+	
+	// bind finder trigger
+	var link = jQuery(selector);
+    link.attr('rel', '#bda_finder_overlay');
+    link.bind('click', function(event){
+		event.preventDefault();
+		jQuery(selector).finder();
+    });
+    
+	// autoload finder if cookie set and not portal_factory context
+    var cookie = readCookie('bda.plone.finder');
+    if (cookie == 'autoload') {
+        var cur_url = document.location.href;
+        if (cur_url.indexOf('/portal_factory/') == -1 &&
+            cur_url.substring(cur_url.lastIndexOf('/') + 1,
+                              cur_url.length) != 'edit') {
+			link.finder();
+        }
+    }
 });
 
-// jQuery finder extension. initialize finder
+// request and show finder
 jQuery.fn.finder = function(){
     var overlay = finder.overlay();
     var elem = jQuery(this);
@@ -44,14 +62,13 @@ jQuery.fn.finder = function(){
                     }
                 });
                 finder.scroll_api = scrollable.data('scrollable');
-                finder.load();
+                finder.initialize();
             });
         },
         onClose: function(){
             createCookie('bda.plone.finder', '');
             jQuery('.finder_container', overlay).remove();
-			finder._overlay = null;
-			finder._scrollable = null;
+			finder.reset();
         },
         oneInstance: false,
         closeOnClick: false
@@ -63,28 +80,31 @@ jQuery.fn.finder = function(){
 // action hooks for finder.actions
 action_hooks = {
 
-    // before action hooks
+    /* before action hooks */
     
-    confirm_delete: function(uid, container, callback){
+    // display confirmation dialog
+	confirm_delete: function(uid, container, callback){
         finder.dialog.msg = 'Do you really want to delete this item?';
         finder.dialog.show(callback);
     },
     
-    // after action hooks
+    /* after action hooks */
     
-    cut_delete_entry: function(uid, container, data){
-        var overlay = finder.overlay_api.getOverlay();
+    // reload column after cut or delete action
+	cut_delete_entry: function(uid, container, data){
+        var overlay = finder.overlay();
         var selector = '#finder_nav_item_' + container + ' a.column_expand';
         var elem = jQuery(selector, overlay).get(0);
-        finder.render_column(elem, 'bda.plone.finder.expand');
+        finder.query_column(elem, 'bda.plone.finder.expand');
     },
     
-    paste_entry: function(uid, container, data){
+    // reload column after paste action
+	paste_entry: function(uid, container, data){
         var url = 'bda.plone.finder.expand?uid=' + uid;
         jQuery.get(url, function(data){
             for (var i = 0; i < finder.columns.length; i++) {
                 if (finder.columns[i] == container) {
-                    finder.init_actions(uid, container);
+                    finder.actions.load(uid, container);
                     finder.apply_column(container, data, i);
                 }
             }
@@ -93,7 +113,8 @@ action_hooks = {
     
     /* after load hooks */
     
-    rebind_add_action: function(actions){
+    // rebind add action dropdown with current focused column
+	rebind_add_action: function(actions){
         var overlay = finder.overlay();
         var action = jQuery('div.action_add_item a', overlay);
         action.unbind();
@@ -117,7 +138,7 @@ action_hooks = {
 // finder object
 finder = {
 
-    // object members
+    /* object members */
     
     // set by jQuery finder extension
     overlay_api: null,
@@ -146,7 +167,7 @@ finder = {
         }
     },
     
-    // object functions
+    /* object functions */
     
     // return overlay dom elem as jQuery object
     overlay: function(){
@@ -156,40 +177,22 @@ finder = {
         return finder._overlay;
     },
     
-    // return column scrollable as jQuery object
+    // return columns dom elem as jQuery object
     scrollable: function(){
         if (!finder._scrollable) {
             finder._scrollable = jQuery('div.finder_columns', finder.overlay());
         }
         return finder._scrollable;
     },
+    
+    // reset finder dom elem references
+	reset: function() {
+		finder._overlay = null;
+        finder._scrollable = null;
+	},
 	
-	// bind finder trigger element
-    bind_trigger: function(sel){
-        var link = jQuery(sel);
-        link.attr('rel', '#bda_finder_overlay');
-        link.bind('click', function(event){
-            event.preventDefault();
-            link.finder();
-        });
-    },
-    
-    // autoload finder if set in cookie
-    auto_load: function(sel){
-        var link = jQuery(sel);
-        var cookie = readCookie('bda.plone.finder');
-        if (cookie == 'autoload') {
-            var cur_url = document.location.href;
-            if (cur_url.indexOf('/portal_factory/') == -1 &&
-                cur_url.substring(cur_url.lastIndexOf('/') + 1,
-				                  cur_url.length) != 'edit') {
-                link.finder();
-            }
-        }
-    },
-    
-    // initialize finder
-    load: function(){
+	// initialize finder
+    initialize: function(){
         var idx = 0;
         var lastidx = 0;
         var items = finder.scroll_api.getItems();
@@ -199,24 +202,28 @@ finder = {
                 lastidx = idx;
             }
             finder.columns[idx] = uid;
-            finder.bind_nav_items(this);
+            finder.bind_colums_items(this);
             idx++;
         });
-        finder.init_actions(finder.columns[lastidx], finder.columns[lastidx - 1]);
-        finder.bind_filter();
+        finder.actions.load(finder.columns[lastidx], finder.columns[lastidx - 1]);
+        finder.bind_column_filter();
         var index = finder.scroll_api.getSize() - 4;
         finder.scroll_api.seekTo(index, 1);
     },
     
-    // bind column filter
-    bind_filter: function(){
+    // bind focus and keyup events on column filter input field
+    bind_column_filter: function(){
         var overlay = finder.overlay();
-        jQuery('input.column_filter', overlay).bind('focus', function(){
+        
+		// reset filter input field
+		jQuery('input.column_filter', overlay).bind('focus', function(){
             finder.current_filter = null;
             this.value = '';
             jQuery(this).css('color', '#000');
         });
-        jQuery('input.column_filter', overlay).bind('keyup', function(){
+        
+		// refresh focused column with filtered listing
+		jQuery('input.column_filter', overlay).bind('keyup', function(){
             finder.current_filter = this.value;
             var url = 'bda.plone.finder.expand?uid=';
             url += finder.current_focused + '&f=';
@@ -233,34 +240,33 @@ finder = {
         });
     },
     
-    // bind navigation items
-    bind_nav_items: function(column){
-        jQuery('a.column_expand', column).bind('click', function(){
+    // bind click events to column items
+    bind_colums_items: function(column){
+        
+		// expand contents to the right
+		jQuery('a.column_expand', column).bind('click', function(){
             var uid = finder.column_uid(this);
             finder.current_focused = uid;
             finder.current_item = uid;
-            finder.render_column(this, 'bda.plone.finder.expand');
+            finder.query_column(this, 'bda.plone.finder.expand');
         });
-        jQuery('a.column_details', column).bind('click', function(){
+        
+		// expand details to the right
+		jQuery('a.column_details', column).bind('click', function(){
             finder.current_item = finder.column_uid(this);
-            finder.render_column(this, 'bda.plone.finder.details');
+            finder.query_column(this, 'bda.plone.finder.details');
         });
     },
     
-    // initialize finder actions
-    init_actions: function(uid, column){
-        finder.actions.load(uid, column);
-    },
-    
-    // render finder column
-    render_column: function(elem, view){
+    // query finder column
+    query_column: function(elem, view){
         var obj_uid = finder.column_uid(elem);
         var column_uid = elem.rel.substring(15, elem.rel.length);
         var url = view + '?uid=' + obj_uid;
         jQuery.get(url, function(data){
             for (var i = 0; i < finder.scroll_api.getSize(); i++) {
                 if (finder.columns[i] == column_uid) {
-                    finder.init_actions(obj_uid, column_uid);
+                    finder.actions.load(obj_uid, column_uid);
                     finder.apply_column(column_uid, data, i);
                     break;
                 }
@@ -323,17 +329,17 @@ finder = {
         
         // remove superfluos columns and finalize
         jQuery(to_remove).remove();
-        finder.reset_columns(after_position + 1);
-        finder.set_selected(after_col, column_uid);
+        finder.trim_column_arr(after_position + 1);
+        finder.set_selected_item(after_col, column_uid);
         var new_col = jQuery('#finder_column_' + column_uid, finder.scrollable());
-        finder.bind_nav_items(new_col);
+        finder.bind_colums_items(new_col);
         var index = finder.scroll_api.getSize() - 4;
         index = index < 0 ? 0 : index;
         finder.scroll_api.seekTo(index, 1);
     },
     
-    // reset finder.columns
-    reset_columns: function(count){
+    // trim finder.columns array
+    trim_column_arr: function(count){
         var new_columns = [];
         if (count < 3) {
             count = 3;
@@ -344,8 +350,8 @@ finder = {
         finder.columns = new_columns;
     },
     
-    // set selected nav item
-    set_selected: function(column, uid){
+    // set selected column item
+    set_selected_item: function(column, uid){
         jQuery('li.selected', column).toggleClass('selected');
         jQuery('#finder_nav_item_' + uid, column).toggleClass('selected');
     },
@@ -356,9 +362,9 @@ finder = {
         return uid.substring(16, uid.length);
     },
     
-    // finder member objects
+    /* finder member objects */
     
-    // dialog object
+    // yes / no dialog
     dialog: {
     
         // current dialog message
@@ -369,7 +375,7 @@ finder = {
             return jQuery('div.finder_dialog', finder.overlay());
         },
         
-        // show dialog
+        // show dialog and bind callback to ok button click event
         show: function(callback){
             var dialog = finder.dialog.elem();
             jQuery('.text', dialog).html(finder.dialog.msg);
@@ -384,13 +390,13 @@ finder = {
             dialog.fadeIn('fast');
         },
         
-        // hide dialog
+        // fade out dialog
         hide: function(){
             finder.dialog.elem().fadeOut('fast');
         }
     },
     
-    // dropdown menu
+    // action dropdown menu
     dropdown: {
     
         // dropdown dom element. set before triggered
@@ -467,14 +473,15 @@ finder = {
     // actions
     actions: {
     
-        // actions object members
-        uid: null,
+        /* actions object members */
+        
+		uid: null,
         column: null,
         actions: null,
         url: null,
         name: null,
         
-        // actions object functions
+        /* actions object functions */
         
         // load actions
         load: function(uid, column){
