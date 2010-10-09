@@ -38,6 +38,8 @@ Changes
 1.0b1-svn
 ---------
 
+  * Reset finder._overlay and finder._scrollable on close [rnix]
+  
   * IE7 CSS fix for column items [rnix]
   
   * Remove dependencies to ``bda.plone.ajax`` [rnix]

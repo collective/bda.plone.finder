@@ -1,4 +1,9 @@
-// finder stuff when document ready
+// finder.js
+//
+// author: Robert Niederreiter
+// version: 1.0b1
+// license: GPL2
+
 jQuery(document).ready(function(){
     finder.bind_trigger('#contentview-bda_plone_finder');
     finder.auto_load('#contentview-bda_plone_finder');
@@ -45,6 +50,8 @@ jQuery.fn.finder = function(){
         onClose: function(){
             createCookie('bda.plone.finder', '');
             jQuery('.finder_container', overlay).remove();
+			finder._overlay = null;
+			finder._scrollable = null;
         },
         oneInstance: false,
         closeOnClick: false
@@ -156,16 +163,6 @@ finder = {
         }
         return finder._scrollable;
     },
-    
-    // reset
-	reset: function(){
-        finder.overlay_api = null;
-        finder.scroll_api = null;
-        finder.columns = [];
-        finder.current_filter = null;
-        finder.current_focused = null;
-        finder.current_item = null;
-	},
 	
 	// bind finder trigger element
     bind_trigger: function(sel){
@@ -173,7 +170,6 @@ finder = {
         link.attr('rel', '#bda_finder_overlay');
         link.bind('click', function(event){
             event.preventDefault();
-			finder.reset();
             link.finder();
         });
     },
@@ -185,9 +181,8 @@ finder = {
         if (cookie == 'autoload') {
             var cur_url = document.location.href;
             if (cur_url.indexOf('/portal_factory/') == -1 &&
-              cur_url.substring(cur_url.lastIndexOf('/') + 1, cur_url.length) !=
-              'edit') {
-			  	finder.reset();
+                cur_url.substring(cur_url.lastIndexOf('/') + 1,
+				                  cur_url.length) != 'edit') {
                 link.finder();
             }
         }
