@@ -559,9 +559,9 @@ finder = {
             var url = finder.actions.url;
             jQuery.getJSON(url, function(data){
                 var container = finder.overlay();
-                var message = jQuery('div.finder_message', container);
-                message.html(data.msg);
-                if (!data.err) {
+                var icon_name = 'error_icon.png';
+				if (!data.err) {
+					icon_name = 'info_icon.png';
                     var hook = finder.action_hooks[actions.name];
                     if (hook) {
                         var func = hook['after'];
@@ -570,13 +570,10 @@ finder = {
                         }
                     }
                 }
-                message.fadeIn('slow', function(){
-                    setTimeout(function(){
-                        message.fadeOut('slow', function(){
-                            message.empty();
-                        });
-                    }, 1000);
-                });
+				var message = jQuery('div.finder_message_bar', container);
+				var icon = '<img src="++resource++bda.plone.finder.images/';
+				icon += icon_name + '" alt="" />';
+                message.html(icon + data.msg);
             });
         }
     }

@@ -4,12 +4,12 @@
 	z-index:5000;
     background-color:#999;
     width:924px;
-    height:408px;
+	height:430px;
     border:1px solid #666;
     -moz-box-shadow:0 0 90px 5px #bbb;
     -webkit-box-shadow: 0 0 90px #bbb;
-    -moz-border-radius:6px;
-    -webkit-border-radius:6px;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
 }
 .finder_overlay .close {
     background-image:url('++resource++bda.plone.finder.images/apple_close.png');
@@ -22,24 +22,9 @@
 }
 .finder_container {
     width:920px;
-    height:408px;
+	height:430px;
     margin-left:2px;
     margin-right:2px;
-}
-.finder_container div.finder_message {
-    display:none;
-    position:absolute;
-    top:150px;
-    left:162px;
-    z-index:10000;
-    padding:5px;
-    border:red 1px solid;
-    background-color:#eb9b9b;
-    font-weight:bold;
-    width:600px;
-    min-height:30px;
-    -moz-border-radius:4px;
-    -webkit-border-radius:4px;
 }
 .finder_container div.finder_dialog {
     display:none;
@@ -211,7 +196,8 @@
 }
 .finder_columns { 
     position:relative;
-    overflow:hidden; 
+    overflow:hidden;
+	height:368px;
 }
 .finder_columns div.items { 
     width:20000em; 
@@ -225,8 +211,8 @@
     width:224px;
     height:362px;
     border:1px solid #666;
-    -moz-border-radius:4px;
-    -webkit-border-radius:4px;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
 	overflow-y:auto;
 }
 .finder_columns div.finder_column ul {
@@ -292,4 +278,16 @@
     height:16px;
     margin:0px;
     font-size:1px;
+}
+.finder_message_bar {
+	color:#fff;
+	font-weight:bold;
+	height:17px;
+	font-size:12px;
+	margin:0 2px 0 2px;
+	padding-left:4px;
+	background-color:#aaa;
+	border:1px solid #666;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
 }

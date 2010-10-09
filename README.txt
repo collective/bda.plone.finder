@@ -35,9 +35,12 @@ Note
 Changes
 =======
 
-1.0b1-svn
----------
+1.0b1
+-----
 
+  * Remove auto fading status message when performing actions. Instead write
+    this information to status bar below columns now [rnix]
+  
   * Reset finder._overlay and finder._scrollable on close [rnix]
   
   * IE7 CSS fix for column items [rnix]

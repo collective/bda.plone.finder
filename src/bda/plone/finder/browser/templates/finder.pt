@@ -1,6 +1,4 @@
 <div class="finder_container">
-
-  <div class="finder_message"></div>
   
   <div class="finder_dialog">
     <div class="text">
@@ -76,6 +74,10 @@
         <tal:column replace="structure column" />
       </tal:column>
     </div>
+  </div>
+  
+  <div class="finder_message_bar">
+    &nbsp;
   </div>
 
 </div>
