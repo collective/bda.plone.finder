@@ -49,7 +49,9 @@ Changes
 1.0b2
 -----
   
-  * initially render context column when opening finder on plone root [rnix]
+  * Disable navigate right arrow on init [rnix]
+  
+  * Initially render context column when opening finder on plone root [rnix]
   
   * JS cleanup and documentation [rnix]
 

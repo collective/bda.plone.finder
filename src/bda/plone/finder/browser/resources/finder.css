@@ -99,7 +99,8 @@
 .finder_controls div.buttonPrev a.disabled {
     background-position:0 0;
 }
-.finder_controls div.buttonNext a.disabled {
+.finder_controls div.buttonNext a.disabled,
+.finder_controls div.buttonNext a.f_disabled {
     background-position:0 -30px;
 }
 .finder_controls a.button {

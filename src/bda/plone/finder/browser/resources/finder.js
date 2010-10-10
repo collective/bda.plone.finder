@@ -27,7 +27,7 @@ jQuery(document).ready(function(){
     }
 });
 
-// request and show finder
+// query and show finder
 jQuery.fn.finder = function(){
     var overlay = finder.overlay();
     var elem = jQuery(this);
@@ -46,7 +46,7 @@ jQuery.fn.finder = function(){
                     clickable: false,
                     speed: 150,
                     onBeforeSeek: function(event, index){
-                        var size = finder.columns.length;
+						var size = finder.columns.length;
                         if (index > size - 4) {
                             return false;
                         }
@@ -55,8 +55,11 @@ jQuery.fn.finder = function(){
                         var size = finder.columns.length;
                         var button = jQuery('a.next', finder.overlay());
                         if ((size <= 4) || (index == size - 4)) {
-                            button.addClass('disabled');
+							// XXX: hack, for some reason on finer load this is
+							//      reset, duplicate disabled styles in css.
+							button.addClass('f_disabled');
                         } else {
+							button.removeClass('f_disabled');
                             button.removeClass('disabled');
                         }
                     }
