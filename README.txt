@@ -49,6 +49,8 @@ Changes
 1.0b2
 -----
   
+  * Add ``finder.base_url`` in JS to fix ajax request context [rnix]
+  
   * Tested in Chrome browser [rnix]
   
   * Do not cache ajax requests [rnix]
@@ -69,7 +71,7 @@ Changes
   * Remove auto fading status message when performing actions. Instead write
     this information to status bar below columns now [rnix]
   
-  * Reset finder._overlay and finder._scrollable on close [rnix]
+  * Reset ``finder._overlay`` and ``finder._scrollable`` on close [rnix]
   
   * IE7 CSS fix for column items [rnix]
   

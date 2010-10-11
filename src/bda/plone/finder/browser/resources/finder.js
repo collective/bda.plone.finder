@@ -161,7 +161,20 @@ finder = {
     
     /* object functions */
     
-    // return overlay dom elem as jQuery object
+    // base url for ajax requests
+	base_url: function() {
+		var url = document.location.href;
+        var idx = url.indexOf('?');
+        if (idx != -1) {
+            url = url.substring(0, idx);
+        }
+		if (url.substr(-1) === "/") {
+			url = url.substring(0, url.length - 1);
+		}
+        return url;
+    },
+	
+	// return overlay dom elem as jQuery object
     overlay: function(){
         if (!finder._overlay) {
             finder._overlay = jQuery('#bda_finder_overlay');
@@ -181,7 +194,7 @@ finder = {
 	query_html: function(url, callback) {
 		jQuery.ajax({
             dataType: 'html',
-            url: url,
+            url: finder.base_url() + '/' + url,
             cache: false,
             success: callback
 		});
@@ -191,7 +204,7 @@ finder = {
 	query_json: function(url, callback) {
 		jQuery.ajax({
             dataType: 'json',
-            url: url,
+            url: finder.base_url() + '/' + url,
             cache: false,
             success: callback
         });
@@ -201,6 +214,7 @@ finder = {
 	reset: function() {
 		finder._overlay = null;
         finder._scrollable = null;
+		finder._base_url = null;
 	},
 	
 	// initialize finder
