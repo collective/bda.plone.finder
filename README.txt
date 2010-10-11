@@ -49,6 +49,8 @@ Changes
 1.0b2
 -----
   
+  * Remove li.cut dom elems after paste action [rnix] 
+  
   * Add ``finder.base_url`` in JS to fix ajax request context [rnix]
   
   * Tested in Chrome browser [rnix]

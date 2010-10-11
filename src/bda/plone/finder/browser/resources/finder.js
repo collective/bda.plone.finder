@@ -98,6 +98,7 @@ action_hooks = {
                 if (finder.columns[i] == container) {
                     finder.actions.load(uid, container);
                     finder.apply_column(container, data, i);
+					jQuery('li.cut', finder.scrollable()).remove();
                 }
             }
         });
@@ -230,7 +231,7 @@ finder = {
             finder.columns[idx] = uid;
 			var column = jQuery(this);
             finder.bind_colums_items(column);
-			finder.scroll_column_to_selected(column);
+			finder.scroll_column_to(column, 'li.selected');
             idx++;
         });
         finder.actions.load(finder.columns[lastidx], finder.columns[lastidx - 1]);
@@ -301,9 +302,9 @@ finder = {
         });
     },
 	
-	// scroll column to selected item if necessary
-	scroll_column_to_selected: function(column) {
-		var selected = jQuery('li.selected', column);
+	// scroll column to item if necessary
+	scroll_column_to: function(column, selector) {
+		var selected = jQuery(selector, column);
 		if (selected.length) {
 			var listing = jQuery('ul.columnitems', column);
 			var list_h = listing.height();
@@ -394,7 +395,7 @@ finder = {
         finder.set_selected_item(after_col, column_uid);
         var new_col = jQuery('#finder_column_' + column_uid, finder.scrollable());
         finder.bind_colums_items(new_col);
-		finder.scroll_column_to_selected(new_col);
+		finder.scroll_column_to(new_col, 'li.selected');
         var index = finder.scroll_api.getSize() - 4;
         index = index < 0 ? 0 : index;
         finder.scroll_api.seekTo(index, 1);
