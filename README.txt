@@ -34,7 +34,7 @@ Note
 
   * Plone 4 only
   
-  * Firefox, IE7
+  * Testet in Firefox, IE7, Chrome
 
 Credits
 =======
@@ -48,6 +48,8 @@ Changes
 
 1.0b2
 -----
+  
+  * Tested in Chrome browser [rnix]
   
   * Do not cache ajax requests [rnix]
   
