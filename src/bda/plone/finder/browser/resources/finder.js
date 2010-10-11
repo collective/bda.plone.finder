@@ -38,15 +38,15 @@ jQuery.fn.finder = function(){
             loadSpeed: 200,
             fixed: true
         },
-        onBeforeLoad: function(){
-            jQuery.get('bda.plone.finder', function(data){
+        onBeforeLoad: function() {
+			finder.query_html('bda.plone.finder', function(data) {
                 overlay.append(data);
                 var scrollable = finder.scrollable();
                 scrollable.scrollable({
                     clickable: false,
                     speed: 150,
                     onBeforeSeek: function(event, index){
-						var size = finder.columns.length;
+                        var size = finder.columns.length;
                         if (index > size - 4) {
                             return false;
                         }
@@ -93,7 +93,7 @@ action_hooks = {
     // reload column after paste action
 	paste_entry: function(uid, container, data){
         var url = 'bda.plone.finder.expand?uid=' + uid;
-        jQuery.get(url, function(data){
+		finder.query_html(url, function(data) {
             for (var i = 0; i < finder.columns.length; i++) {
                 if (finder.columns[i] == container) {
                     finder.actions.load(uid, container);
@@ -177,7 +177,27 @@ finder = {
         return finder._scrollable;
     },
     
-    // reset finder dom elem references
+    // uncached html ajax request
+	query_html: function(url, callback) {
+		jQuery.ajax({
+            dataType: 'html',
+            url: url,
+            cache: false,
+            success: callback
+		});
+	},
+	
+	// uncached json ajax request
+	query_json: function(url, callback) {
+		jQuery.ajax({
+            dataType: 'json',
+            url: url,
+            cache: false,
+            success: callback
+        });
+	},
+	
+	// reset finder dom elem references
 	reset: function() {
 		finder._overlay = null;
         finder._scrollable = null;
@@ -237,7 +257,7 @@ finder = {
             var url = 'bda.plone.finder.expand?uid=';
             url += finder.current_focused + '&f=';
             url += finder.current_filter;
-            jQuery.get(url, function(data){
+			finder.query_html(url, function(data) {
                 var uid = finder.current_focused;
                 for (var i = 0; i < finder.columns.length; i++) {
                     if (finder.columns[i] == uid) {
@@ -290,7 +310,7 @@ finder = {
         var obj_uid = finder.column_uid(elem);
         var column_uid = elem.rel.substring(15, elem.rel.length);
         var url = view + '?uid=' + obj_uid;
-        jQuery.get(url, function(data){
+		finder.query_html(url, function(data) {
             for (var i = 0; i < finder.scroll_api.getSize(); i++) {
                 if (finder.columns[i] == column_uid) {
                     finder.actions.load(obj_uid, column_uid);
@@ -434,7 +454,7 @@ finder = {
         show: function(view, uid, callback){
             var dropdown = finder.dropdown.elem;
             var url = view + '?uid=' + uid;
-            jQuery.get(url, function(data){
+            finder.query_html(url, function(data){
                 dropdown.html(data);
                 jQuery('a', dropdown).unbind();
             });
@@ -518,7 +538,7 @@ finder = {
             var container = finder.overlay();
             var url = 'bda.plone.finder.actioninfo?uid=' + uid;
             var actions = finder.actions;
-            jQuery.getJSON(url, function(data){
+            finder.query_json(url, function(data){
                 actions.actions = data;
                 for (var action_name in actions.actions) {
                     var action = jQuery('.' + action_name + ' a', container);
@@ -592,7 +612,7 @@ finder = {
         perform_action: function(){
             var actions = finder.actions;
             var url = finder.actions.url;
-            jQuery.getJSON(url, function(data){
+            finder.query_json(url, function(data){
                 var container = finder.overlay();
                 var icon_name = 'error_icon.png';
 				if (!data.err) {

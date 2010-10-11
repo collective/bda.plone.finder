@@ -49,6 +49,8 @@ Changes
 1.0b2
 -----
   
+  * Do not cache ajax requests [rnix]
+  
   * Scroll column to selected item if necessary [rnix]
   
   * Disable navigate right arrow on init [rnix]
