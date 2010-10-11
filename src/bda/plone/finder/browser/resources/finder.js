@@ -51,18 +51,7 @@ jQuery.fn.finder = function(){
                             return false;
                         }
                     },
-                    onSeek: function(event, index){
-                        var size = finder.columns.length;
-                        var button = jQuery('a.next', finder.overlay());
-                        if ((size <= 4) || (index == size - 4)) {
-							// XXX: hack, for some reason on finer load this is
-							//      reset, duplicate disabled styles in css.
-							button.addClass('f_disabled');
-                        } else {
-							button.removeClass('f_disabled');
-                            button.removeClass('disabled');
-                        }
-                    }
+                    onSeek: finder.prepare_navigation
                 });
                 finder.scroll_api = scrollable.data('scrollable');
                 finder.initialize();
@@ -205,13 +194,30 @@ finder = {
                 lastidx = idx;
             }
             finder.columns[idx] = uid;
-            finder.bind_colums_items(this);
+			var column = jQuery(this);
+            finder.bind_colums_items(column);
+			finder.scroll_column_to_selected(column);
             idx++;
         });
         finder.actions.load(finder.columns[lastidx], finder.columns[lastidx - 1]);
         finder.bind_column_filter();
         var index = finder.scroll_api.getSize() - 4;
         finder.scroll_api.seekTo(index, 1);
+    },
+	
+	// initialize column navigation UI callback
+	prepare_navigation: function(event, index){
+        var size = finder.columns.length;
+        var button = jQuery('a.next', finder.overlay());
+        if ((size <= 4) || (index == size - 4)) {
+            // XXX: hack, for some reason on finer load time 'disabled' class
+			//      is reset on scrollable.onSeek. So we use custom disabled
+			//      css class 'f_disabled'.
+            button.addClass('f_disabled');
+        } else {
+            button.removeClass('f_disabled');
+            button.removeClass('disabled');
+        }
     },
     
     // bind focus and keyup events on column filter input field
@@ -260,6 +266,24 @@ finder = {
             finder.query_column(this, 'bda.plone.finder.details');
         });
     },
+	
+	// scroll column to selected item if necessary
+	scroll_column_to_selected: function(column) {
+		var selected = jQuery('li.selected', column);
+		if (selected.length) {
+			var listing = jQuery('ul.columnitems', column);
+			var list_h = listing.height();
+			var col_h = column.height();
+			if (list_h > col_h) {
+				var range_y = list_h - col_h;
+				var sel_y = selected.position().top - col_h;
+	            var sel_h = selected.height();
+				if (sel_y > 0) {
+	                column.scrollTop(sel_y + sel_h + 3);
+	            }
+			}
+		}
+	},
     
     // query finder column
     query_column: function(elem, view){
@@ -336,6 +360,7 @@ finder = {
         finder.set_selected_item(after_col, column_uid);
         var new_col = jQuery('#finder_column_' + column_uid, finder.scrollable());
         finder.bind_colums_items(new_col);
+		finder.scroll_column_to_selected(new_col);
         var index = finder.scroll_api.getSize() - 4;
         index = index < 0 ? 0 : index;
         finder.scroll_api.seekTo(index, 1);
