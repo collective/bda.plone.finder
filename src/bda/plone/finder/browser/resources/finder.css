@@ -4,7 +4,7 @@
 	z-index:5000;
     background-color:#999;
     width:924px;
-	height:428px;
+	height:430px;
     border:2px solid #666;
     -moz-box-shadow:0 0 90px 5px #bbb;
     -webkit-box-shadow: 0 0 90px #bbb;
@@ -22,7 +22,7 @@
 }
 .finder_container {
     width:920px;
-	height:428px;
+	height:430px;
     margin-left:2px;
     margin-right:2px;
 }
@@ -214,10 +214,10 @@
     position:relative;
     float:left;
     background-color:#fff;
-    margin:0 2px 4px 2px;
-    width:224px;
+    margin:0px 2px 2px 2px;
+    width:226px;
     height:362px;
-    border:1px solid #666;
+    border:none;
     -moz-border-radius:3px;
     -webkit-border-radius:3px;
 	overflow-y:auto;
@@ -291,7 +291,7 @@
 	font-weight:bold;
 	height:16px;
 	font-size:12px;
-	margin:0px 3px 0px 3px;
+	margin:0px 2px 0px 2px;
 	padding-left:4px;
 	background-color:#fff;
     -moz-border-radius:3px;
