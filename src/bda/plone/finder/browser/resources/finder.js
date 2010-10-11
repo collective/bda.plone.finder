@@ -1,7 +1,7 @@
 // finder.js
 //
 // author: Robert Niederreiter
-// version: 1.0b2
+// version: 1.0b3
 // license: GPL2
 
 jQuery(document).ready(function(){
@@ -39,7 +39,7 @@ jQuery.fn.finder = function(){
             fixed: true
         },
         onBeforeLoad: function() {
-			finder.query_html('bda.plone.finder', function(data) {
+			finder.request_html('bda.plone.finder', function(data) {
                 overlay.append(data);
                 var scrollable = finder.scrollable();
                 scrollable.scrollable({
@@ -69,65 +69,6 @@ jQuery.fn.finder = function(){
     finder.overlay_api.load();
 };
 
-// action hooks for finder.actions
-action_hooks = {
-
-    /* before action hooks */
-    
-    // display confirmation dialog
-	confirm_delete: function(uid, container, callback){
-        finder.dialog.msg = 'Do you really want to delete this item?';
-        finder.dialog.show(callback);
-    },
-    
-    /* after action hooks */
-    
-    // reload column after cut or delete action
-	cut_delete_entry: function(uid, container, data){
-        var overlay = finder.overlay();
-        var selector = '#finder_nav_item_' + container + ' a.column_expand';
-        var elem = jQuery(selector, overlay).get(0);
-        finder.query_column(elem, 'bda.plone.finder.expand');
-    },
-    
-    // reload column after paste action
-	paste_entry: function(uid, container, data){
-        var url = 'bda.plone.finder.expand?uid=' + uid;
-		finder.query_html(url, function(data) {
-            for (var i = 0; i < finder.columns.length; i++) {
-                if (finder.columns[i] == container) {
-                    finder.actions.load(uid, container);
-                    finder.apply_column(container, data, i);
-					jQuery('li.cut', finder.scrollable()).remove();
-                }
-            }
-        });
-    },
-    
-    /* after load hooks */
-    
-    // rebind add action dropdown with current focused column
-	rebind_add_action: function(actions){
-        var overlay = finder.overlay();
-        var action = jQuery('div.action_add_item a', overlay);
-        action.unbind();
-        action.bind('click', function(){
-            if (jQuery(this).hasClass('disabled')) {
-                return false;
-            }
-            createCookie('bda.plone.finder', 'autoload');
-            var parent = jQuery(this).parent();
-            var dropdown = jQuery('.action_dropdown', parent);
-            var uid = finder.current_focused;
-            finder.dropdown.elem = dropdown;
-            finder.dropdown.show('bda.plone.finder.additemsmenu', uid, function(target){
-                document.location.href = target.href;
-            });
-            return false;
-        });
-    }
-};
-
 // finder object
 finder = {
 
@@ -143,22 +84,8 @@ finder = {
     current_focused: null,
     // current selected item uid
     current_item: null,
-    
-    // action hooks configuration
-    action_hooks: {
-        action_cut: {
-            before: null,
-            after: action_hooks.cut_delete_entry
-        },
-        action_delete: {
-            before: action_hooks.confirm_delete,
-            after: action_hooks.cut_delete_entry
-        },
-        action_paste: {
-            before: null,
-            after: action_hooks.paste_entry
-        }
-    },
+	// extend this when you need finder specific helper stuff
+	utils: {},
     
     /* object functions */
     
@@ -192,7 +119,7 @@ finder = {
     },
     
     // uncached html ajax request
-	query_html: function(url, callback) {
+	request_html: function(url, callback) {
 		jQuery.ajax({
             dataType: 'html',
             url: finder.base_url() + '/' + url,
@@ -202,7 +129,7 @@ finder = {
 	},
 	
 	// uncached json ajax request
-	query_json: function(url, callback) {
+	request_json: function(url, callback) {
 		jQuery.ajax({
             dataType: 'json',
             url: finder.base_url() + '/' + url,
@@ -272,7 +199,7 @@ finder = {
             var url = 'bda.plone.finder.expand?uid=';
             url += finder.current_focused + '&f=';
             url += finder.current_filter;
-			finder.query_html(url, function(data) {
+			finder.request_html(url, function(data) {
                 var uid = finder.current_focused;
                 for (var i = 0; i < finder.columns.length; i++) {
                     if (finder.columns[i] == uid) {
@@ -325,7 +252,7 @@ finder = {
         var obj_uid = finder.column_uid(elem);
         var column_uid = elem.rel.substring(15, elem.rel.length);
         var url = view + '?uid=' + obj_uid;
-		finder.query_html(url, function(data) {
+		finder.request_html(url, function(data) {
             for (var i = 0; i < finder.scroll_api.getSize(); i++) {
                 if (finder.columns[i] == column_uid) {
                     finder.actions.load(obj_uid, column_uid);
@@ -426,8 +353,8 @@ finder = {
     },
     
     /* finder member objects */
-    
-    // yes / no dialog
+	
+	// yes / no dialog
     dialog: {
     
         // current dialog message
@@ -469,7 +396,7 @@ finder = {
         show: function(view, uid, callback){
             var dropdown = finder.dropdown.elem;
             var url = view + '?uid=' + uid;
-            finder.query_html(url, function(data){
+            finder.request_html(url, function(data){
                 dropdown.html(data);
                 jQuery('a', dropdown).unbind();
             });
@@ -498,42 +425,8 @@ finder = {
         }
     },
     
-    // transitions
-    transitions: {
-    
-        // bind change state action
-        bind: function(){
-            var overlay = finder.overlay();
-            var action = jQuery('div.action_change_state a', overlay);
-            action.unbind();
-            action.bind('click', function(){
-                if (jQuery(this).hasClass('disabled')) {
-                    return false;
-                }
-                finder.transitions.query_transitions(this);
-                return false;
-            });
-        },
-        
-        // query transitions and display dropdown
-        query_transitions: function(action){
-            if (jQuery(action).hasClass('disabled')) {
-                return false;
-            }
-            createCookie('bda.plone.finder', 'autoload');
-            var parent = jQuery(action).parent();
-            var dropdown = jQuery('.action_dropdown', parent);
-            var uid = finder.current_item;
-            var view = 'bda.plone.finder.transitionsmenu';
-            finder.dropdown.elem = dropdown;
-            finder.dropdown.show(view, uid, function(target){
-                // XXX: ajaxify
-                document.location.href = target.href;
-            });
-        }
-    },
-    
-    // actions
+    // finder actions object.
+	// provide querying and executing of actions for a specific context.
     actions: {
     
         /* actions object members */
@@ -553,7 +446,7 @@ finder = {
             var container = finder.overlay();
             var url = 'bda.plone.finder.actioninfo?uid=' + uid;
             var actions = finder.actions;
-            finder.query_json(url, function(data){
+            finder.request_json(url, function(data){
                 actions.actions = data;
                 for (var action_name in actions.actions) {
                     var action = jQuery('.' + action_name + ' a', container);
@@ -580,9 +473,15 @@ finder = {
                         });
                     }
                 }
-                // XXX: make after load calls hookable
-                finder.transitions.bind();
-                action_hooks.rebind_add_action(actions);
+				
+				// perform after actions load hooks
+				// XXX adopt to jQuery.each
+				for (var hook_name in finder.hooks.actions_loaded) {
+				    var func = finder.hooks.actions_loaded[hook_name];
+		            if (func) {
+	                    func(actions);
+	                }
+				}
             });
         },
         
@@ -612,11 +511,13 @@ finder = {
             finder.actions.name = action.parent().attr('class');
             finder.actions.url = 'bda.plone.finder.execute?uid=' + finder.actions.uid;
             finder.actions.url += '&name=' + finder.actions.name;
-            var hook = finder.action_hooks[finder.actions.name];
+            var hook = finder.hooks.actions[finder.actions.name];
             if (hook) {
                 var func = hook['before'];
                 if (func) {
-                    func(finder.actions.uid, finder.actions.column, finder.actions.perform_action);
+                    func(finder.actions.uid,
+					     finder.actions.column,
+						 finder.actions.perform_action);
                     return;
                 }
             }
@@ -627,12 +528,12 @@ finder = {
         perform_action: function(){
             var actions = finder.actions;
             var url = finder.actions.url;
-            finder.query_json(url, function(data){
+            finder.request_json(url, function(data){
                 var container = finder.overlay();
                 var icon_name = 'error_icon.png';
 				if (!data.err) {
 					icon_name = 'info_icon.png';
-                    var hook = finder.action_hooks[actions.name];
+                    var hook = finder.hooks.actions[actions.name];
                     if (hook) {
                         var func = hook['after'];
                         if (func) {
@@ -646,5 +547,142 @@ finder = {
                 message.html(icon + data.msg);
             });
         }
-    }
+    },
+	
+	// object for finder hooks.
+	hooks: {
+		
+		// hooks loaded after actions load
+		actions_loaded: {},
+		
+		// before and after hooks for actions by id
+		actions: {}
+	}
 };
+
+// set action hook utility function
+jQuery.extend(finder.utils, {
+	
+	// cut_delete_entry_hook, reload column after cut or delete action
+	cut_delete_entry_hook: function(uid, container, data) {
+        var overlay = finder.overlay();
+        var selector = '#finder_nav_item_' + container + ' a.column_expand';
+        var elem = jQuery(selector, overlay).get(0);
+        finder.query_column(elem, 'bda.plone.finder.expand');
+    },
+	
+	// transitions action extension
+    transitions: {
+    
+        // bind change state action
+        bind: function(actions) {
+            var overlay = finder.overlay();
+            var action = jQuery('div.action_change_state a', overlay);
+            action.unbind();
+            action.bind('click', function(){
+                if (jQuery(this).hasClass('disabled')) {
+                    return false;
+                }
+                finder.utils.transitions.query_transitions(this);
+                return false;
+            });
+        },
+        
+        // query transitions and display dropdown
+        query_transitions: function(action) {
+            if (jQuery(action).hasClass('disabled')) {
+                return false;
+            }
+            createCookie('bda.plone.finder', 'autoload');
+            var parent = jQuery(action).parent();
+            var dropdown = jQuery('.action_dropdown', parent);
+            var uid = finder.current_item;
+            var view = 'bda.plone.finder.transitionsmenu';
+            finder.dropdown.elem = dropdown;
+            finder.dropdown.show(view, uid, function(target){
+                // XXX: ajaxify
+                document.location.href = target.href;
+            });
+        }
+    }
+});
+
+// set finder hooks for specific actions
+jQuery.extend(finder.hooks.actions, {
+	
+	// cut action
+	action_cut: {
+        
+		// no action before cut
+		before: null,
+		
+		// reload column after cut or delete action
+		// XXX: seperate cut and delete
+        after: finder.utils.cut_delete_entry_hook
+    },
+    
+	// delete action
+	action_delete: {
+		
+		// confirm_delete, display confirmation dialog
+        before: function(uid, container, callback) {
+	        finder.dialog.msg = 'Do you really want to delete this item?';
+	        finder.dialog.show(callback);
+	    },
+        
+		// reload column after cut or delete action
+        // XXX: seperate cut and delete
+		after: finder.utils.cut_delete_entry_hook
+    },
+    
+	// paste action
+	action_paste: {
+        
+		// no action before paste
+		before: null,
+		
+		// paste_entry, reload column after paste action
+        after: function(uid, container, data){
+	        var url = 'bda.plone.finder.expand?uid=' + uid;
+	        finder.request_html(url, function(data) {
+	            for (var i = 0; i < finder.columns.length; i++) {
+	                if (finder.columns[i] == container) {
+	                    finder.actions.load(uid, container);
+	                    finder.apply_column(container, data, i);
+	                    jQuery('li.cut', finder.scrollable()).remove();
+	                }
+	            }
+	        });
+	    }
+    }
+});
+
+// set finder hooks for after actions load
+jQuery.extend(finder.hooks.actions_loaded, {
+    
+    // rebind add action dropdown with current focused column
+    rebind_add_action: function(actions) {
+        var overlay = finder.overlay();
+        var action = jQuery('div.action_add_item a', overlay);
+        action.unbind();
+        action.bind('click', function(){
+            if (jQuery(this).hasClass('disabled')) {
+                return false;
+            }
+            createCookie('bda.plone.finder', 'autoload');
+            var parent = jQuery(this).parent();
+            var dropdown = jQuery('.action_dropdown', parent);
+            var uid = finder.current_focused;
+            finder.dropdown.elem = dropdown;
+            finder.dropdown.show('bda.plone.finder.additemsmenu',
+			                     uid,
+								 function(target){
+                document.location.href = target.href;
+            });
+            return false;
+        });
+    },
+	
+	// bind transitions dropdown menu
+	bind_tansitions_dropdown: finder.utils.transitions.bind
+});

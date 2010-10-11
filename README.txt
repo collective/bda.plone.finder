@@ -27,14 +27,14 @@ you can checkout and install from source code. Plone 4 buildout configuration
 is included.
 ::
 
-    http://svn.plone.org/svn/collective/bda.plone.finder/trunk/
+    https://svn.plone.org/svn/collective/bda.plone.finder/trunk/
 
 Note
 ====
 
   * Plone 4 only
   
-  * Testet in Firefox, IE7, Chrome
+  * Testet in Firefox, Chrome, Safari, IE7
 
 Credits
 =======
@@ -46,14 +46,19 @@ Credits
 Changes
 =======
 
+1.0b3
+-----
+
+  * Refactor actions performing and corresponding hooks [rnix]
+
+  * Add minified finder.js [rnix]
+
 1.0b2
 -----
   
-  * Remove li.cut dom elems after paste action [rnix] 
+  * Remove ``li.cut`` dom elems after paste action [rnix] 
   
   * Add ``finder.base_url`` in JS to fix ajax request context [rnix]
-  
-  * Tested in Chrome browser [rnix]
   
   * Do not cache ajax requests [rnix]
   
