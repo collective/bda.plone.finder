@@ -49,6 +49,9 @@ Changes
 1.0b3
 -----
 
+  * Wrap finder JS code inside ``(function($) { ... })(jQuery);`` block
+    and use ``$`` instead of ``jQuery`` [rnix]
+  
   * Refactor actions performing and corresponding hooks [rnix]
 
   * Add minified finder.js [rnix]
