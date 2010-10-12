@@ -19,7 +19,7 @@
         
         // autoload finder if cookie set and not portal_factory context
         var cookie = readCookie('bda.plone.finder');
-        if (cookie == 'autoload') {
+        if (cookie) {
             var cur_url = document.location.href;
             if (cur_url.indexOf('/portal_factory/') == -1 &&
                 cur_url.substring(cur_url.lastIndexOf('/') + 1,
@@ -93,6 +93,13 @@
         
         // base url for ajax requests
         base_url: function() {
+			
+			// return value of bda.plone.finder cookie. this cookie is expected
+			// to be a url if present, not '' and not 'autoload'
+			var cookie = readCookie('bda.plone.finder');
+			if (cookie && cookie != 'autoload') {
+				return cookie;
+			}
             var url = document.location.href;
             var idx = url.indexOf('?');
             if (idx != -1) {
@@ -443,7 +450,7 @@
             
             /* actions object functions */
             
-            // load actions
+            // load actions for current selected item and bind events
             load: function(uid, column) {
                 finder.actions.uid = uid;
                 finder.actions.column = column;
@@ -486,7 +493,7 @@
                 });
             },
             
-            // enable action
+            // remove disabled css class from action dom element
             enable: function(action) {
                 if (action.hasClass('disabled')) {
                     action.removeClass('disabled');
@@ -494,7 +501,7 @@
                 action.unbind();
             },
             
-            // disable action
+            // add disabled css class from action dom element
             disable: function(action) {
                 if (!action.hasClass('disabled')) {
                     action.addClass('disabled');
@@ -512,6 +519,8 @@
                 finder.actions.name = action.parent().attr('class');
                 var ajax = action.hasClass('ajax');
 				var cb;
+				
+				// set action url. value depends if ajax action or not
 				if (ajax) {
 					cb = finder.actions.perform_ajax;
 					finder.actions.url = 'bda.plone.finder.execute?uid=';
@@ -521,6 +530,8 @@
 					cb = finder.actions.follow_action_link;
 					finder.actions.url = action.attr('href');
 				}
+				
+				// execute befor action hook if exists and return
 				var hook = finder.hooks.actions[finder.actions.name];
                 if (hook) {
                     var func = hook['before'];
@@ -529,6 +540,9 @@
                         return;
                     }
                 }
+				
+				// no hook defined for action, execute action performing
+				// callback directly
 				if (ajax) {
 					finder.actions.perform_ajax();
 				} else {
@@ -541,7 +555,8 @@
 				document.location.href = finder.actions.url;
 			},
             
-            // ajax action callback
+            // ajax action callback, expected to be called by
+			// ``finder.actions.execute`` by action callback
             perform_ajax: function() {
                 var actions = finder.actions;
                 var url = finder.actions.url;
@@ -569,7 +584,7 @@
         // object for finder hooks.
         hooks: {
             
-            // hooks loaded after actions load
+            // hooks executed after actions load
             actions_loaded: {},
             
             // before and after hooks for actions by id
@@ -579,6 +594,8 @@
     
     // set action hook utility function
     $.extend(finder.utils, {
+		
+		// set autoload and load function
         
         // cut_delete_entry_hook, reload column after cut or delete action
         cut_delete_entry_hook: function(uid, container, data) {
@@ -633,7 +650,9 @@
 			// write object location to re-open finder with after edit to
 			// cookie
 			before: function(uid, container, callback) {
-				alert('write path');
+				var url = finder.actions.url;
+				url = url.substring(0, url.indexOf('/edit'));
+				createCookie('bda.plone.finder', url);
 				callback();
 			},
 			

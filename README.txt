@@ -54,6 +54,9 @@ Changes
 1.0b3
 -----
 
+  * ``bda.plone.finder`` cookie can contain url's now (beside value 'autoload')
+    which define the actual context to be used as base url for auto load [rnix]
+  
   * Rename ``perform_action`` to ``perform_ajax`` and add ``follow_action_link``
     function as non ajax callback for actions [rnix] 
 
