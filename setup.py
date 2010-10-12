@@ -38,5 +38,8 @@ setup(name='bda.plone.finder',
       ),
       entry_points="""
       # -*- Entry points: -*-
+
+      [z3c.autoinclude.plugin]
+      target = plone
       """,
       )
