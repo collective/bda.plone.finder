@@ -457,24 +457,21 @@
                         var url = actions.actions[action_name]['url'];
                         var enabled = actions.actions[action_name]['enabled'];
                         var ajax = actions.actions[action_name]['ajax'];
-                        var autoload = actions.actions[action_name]['autoload'];
-                        action.attr('href', url);
+						action.attr('href', url);
                         if (enabled) {
                             actions.enable(action);
-                        }
-                        else {
-                            actions.disable(action);
-                        }
-                        if (ajax && enabled) {
-                            action.bind('click', function(event) {
+							action.bind('click', function(event) {
                                 actions.execute(this);
                                 event.preventDefault();
                             });
-                        }
-                        if (!ajax && enabled && autoload) {
-                            action.bind('click', function() {
-                                createCookie('bda.plone.finder', 'autoload');
-                            });
+							if (ajax) {
+								action.addClass('ajax');
+							}
+                        } else {
+                            actions.disable(action);
+							if (!ajax) {
+								action.removeClass('ajax');
+							}
                         }
                     }
                     
@@ -513,24 +510,39 @@
             execute: function(action) {
                 action = $(action);
                 finder.actions.name = action.parent().attr('class');
-                finder.actions.url = 'bda.plone.finder.execute?uid=';
-                finder.actions.url += finder.actions.uid;
-                finder.actions.url += '&name=' + finder.actions.name;
-                var hook = finder.hooks.actions[finder.actions.name];
+                var ajax = action.hasClass('ajax');
+				var cb;
+				if (ajax) {
+					cb = finder.actions.perform_ajax;
+					finder.actions.url = 'bda.plone.finder.execute?uid=';
+	                finder.actions.url += finder.actions.uid;
+	                finder.actions.url += '&name=' + finder.actions.name;
+				} else {
+					cb = finder.actions.follow_action_link;
+					finder.actions.url = action.attr('href');
+				}
+				var hook = finder.hooks.actions[finder.actions.name];
                 if (hook) {
                     var func = hook['before'];
                     if (func) {
-                        func(finder.actions.uid,
-                             finder.actions.column,
-                             finder.actions.perform_action);
+                        func(finder.actions.uid, finder.actions.column, cb);
                         return;
                     }
                 }
-                finder.actions.perform_action();
+				if (ajax) {
+					finder.actions.perform_ajax();
+				} else {
+					finder.actions.follow_action_link();
+				}
             },
+			
+			// follow action link callback for non ajax actions
+			follow_action_link: function() {
+				document.location.href = finder.actions.url;
+			},
             
-            // perform action
-            perform_action: function() {
+            // ajax action callback
+            perform_ajax: function() {
                 var actions = finder.actions;
                 var url = finder.actions.url;
                 finder.request_json(url, function(data) {
@@ -615,7 +627,21 @@
     // set finder hooks for specific actions
     $.extend(finder.hooks.actions, {
         
-        // cut action
+        // edit action
+		action_edit: {
+			
+			// write object location to re-open finder with after edit to
+			// cookie
+			before: function(uid, container, callback) {
+				alert('write path');
+				callback();
+			},
+			
+			// edit action is a non ajax action, after hooks are never called
+			after: null,
+		},
+		
+		// cut action
         action_cut: {
             
             // no action before cut

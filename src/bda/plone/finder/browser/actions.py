@@ -51,8 +51,8 @@ class Actions(BrowserView):
         data['action_view']['enabled'] = True
         data['action_edit']['url'] = '%s/edit' % url
         data['action_edit']['enabled'] = True
-        data['action_edit']['autoload'] = True
-        data['action_add_item']['autoload'] = True
+        #data['action_edit']['autoload'] = True
+        #data['action_add_item']['autoload'] = True
         return json.dumps(data)
     
     def execute(self):
@@ -104,10 +104,10 @@ class Actions(BrowserView):
             data['action_view']['url'] = purl
             if uid == 'plone_content':
                 data['action_add_item']['enabled'] = True
-                data['action_add_item']['autoload'] = True
+                #data['action_add_item']['autoload'] = True
                 data['action_edit']['enabled'] = True
                 data['action_edit']['url'] = purl + '/edit'
-                data['action_edit']['autoload'] = True
+                #data['action_edit']['autoload'] = True
             if uid in ['plone_control_panel',
                        'plone_addons']:
                 data['action_view']['url'] = purl + '/plone_control_panel'

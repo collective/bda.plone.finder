@@ -54,6 +54,14 @@ Changes
 1.0b3
 -----
 
+  * Rename ``perform_action`` to ``perform_ajax`` and add ``follow_action_link``
+    function as non ajax callback for actions [rnix] 
+
+  * Change autoload logic, remove from server side action definitions and let
+    do JS action callbacks the work [rnix]
+  
+  * Enable before hooks on non ajax actions [rnix]
+  
   * Wrap finder JS code inside ``(function($) { ... })(jQuery);`` block
     and use ``$`` instead of ``jQuery`` [rnix]
   
