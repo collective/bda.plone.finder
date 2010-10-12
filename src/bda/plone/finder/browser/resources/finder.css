@@ -1,3 +1,6 @@
+#finder_base_url {
+	display:none;
+}
 .finder_overlay {
     display:none;
     position:relative;
@@ -216,7 +219,7 @@
     background-color:#fff;
     margin:0px 2px 2px 2px;
     width:226px;
-    height:362px;
+    height:365px;
     border:none;
     -moz-border-radius:3px;
     -webkit-border-radius:3px;
@@ -291,7 +294,7 @@
 	font-weight:bold;
 	height:16px;
 	font-size:12px;
-	margin:0px 2px 0px 2px;
+	margin:2px 2px 0px 2px;
 	padding-left:4px;
 	background-color:#fff;
     -moz-border-radius:3px;

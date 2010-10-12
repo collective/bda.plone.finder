@@ -23,6 +23,10 @@ class OverlayViewlet(ViewletBase):
     def update(self):
         user = getSecurityManager().getUser()
         self.show = not user.has_role('Anonymous')
+    
+    @property
+    def base_url(self):
+        return self.context.absolute_url()
 
 class Finder(BrowserView):
     

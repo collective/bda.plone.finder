@@ -100,15 +100,21 @@
             if (cookie && cookie != 'autoload') {
                 return cookie;
             }
-            var url = document.location.href;
-            var idx = url.indexOf('?');
-            if (idx != -1) {
-                url = url.substring(0, idx);
+			if (!finder._base_url) {
+                finder._base_url = $('#finder_base_url').text();
             }
-            if (url.substr(-1) === "/") {
-                url = url.substring(0, url.length - 1);
-            }
-            return url;
+            return finder._base_url;
+			
+            //var url = document.location.href;
+            //var idx = url.indexOf('?');
+            //if (idx != -1) {
+            //    url = url.substring(0, idx);
+            //}
+            //if (url.substr(-1) === "/") {
+            //    url = url.substring(0, url.length - 1);
+            //}
+			//alert(url);
+            //return url;
         },
         
         // return overlay dom elem as jQuery object

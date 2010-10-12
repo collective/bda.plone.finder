@@ -54,6 +54,8 @@ Changes
 1.0b3
 -----
 
+  * deliver context url for ajax calls from server [rnix]
+  
   * ``bda.plone.finder`` cookie can contain url's now (beside value 'autoload')
     which define the actual context to be used as base url for auto load [rnix]
   

@@ -2,3 +2,5 @@
      id="bda_finder_overlay"
      tal:condition="view/show">
 </div>
+<span id="finder_base_url"
+      tal:content="view/base_url">http://www.example.com</span>
