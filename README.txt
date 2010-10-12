@@ -29,6 +29,11 @@ is included.
 
     https://svn.plone.org/svn/collective/bda.plone.finder/trunk/
 
+Usage
+=====
+
+Add @@bda.plone.finder to the URL of the Plone site or a Plone folder.
+
 Note
 ====
 
