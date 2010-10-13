@@ -650,7 +650,20 @@
     // set finder hooks for specific actions
     $.extend(finder.hooks.actions, {
         
-        // edit action
+        // action view
+		action_view: {
+			
+			// reset cookie
+			before: function(uid, container, callback) {
+				createCookie('bda.plone.finder', '');
+				callback();
+			},
+			
+			// view action is a non ajax action, after hooks are never called
+			after: null
+		},
+		
+		// edit action
         action_edit: {
             
             // write object location to re-open finder with after edit to
@@ -663,7 +676,7 @@
             },
             
             // edit action is a non ajax action, after hooks are never called
-            after: null,
+            after: null
         },
         
         // cut action
