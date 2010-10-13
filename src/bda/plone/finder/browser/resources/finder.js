@@ -100,21 +100,10 @@
             if (cookie && cookie != 'autoload') {
                 return cookie;
             }
-			if (!finder._base_url) {
+            if (!finder._base_url) {
                 finder._base_url = $('#finder_base_url').text();
             }
             return finder._base_url;
-			
-            //var url = document.location.href;
-            //var idx = url.indexOf('?');
-            //if (idx != -1) {
-            //    url = url.substring(0, idx);
-            //}
-            //if (url.substr(-1) === "/") {
-            //    url = url.substring(0, url.length - 1);
-            //}
-			//alert(url);
-            //return url;
         },
         
         // return overlay dom elem as jQuery object
@@ -651,19 +640,19 @@
     $.extend(finder.hooks.actions, {
         
         // action view
-		action_view: {
-			
-			// reset cookie
-			before: function(uid, container, callback) {
-				createCookie('bda.plone.finder', '');
-				callback();
-			},
-			
-			// view action is a non ajax action, after hooks are never called
-			after: null
-		},
-		
-		// edit action
+        action_view: {
+            
+            // reset cookie
+            before: function(uid, container, callback) {
+                createCookie('bda.plone.finder', '');
+                callback();
+            },
+            
+            // view action is a non ajax action, after hooks are never called
+            after: null
+        },
+        
+        // edit action
         action_edit: {
             
             // write object location to re-open finder with after edit to
