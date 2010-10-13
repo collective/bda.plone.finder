@@ -13,12 +13,31 @@ browsing in Plone.
 Installation
 ============
 
-  * make egg available in your Plone site
+  * Make egg available in your Plone site
   
-  * apply corresponding GS profile
-  
-  * now you have a link named 'Finder' in the document actions which trigger the
-    widget
+  * Apply corresponding GS profile
+
+Usage
+=====
+
+After installation you have a link named 'Finder' in the document actions.
+The finder gets displayed with focus on triggering context by clicking this
+link.
+
+Behavior
+========
+
+``bda.plone.finder`` browser view is requested via XML HTTP request and the
+returned markup gets displayed inside the overlay.
+
+For expanding columns respective rendering details columns the views
+``bda.plone.finder.expand`` and ``bda.plone.finder.details`` are requested.
+
+The actions configuration for context is requested via
+``bda.plone.finder.actioninfo`` browser view by JSON request.
+
+Execution of actions is done by requesting ``bda.plone.finder.execute``, again
+via JSON
 
 Development and evaluation
 ==========================
@@ -28,11 +47,6 @@ is included.
 ::
 
     https://svn.plone.org/svn/collective/bda.plone.finder/trunk/
-
-Usage
-=====
-
-Add @@bda.plone.finder to the URL of the Plone site or a Plone folder.
 
 Note
 ====
