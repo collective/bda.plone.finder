@@ -68,6 +68,9 @@ Changes
 1.0b4
 -----
 
+  * Fix initial finder rendering when called on leaf object located in plone
+    root
+
   * Enable paste action on plone root content
 
 1.0b3

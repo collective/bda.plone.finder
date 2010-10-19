@@ -13,7 +13,7 @@ from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.layout.viewlets.common import ViewletBase
 from Products.CMFPlone.interfaces import IPloneSiteRoot
-from Products.Archetypes.interfaces import IBaseFolder
+from Products.Archetypes.interfaces import IBaseContent
 from bda.plone.finder.interfaces import IPloneContent
 
 class OverlayViewlet(ViewletBase):
@@ -60,7 +60,7 @@ class Finder(BrowserView):
             child = context
             context = aq_parent(aq_inner(context))
             if IPloneSiteRoot.providedBy(context) \
-              and IBaseFolder.providedBy(child):
+              and IBaseContent.providedBy(child):
                 directlyProvides(context, IPloneContent)
                 yield context
                 noLongerProvides(context, IPloneContent)
