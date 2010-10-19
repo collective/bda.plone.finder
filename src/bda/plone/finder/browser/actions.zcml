@@ -60,7 +60,7 @@
 	<adapter
         for="Products.Archetypes.interfaces.IBaseObject"
         name="action_cut"
-        factory=".actions.CutActionExecution"
+        factory=".actions.CutAction"
     />
 	
 	<!-- action copy object -->
@@ -73,7 +73,7 @@
 	<adapter
         for="Products.Archetypes.interfaces.IBaseObject"
         name="action_copy"
-        factory=".actions.CopyActionExecution"
+        factory=".actions.CopyAction"
     />
 	
 	<!-- action paste object -->
@@ -86,13 +86,13 @@
 	<adapter
         for="Products.Archetypes.interfaces.IBaseObject"
         name="action_paste"
-        factory=".actions.PasteActionExecution"
+        factory=".actions.PasteAction"
     />
     
     <adapter
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"
         name="action_paste"
-        factory=".actions.PasteActionExecution"
+        factory=".actions.PasteAction"
     />
 	
 	<!-- action delete object -->
@@ -105,7 +105,7 @@
 	<adapter
         for="Products.Archetypes.interfaces.IBaseObject"
         name="action_delete"
-        factory=".actions.DeleteActionExecution"
+        factory=".actions.DeleteAction"
     />
 
 </configure>

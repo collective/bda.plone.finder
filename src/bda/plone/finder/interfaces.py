@@ -81,12 +81,6 @@ class IAction(Interface):
     
     ajax = Attribute(u"Flag wether action is performed via AJAX or not."
                      u"Note - Non AJAX actions always follow ``url``")
-
-class IActionExecution(Interface):
-    """Action execution adapter interface for ajax enabled actions.
-    
-    Must be registered as adapter for context with action id as name.
-    """
     
     def __call__(self, request):
         """Execute action. Return message. and UID as tuple.

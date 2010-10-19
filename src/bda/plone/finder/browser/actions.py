@@ -17,7 +17,6 @@ from Products.CMFPlone.utils import (
     safe_unicode,
 )
 from bda.plone.finder.interfaces import IAction
-from bda.plone.finder.interfaces import IActionExecution
 
 class Actions(BrowserView):
     
@@ -68,7 +67,7 @@ class Actions(BrowserView):
         err = False
         ret_uid = None
         try:
-            execution = getAdapter(context, IActionExecution, name=name)
+            execution = getAdapter(context, IAction, name=name)
             msg, ret_uid = execution(self.request)
             if ret_uid is None:
                 ret_uid = uid
@@ -157,6 +156,10 @@ class Action(object):
     
     def __init__(self, context):
         self.context = context
+    
+    def __call__(self, request):
+        raise NotImplementedError(u'Abstract Action does not ',
+                                  u'implement ``__call__``.')
 
 class ViewAction(Action):
     title = _('View')
@@ -184,34 +187,6 @@ class CutAction(Action):
     title = _('Cut')
     order = 10
     group = 20
-
-class CopyAction(Action):
-    title = _('Copy')
-    order = 20
-    group = 20
-
-class PasteAction(Action):
-    title = _('Paste')
-    order = 30
-    group = 20
-
-class DeleteAction(Action):
-    title = _('Delete')
-    order = 40
-    group = 20
-
-class ActionExecution(object):
-    
-    implements(IActionExecution)
-    
-    def __init__(self, context):
-        self.context = context
-    
-    def __call__(self, request):
-        raise NotImplementedError(u'Abstract ActionExecution does not ',
-                                  u'implement ``__call__``.')
-
-class CutActionExecution(ActionExecution):
     
     def __call__(self, request):
         context = self.context
@@ -245,7 +220,10 @@ class CutActionExecution(ActionExecution):
         transaction_note('Cut object %s' % context.absolute_url())
         return msg, None
 
-class CopyActionExecution(ActionExecution):
+class CopyAction(Action):
+    title = _('Copy')
+    order = 20
+    group = 20
     
     def __call__(self, request):
         context = self.context
@@ -270,7 +248,10 @@ class CopyActionExecution(ActionExecution):
         transaction_note('Copied object %s' % context.absolute_url())
         return msg, None
 
-class PasteActionExecution(ActionExecution):
+class PasteAction(Action):
+    title = _('Paste')
+    order = 30
+    group = 20
     
     def __call__(self, request):
         context = self.context
@@ -293,7 +274,10 @@ class PasteActionExecution(ActionExecution):
                 msg = _(u'Paste could not find clipboard content.')
         return msg, None
 
-class DeleteActionExecution(ActionExecution):
+class DeleteAction(Action):
+    title = _('Delete')
+    order = 40
+    group = 20
     
     def __call__(self, request):
         context = self.context
