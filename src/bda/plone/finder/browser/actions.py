@@ -90,12 +90,11 @@ class Actions(BrowserView):
         return brains[0].getObject()
     
     def _create_action(self, enabled=False, url='',
-                       ajax=False, setautoload=False):
+                       ajax=False):
         return {
             'enabled': enabled,
             'url': url,
             'ajax': ajax,
-            'setautoload': setautoload,
         }
     
     def _set_special_action_url(self, uid, data):

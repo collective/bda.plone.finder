@@ -59,6 +59,10 @@ class ATDetails(Details):
     details = ViewPageTemplateFile('templates/at_details.pt')
     
     @property
+    def uid(self):
+        return col_id(self.context.UID())
+    
+    @property
     def type(self):
         return _(self.context.portal_type)
     

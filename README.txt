@@ -68,6 +68,8 @@ Changes
 1.0b4
 -----
 
+  * Fix ``uid`` property in ATDetails column view
+
   * Fix initial finder rendering when called on leaf object located in plone
     root
 
