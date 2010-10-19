@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+from zope.interface import implements
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.memoize.instance import memoize
 from Products.CMFPlone import PloneMessageFactory as _
+from bda.plone.finder.interfaces import IColumn
 from utils import col_id
 
 DETAILS = """
@@ -23,6 +25,8 @@ DETAILS_CONTENT = """
 class Details(BrowserView):
     """Details base. Used as fallback.
     """
+    
+    implements(IColumn)
     
     def __call__(self):
         return DETAILS % {

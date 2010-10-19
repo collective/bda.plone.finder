@@ -1,7 +1,8 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:browser="http://namespaces.zope.org/browser">
 
-    <browser:page
+    <!-- ajax view for querying action info for context -->
+	<browser:page
         for="*"
         name="bda.plone.finder.actioninfo"
         class=".actions.Actions"
@@ -10,6 +11,8 @@
         permission="cmf.ManagePortal"
     />
 	
+	
+	<!-- ajax view for performing actions -->
 	<browser:page
         for="*"
         name="bda.plone.finder.execute"
@@ -19,38 +22,97 @@
         permission="cmf.ManagePortal"
     />
 
-    <!-- cut action -->
+    <!--
+	    specific actions.
+		each action contains of an IActionInfo adapter for context registered
+		by action name and a IActionExecution adapter for context registered by
+		action name if ajax.
+    -->
+		
+	<!-- action view -->
 	<adapter
-        for="Products.Archetypes.interfaces.IBaseObject"
+        for="*"
+        name="action_view"
+        factory=".actions.ViewActionInfo"
+    />
+	
+	<!-- action edit -->
+	<adapter
+        for="*"
+        name="action_edit"
+        factory=".actions.EditActionInfo"
+    />
+	
+	<!-- action change state -->
+	<adapter
+        for="*"
+        name="action_change_state"
+        factory=".actions.ChangeStateActionInfo"
+    />
+	
+	<!-- action add item -->
+	<adapter
+        for="*"
+        name="action_add_item"
+        factory=".actions.AddItemActionInfo"
+    />
+	
+	<!-- action cut object -->
+	<adapter
+        for="*"
         name="action_cut"
-        factory=".actions.CutAction"
-    />
-    
-	<!-- copy action -->
-    <adapter
-        for="Products.Archetypes.interfaces.IBaseObject"
-        name="action_copy"
-        factory=".actions.CopyAction"
-    />
-    
-	<!-- paste action -->
-    <adapter
-        for="Products.Archetypes.interfaces.IBaseObject"
-        name="action_paste"
-        factory=".actions.PasteAction"
+        factory=".actions.CutActionInfo"
     />
 	
 	<adapter
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        for="Products.Archetypes.interfaces.IBaseObject"
+        name="action_cut"
+        factory=".actions.CutActionExecution"
+    />
+	
+	<!-- action copy object -->
+	<adapter
+        for="*"
+        name="action_copy"
+        factory=".actions.CopyActionInfo"
+    />
+	
+	<adapter
+        for="Products.Archetypes.interfaces.IBaseObject"
+        name="action_copy"
+        factory=".actions.CopyActionExecution"
+    />
+	
+	<!-- action paste object -->
+	<adapter
+        for="*"
         name="action_paste"
-        factory=".actions.PasteAction"
+        factory=".actions.PasteActionInfo"
+    />
+	
+	<adapter
+        for="Products.Archetypes.interfaces.IBaseObject"
+        name="action_paste"
+        factory=".actions.PasteActionExecution"
     />
     
-	<!-- delete action -->
     <adapter
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        name="action_paste"
+        factory=".actions.PasteActionExecution"
+    />
+	
+	<!-- action delete object -->
+	<adapter
+        for="*"
+        name="action_delete"
+        factory=".actions.DeleteActionInfo"
+    />
+	
+	<adapter
         for="Products.Archetypes.interfaces.IBaseObject"
         name="action_delete"
-        factory=".actions.DeleteAction"
+        factory=".actions.DeleteActionExecution"
     />
 
 </configure>

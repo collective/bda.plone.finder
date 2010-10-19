@@ -3,7 +3,7 @@
 
     <include file="dispatcher.zcml" />
     <include file="actions.zcml" />
-	<include file="column.zcml" />
+	<include file="folderish.zcml" />
 	<include file="details.zcml" />
 	<include file="menu.zcml" />
 	

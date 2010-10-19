@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from zope.interface import implements
 from zope.component import getMultiAdapter
 from Acquisition import aq_inner
 from Products.Five import BrowserView
@@ -6,17 +7,18 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.layout.icons.interfaces import IContentIcon
 from Products.CMFPlone import PloneMessageFactory as _
 from Products.CMFPlone.utils import typesToList
+from bda.plone.finder.interfaces import IFolderishColumn
 from utils import (
     col_id,
     item_id,
     nav_item,
 )
 
-class Column(BrowserView):
+class FolderColumn(BrowserView):
+    
+    implements(IFolderishColumn)
     
     __call__ = ViewPageTemplateFile('templates/column.pt')
-    
-    slicesize = 20
     
     @property
     def uid(self):
@@ -76,9 +78,7 @@ class Column(BrowserView):
             return '%s...%s' % (title[:10], title[-10:])
         return title
 
-class FolderColumn(Column): pass
-
-class PloneRoot(Column):
+class PloneRoot(FolderColumn):
     
     @property
     def uid(self):
@@ -101,13 +101,13 @@ class PloneRoot(Column):
                                 uid == id and True or False))
         return ret
 
-class PloneContent(Column):
+class PloneContent(FolderColumn):
     
     @property
     def uid(self):
         return col_id('plone_content')
 
-class ControlPanelColumn(Column):
+class ControlPanelColumn(FolderColumn):
     
     def items_by_configlets(self, group):
         ret = list()

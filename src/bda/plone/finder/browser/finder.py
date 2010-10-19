@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from zope.interface import (
+    implements,
     directlyProvides,
     noLongerProvides,
 )
@@ -15,6 +16,7 @@ from plone.app.layout.viewlets.common import ViewletBase
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.Archetypes.interfaces import IBaseContent
 from bda.plone.finder.interfaces import IPloneContent
+from bda.plone.finder.interfaces import IFinder
 
 class OverlayViewlet(ViewletBase):
     
@@ -29,6 +31,8 @@ class OverlayViewlet(ViewletBase):
         return self.context.absolute_url()
 
 class Finder(BrowserView):
+    
+    implements(IFinder)
     
     __call__ = ViewPageTemplateFile('templates/finder.pt')
     

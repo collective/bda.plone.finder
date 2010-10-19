@@ -16,6 +16,7 @@ from Products.CMFPlone.utils import (
     transaction_note,
     safe_unicode,
 )
+from bda.plone.finder.interfaces import IActionInfo
 from bda.plone.finder.interfaces import IActionExecution
 
 class Actions(BrowserView):
@@ -132,6 +133,46 @@ class Actions(BrowserView):
         context = self.context
         return context.portal_controlpanel.enumConfiglets(group=group)
 
+class ActionInfo(object):
+    
+    implements(IActionInfo)
+    
+    @property
+    def enabled(self):
+        return False
+    
+    @property
+    def url(self):
+        return u''
+    
+    @property
+    def ajax(self):
+        return False
+
+class ViewActionInfo(ActionInfo):
+    pass
+
+class EditActionInfo(ActionInfo):
+    pass
+
+class ChangeStateActionInfo(ActionInfo):
+    pass
+
+class AddItemActionInfo(ActionInfo):
+    pass
+
+class CutActionInfo(ActionInfo):
+    pass
+
+class CopyActionInfo(ActionInfo):
+    pass
+
+class PasteActionInfo(ActionInfo):
+    pass
+
+class DeleteActionInfo(ActionInfo):
+    pass
+
 class ActionExecution(object):
     
     implements(IActionExecution)
@@ -143,7 +184,7 @@ class ActionExecution(object):
         raise NotImplementedError(u'Abstract ActionExecution does not ',
                                   u'implement ``__call__``.')
 
-class CutAction(ActionExecution):
+class CutActionExecution(ActionExecution):
     
     def __call__(self, request):
         context = self.context
@@ -177,7 +218,7 @@ class CutAction(ActionExecution):
         transaction_note('Cut object %s' % context.absolute_url())
         return msg, None
 
-class CopyAction(ActionExecution):
+class CopyActionExecution(ActionExecution):
     
     def __call__(self, request):
         context = self.context
@@ -202,7 +243,7 @@ class CopyAction(ActionExecution):
         transaction_note('Copied object %s' % context.absolute_url())
         return msg, None
 
-class PasteAction(ActionExecution):
+class PasteActionExecution(ActionExecution):
     
     def __call__(self, request):
         context = self.context
@@ -225,7 +266,7 @@ class PasteAction(ActionExecution):
                 msg = _(u'Paste could not find clipboard content.')
         return msg, None
 
-class DeleteAction(ActionExecution):
+class DeleteActionExecution(ActionExecution):
     
     def __call__(self, request):
         context = self.context

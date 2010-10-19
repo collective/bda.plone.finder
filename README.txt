@@ -68,6 +68,10 @@ Changes
 1.0b4
 -----
 
+  * Add View interfaces
+  
+  * Add IActionInfo interface
+  
   * Fix ``uid`` property in ATDetails column view
 
   * Fix initial finder rendering when called on leaf object located in plone

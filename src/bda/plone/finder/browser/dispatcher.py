@@ -13,7 +13,7 @@ from bda.plone.finder.interfaces import (
     IPloneAddons,
     IPloneAction,
 )
-from bda.plone.finder.browser.column import Column
+from bda.plone.finder.browser.folderish import FolderColumn
 
 class AjaxContext(BrowserView):
     
@@ -81,7 +81,7 @@ class AjaxColumn(AjaxContext):
         noLongerProvides(context, iface)
         return rendered
 
-class PloneColumn(Column):
+class PloneColumn(FolderColumn):
     """Dispatcher view for IPloneSiteRoot.
     """
     
