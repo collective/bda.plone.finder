@@ -19,24 +19,34 @@
         permission="cmf.ManagePortal"
     />
 
-    <adapter
+    <!-- cut action -->
+	<adapter
         for="Products.Archetypes.interfaces.IBaseObject"
         name="action_cut"
         factory=".actions.CutAction"
     />
     
+	<!-- copy action -->
     <adapter
         for="Products.Archetypes.interfaces.IBaseObject"
         name="action_copy"
         factory=".actions.CopyAction"
     />
     
+	<!-- paste action -->
     <adapter
         for="Products.Archetypes.interfaces.IBaseObject"
         name="action_paste"
         factory=".actions.PasteAction"
     />
+	
+	<adapter
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        name="action_paste"
+        factory=".actions.PasteAction"
+    />
     
+	<!-- delete action -->
     <adapter
         for="Products.Archetypes.interfaces.IBaseObject"
         name="action_delete"

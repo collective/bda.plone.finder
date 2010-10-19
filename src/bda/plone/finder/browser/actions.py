@@ -51,17 +51,17 @@ class Actions(BrowserView):
         data['action_view']['enabled'] = True
         data['action_edit']['url'] = '%s/edit' % url
         data['action_edit']['enabled'] = True
-        #data['action_edit']['autoload'] = True
-        #data['action_add_item']['autoload'] = True
         return json.dumps(data)
     
     def execute(self):
         name = self.request.get(u'name', u'')
         uid = self.request.get(u'uid', u'')
-        brains = self.context.portal_catalog(UID=uid)
-        if not brains:
-            return json.dumps(_(u'Object not found. Could not continue.'))
-        context = brains[0].getObject()
+        context = self._get_object(uid)
+        if not context:
+            return json.dumps({
+                'err': True,
+                'msg': _(u'Object not found. Could not continue.'),
+            })
         err = False
         ret_uid = None
         try:
@@ -75,12 +75,19 @@ class Actions(BrowserView):
         except Exception, e:
             err = True
             msg = str(e)
-        ret = {
+        return json.dumps({
             'err': err,
             'msg': msg,
             'uid': ret_uid,
-        }
-        return json.dumps(ret)
+        })
+    
+    def _get_object(self, uid):
+        if uid == 'plone_content':
+            return self.context.portal_url.getPortalObject()
+        brains = self.context.portal_catalog(UID=uid)
+        if not brains:
+            return None
+        return brains[0].getObject()
     
     def _create_action(self, enabled=False, url='',
                        ajax=False, setautoload=False):
@@ -104,12 +111,10 @@ class Actions(BrowserView):
             data['action_view']['url'] = purl
             if uid == 'plone_content':
                 data['action_add_item']['enabled'] = True
-                #data['action_add_item']['autoload'] = True
                 data['action_edit']['enabled'] = True
                 data['action_edit']['url'] = purl + '/edit'
-                #data['action_edit']['autoload'] = True
-            if uid in ['plone_control_panel',
-                       'plone_addons']:
+                data['action_paste']['enabled'] = True
+            if uid in ['plone_control_panel', 'plone_addons']:
                 data['action_view']['url'] = purl + '/plone_control_panel'
         return data
     
