@@ -24,86 +24,91 @@
 		
 	<!-- action view -->
 	<adapter
-        for="*"
+        for="* zope.publisher.interfaces.http.IHTTPRequest"
         name="action_view"
         factory=".actions.ViewAction"
     />
 	
 	<!-- action edit -->
 	<adapter
-        for="*"
+        for="* zope.publisher.interfaces.http.IHTTPRequest"
         name="action_edit"
         factory=".actions.EditAction"
     />
 	
 	<!-- action change state -->
 	<adapter
-        for="*"
+        for="* zope.publisher.interfaces.http.IHTTPRequest"
         name="action_change_state"
         factory=".actions.ChangeStateAction"
     />
 	
 	<!-- action add item -->
 	<adapter
-        for="*"
+        for="* zope.publisher.interfaces.http.IHTTPRequest"
         name="action_add_item"
         factory=".actions.AddItemAction"
     />
 	
 	<!-- action cut object -->
 	<adapter
-        for="*"
+        for="* zope.publisher.interfaces.http.IHTTPRequest"
         name="action_cut"
         factory=".actions.CutAction"
     />
 	
 	<adapter
-        for="Products.Archetypes.interfaces.IBaseObject"
+        for="Products.Archetypes.interfaces.IBaseObject
+		     zope.publisher.interfaces.http.IHTTPRequest"
         name="action_cut"
         factory=".actions.CutAction"
     />
 	
 	<!-- action copy object -->
 	<adapter
-        for="*"
+        for="* zope.publisher.interfaces.http.IHTTPRequest"
         name="action_copy"
         factory=".actions.CopyAction"
     />
 	
 	<adapter
-        for="Products.Archetypes.interfaces.IBaseObject"
+        for="Products.Archetypes.interfaces.IBaseObject
+		     zope.publisher.interfaces.http.IHTTPRequest"
         name="action_copy"
         factory=".actions.CopyAction"
     />
 	
 	<!-- action paste object -->
 	<adapter
-        for="*"
+        for="* zope.publisher.interfaces.http.IHTTPRequest"
         name="action_paste"
         factory=".actions.PasteAction"
     />
 	
 	<adapter
-        for="Products.Archetypes.interfaces.IBaseObject"
+        for="Products.Archetypes.interfaces.IBaseObject
+		     zope.publisher.interfaces.http.IHTTPRequest"
         name="action_paste"
         factory=".actions.PasteAction"
     />
     
     <adapter
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot
+		     zope.publisher.interfaces.http.IHTTPRequest"
         name="action_paste"
         factory=".actions.PasteAction"
     />
 	
 	<!-- action delete object -->
 	<adapter
-        for="*"
+        for="* zope.publisher.interfaces.http.IHTTPRequest"
         name="action_delete"
         factory=".actions.DeleteAction"
     />
 	
 	<adapter
-        for="Products.Archetypes.interfaces.IBaseObject"
+        for="Products.Archetypes.interfaces.IBaseObject
+		     zope.publisher.interfaces.http.IHTTPRequest"
         name="action_delete"
         factory=".actions.DeleteAction"
     />

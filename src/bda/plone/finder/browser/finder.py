@@ -41,7 +41,7 @@ class Finder(BrowserView):
     @property
     def actions(self):
         groups = dict()
-        actions = list(getAdapters((self.context, ), IAction))
+        actions = list(getAdapters((self.context, self.request), IAction))
         for id, action in actions:
             if not groups.get(action.group):
                 groups[action.group] = list()

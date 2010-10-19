@@ -2,6 +2,7 @@
 import simplejson as json
 from zope.interface import implements
 from zope.component import getAdapter
+from zope.component import getAdapters
 from zope.component.interfaces import ComponentLookupError
 from ZODB.POSException import ConflictError
 from OFS.CopySupport import CopyError
@@ -21,19 +22,18 @@ from bda.plone.finder.interfaces import IAction
 class Actions(BrowserView):
     
     def actionInfo(self):
-        
-        
         data = dict()
-        for name in ['action_view',
-                     'action_edit',
-                     'action_change_state',
-                     'action_add_item']:
-            data[name] = self._create_action()
-        for name in ['action_cut',
-                     'action_copy',
-                     'action_paste',
-                     'action_delete']:
-            data[name] = self._create_action(ajax=True)
+        actions = list(getAdapters((self.context, self.request), IAction))
+        for id, action in actions:
+            data[id] = {
+                'enabled': action.enabled,
+                'url': action.url,
+                'ajax': action.ajax,
+            }
+        return json.dumps(data)
+        
+        # old
+        data = dict()
         uid = self.request.get('uid')
         if not uid:
             return json.dumps(data)
@@ -83,22 +83,6 @@ class Actions(BrowserView):
             'uid': ret_uid,
         })
     
-    def _get_object(self, uid):
-        if uid == 'plone_content':
-            return self.context.portal_url.getPortalObject()
-        brains = self.context.portal_catalog(UID=uid)
-        if not brains:
-            return None
-        return brains[0].getObject()
-    
-    def _create_action(self, enabled=False, url='',
-                       ajax=False):
-        return {
-            'enabled': enabled,
-            'url': url,
-            'ajax': ajax,
-        }
-    
     def _set_special_action_url(self, uid, data):
         action = self._action_by_id(uid)
         if action:
@@ -118,21 +102,29 @@ class Actions(BrowserView):
             if uid in ['plone_control_panel', 'plone_addons']:
                 data['action_view']['url'] = purl + '/plone_control_panel'
         return data
+
+class ControlPanelItems(object):
     
-    @property
-    def _actions(self):
-        return [i['id'] for i in self._actions_by_group('Plone')] + \
-               [i['id'] for i in self._actions_by_group('Products')]
+    def __init__(self, context):
+        self.context = context
     
-    def _action_by_id(self, id):
+    def item_by_id(self, id):
         for group in ['Plone', 'Products']:
-            for item in self._actions_by_group(group):
+            for item in self.items_by_group(group):
                 if item['id'] == id:
                     return item
     
-    def _actions_by_group(self, group):
-        context = self.context
-        return context.portal_controlpanel.enumConfiglets(group=group)
+    def items_by_group(self, group):
+        """Group 'Plone' or 'Products'
+        """
+        return self.context.portal_controlpanel.enumConfiglets(group=group)
+
+ROOT_UIDS = [
+    'plone_root',
+    'plone_content',
+    'plone_control_panel',
+    'plone_addons'
+]
 
 class Action(object):
     implements(IAction)
@@ -141,54 +133,104 @@ class Action(object):
     order = 0
     group = None
     dropdown = False
+    enabled = False
+    url = u''
+    ajax = False
     
-    @property
-    def enabled(self):
-        return False
-    
-    @property
-    def url(self):
-        return u''
-    
-    @property
-    def ajax(self):
-        return False
-    
-    def __init__(self, context):
+    def __init__(self, context, request):
         self.context = context
+        self.request = request
     
     def __call__(self, request):
         raise NotImplementedError(u'Abstract Action does not ',
                                   u'implement ``__call__``.')
+    
+    @property
+    def _uid(self):
+        return self.request.get('uid')
+    
+    def _get_object(self, uid):
+        if uid in ROOT_UIDS:
+            return self.context.portal_url.getPortalObject()
+        brains = self.context.portal_catalog(UID=uid)
+        if not brains:
+            return None
+        return brains[0].getObject()
 
 class ViewAction(Action):
     title = _('View')
     order = 10
     group = 10
+    enabled = True
+    
+    @property
+    def url(self):
+        uid = self._uid
+        if uid in ['plone_control_panel', 'plone_addons']:
+            url = self.context.portal_url.getPortalObject().absolute_url()
+            url += '/plone_control_panel'
+            return url
+        cp_item = ControlPanelItems(self.context).item_by_id(uid)
+        if cp_item:
+            return cp_item['url']
+        obj = self._get_object(self._uid)
+        if not obj:
+            return u''
+        return obj.absolute_url()
 
 class EditAction(Action):
     title = _('Edit')
     order = 20
     group = 10
+    
+    @property
+    def enabled(self):
+        uid = self._uid
+        if uid in ['plone_control_panel', 'plone_addons']:
+            return False
+        cp_item = ControlPanelItems(self.context).item_by_id(uid)
+        if cp_item:
+            return False
+        return True
+    
+    @property
+    def url(self):
+        obj = self._get_object(self._uid)
+        if obj is not None:
+            return obj.absolute_url() + '/edit'
+        return None
 
 class ChangeStateAction(Action):
     title = _('Change state')
     order = 30
     group = 10
     dropdown = True
+    
+    @property
+    def enabled(self):
+        return False
 
 class AddItemAction(Action):
     title = _('Add item')
     order = 40
     group = 10
     dropdown = True
+    
+    @property
+    def enabled(self):
+        return False
 
 class CutAction(Action):
     title = _('Cut')
     order = 10
     group = 20
+    ajax = True
     
-    def __call__(self, request):
+    @property
+    def enabled(self):
+        return False
+    
+    def __call__(self):
         context = self.context
         title = safe_unicode(context.title_or_id())
         mtool = context.portal_membership
@@ -208,13 +250,13 @@ class CutAction(Action):
             raise Exception, msg
         parent = aq_parent(aq_inner(context))
         try:
-            parent.manage_cutObjects(context.getId(), request)
+            parent.manage_cutObjects(context.getId(), self.request)
         except CopyError:
             #msg = _(u'${title} is not moveable.',
             #        mapping={u'title' : title})
             msg = u'%s is not moveable.' % title
             raise Exception, msg
-        request.response.setCookie('__fct', self.context.UID(), path='/')
+        self.request.response.setCookie('__fct', self.context.UID(), path='/')
         #msg = _(u'${title} cut.', mapping={u'title' : title})
         msg = u'%s cut.' % title
         transaction_note('Cut object %s' % context.absolute_url())
@@ -224,8 +266,13 @@ class CopyAction(Action):
     title = _('Copy')
     order = 20
     group = 20
+    ajax = True
     
-    def __call__(self, request):
+    @property
+    def enabled(self):
+        return False
+    
+    def __call__(self):
         context = self.context
         title = safe_unicode(context.title_or_id())
         mtool = context.portal_membership
@@ -236,7 +283,7 @@ class CopyAction(Action):
             raise Unauthorized, msg
         parent = aq_parent(aq_inner(context))
         try:
-            parent.manage_copyObjects(context.getId(), request)
+            parent.manage_copyObjects(context.getId(), self.request)
         except CopyError:
             #msg = _(u'${title} is not copyable.',
             #        mapping={u'title' : title})
@@ -252,16 +299,21 @@ class PasteAction(Action):
     title = _('Paste')
     order = 30
     group = 20
+    ajax = True
     
-    def __call__(self, request):
+    @property
+    def enabled(self):
+        return False
+    
+    def __call__(self):
         context = self.context
         msg = _(u'Copy or cut one or more items to paste.')
         if context.cb_dataValid:
             try:
-                context.manage_pasteObjects(request['__cp'])        
+                context.manage_pasteObjects(self.request['__cp'])        
                 transaction_note(
                     'Pasted content to %s' % (context.absolute_url()))
-                request.response.expireCookie('__fct', path='/')
+                self.request.response.expireCookie('__fct', path='/')
                 msg = _(u'Item(s) pasted.')
                 return msg, context.objectValues()[-1].UID()
             except ConflictError, e:
@@ -278,8 +330,13 @@ class DeleteAction(Action):
     title = _('Delete')
     order = 40
     group = 20
+    ajax = True
     
-    def __call__(self, request):
+    @property
+    def enabled(self):
+        return False
+    
+    def __call__(self):
         context = self.context
         parent = context.aq_inner.aq_parent
         title = safe_unicode(context.title_or_id())
