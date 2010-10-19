@@ -68,9 +68,9 @@ Changes
 1.0b4
 -----
 
+  * Refactor finder actions
+
   * Add View interfaces
-  
-  * Add IActionInfo interface
   
   * Fix ``uid`` property in ATDetails column view
 

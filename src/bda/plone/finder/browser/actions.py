@@ -16,12 +16,14 @@ from Products.CMFPlone.utils import (
     transaction_note,
     safe_unicode,
 )
-from bda.plone.finder.interfaces import IActionInfo
+from bda.plone.finder.interfaces import IAction
 from bda.plone.finder.interfaces import IActionExecution
 
 class Actions(BrowserView):
     
     def actionInfo(self):
+        
+        
         data = dict()
         for name in ['action_view',
                      'action_edit',
@@ -133,9 +135,13 @@ class Actions(BrowserView):
         context = self.context
         return context.portal_controlpanel.enumConfiglets(group=group)
 
-class ActionInfo(object):
+class Action(object):
+    implements(IAction)
     
-    implements(IActionInfo)
+    title = None
+    order = 0
+    group = None
+    dropdown = False
     
     @property
     def enabled(self):
@@ -148,30 +154,51 @@ class ActionInfo(object):
     @property
     def ajax(self):
         return False
+    
+    def __init__(self, context):
+        self.context = context
 
-class ViewActionInfo(ActionInfo):
-    pass
+class ViewAction(Action):
+    title = _('View')
+    order = 10
+    group = 10
 
-class EditActionInfo(ActionInfo):
-    pass
+class EditAction(Action):
+    title = _('Edit')
+    order = 20
+    group = 10
 
-class ChangeStateActionInfo(ActionInfo):
-    pass
+class ChangeStateAction(Action):
+    title = _('Change state')
+    order = 30
+    group = 10
+    dropdown = True
 
-class AddItemActionInfo(ActionInfo):
-    pass
+class AddItemAction(Action):
+    title = _('Add item')
+    order = 40
+    group = 10
+    dropdown = True
 
-class CutActionInfo(ActionInfo):
-    pass
+class CutAction(Action):
+    title = _('Cut')
+    order = 10
+    group = 20
 
-class CopyActionInfo(ActionInfo):
-    pass
+class CopyAction(Action):
+    title = _('Copy')
+    order = 20
+    group = 20
 
-class PasteActionInfo(ActionInfo):
-    pass
+class PasteAction(Action):
+    title = _('Paste')
+    order = 30
+    group = 20
 
-class DeleteActionInfo(ActionInfo):
-    pass
+class DeleteAction(Action):
+    title = _('Delete')
+    order = 40
+    group = 20
 
 class ActionExecution(object):
     

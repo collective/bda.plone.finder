@@ -14,6 +14,9 @@ class IFinder(Interface):
     """View interface for finder.
     """
     
+    actions = Attribute(u"List of action groups containing ordered action "
+                        u"defs.")
+    
     columns = Attribute(u"List of rendered columns.")
 
 class IColumn(Interface):
@@ -57,11 +60,20 @@ class IPloneAction(Interface):
 # action related interfaces
 ###############################################################################
 
-class IActionInfo(Interface):
-    """Action information adapter interface.
+class IAction(Interface):
+    """Action adapter interface.
     
-    Must be registered for context with action name.
+    Must be registered as adapter for context with action id as name.
     """
+    
+    title = Attribute(u"Action title")
+    
+    order = Attribute(u"Integer defining action position.")
+    
+    group = Attribute(u"Group integer for visually grouping actions.")
+    
+    dropdown = Attribute(u"Flag wether dropdown ul should be rendered for "
+                         u"this action or not.")
     
     enabled = Attribute(u"Flag wether action is enabled or not")
     
@@ -73,7 +85,7 @@ class IActionInfo(Interface):
 class IActionExecution(Interface):
     """Action execution adapter interface for ajax enabled actions.
     
-    Must be registered for context with action name.
+    Must be registered as adapter for context with action id as name.
     """
     
     def __call__(self, request):

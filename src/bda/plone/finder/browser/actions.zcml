@@ -21,47 +21,40 @@
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="cmf.ManagePortal"
     />
-
-    <!--
-	    specific actions.
-		each action contains of an IActionInfo adapter for context registered
-		by action name and a IActionExecution adapter for context registered by
-		action name if ajax.
-    -->
 		
 	<!-- action view -->
 	<adapter
         for="*"
         name="action_view"
-        factory=".actions.ViewActionInfo"
+        factory=".actions.ViewAction"
     />
 	
 	<!-- action edit -->
 	<adapter
         for="*"
         name="action_edit"
-        factory=".actions.EditActionInfo"
+        factory=".actions.EditAction"
     />
 	
 	<!-- action change state -->
 	<adapter
         for="*"
         name="action_change_state"
-        factory=".actions.ChangeStateActionInfo"
+        factory=".actions.ChangeStateAction"
     />
 	
 	<!-- action add item -->
 	<adapter
         for="*"
         name="action_add_item"
-        factory=".actions.AddItemActionInfo"
+        factory=".actions.AddItemAction"
     />
 	
 	<!-- action cut object -->
 	<adapter
         for="*"
         name="action_cut"
-        factory=".actions.CutActionInfo"
+        factory=".actions.CutAction"
     />
 	
 	<adapter
@@ -74,7 +67,7 @@
 	<adapter
         for="*"
         name="action_copy"
-        factory=".actions.CopyActionInfo"
+        factory=".actions.CopyAction"
     />
 	
 	<adapter
@@ -87,7 +80,7 @@
 	<adapter
         for="*"
         name="action_paste"
-        factory=".actions.PasteActionInfo"
+        factory=".actions.PasteAction"
     />
 	
 	<adapter
@@ -106,7 +99,7 @@
 	<adapter
         for="*"
         name="action_delete"
-        factory=".actions.DeleteActionInfo"
+        factory=".actions.DeleteAction"
     />
 	
 	<adapter

@@ -21,45 +21,23 @@
     
     <div class="buttonSeperator">&nbsp;</div>
     
-    <div class="action_view">
-      <a class="button disabled"
-         title="View">&nbsp;</a>
-    </div>
-    <div class="action_edit">
-      <a class="button disabled"
-         title="Edit">&nbsp;</a>
-    </div>
-    <div class="action_change_state">
-      <a class="button disabled"
-         title="Change state">&nbsp;</a>
-      <ul class="action_dropdown">
-      </ul>
-    </div>
-    <div class="action_add_item">
-      <a class="button disabled"
-         title="Add new Item">&nbsp;</a>
-      <ul class="action_dropdown">
-      </ul>
-    </div>
-    
-    <div class="buttonSeperator">&nbsp;</div>
-    
-    <div class="action_cut">
-      <a class="button disabled"
-         title="Cut">&nbsp;</a>
-    </div>
-    <div class="action_copy">
-      <a class="button disabled"
-         title="Copy">&nbsp;</a>
-    </div>
-    <div class="action_paste">
-      <a class="button disabled"
-         title="Paste">&nbsp;</a>
-    </div>
-    <div class="action_delete">
-      <a class="button disabled"
-         title="Delete">&nbsp;</a>
-    </div>
+    <tal:actions define="actions view/actions">
+      <tal:group repeat="group actions">
+        <tal:action repeat="action group">
+          <div class="action_foo"
+               tal:attributes="class action/id">
+            <a class="button disabled"
+               title="Foo"
+               tal:attributes="title action/title">&nbsp;</a>
+            <ul class="action_dropdown"
+                tal:condition="action/dropdown">
+            </ul>
+          </div>
+        </tal:action>
+        <div class="buttonSeperator"
+             tal:condition="not:repeat/group/end">&nbsp;</div>
+      </tal:group>
+    </tal:actions>
     
     <input type="text"
            value="Filter focused column"

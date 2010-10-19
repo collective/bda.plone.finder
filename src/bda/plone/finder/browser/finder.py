@@ -4,6 +4,7 @@ from zope.interface import (
     directlyProvides,
     noLongerProvides,
 )
+from zope.component import getAdapters
 from zope.component import getMultiAdapter
 from AccessControl import getSecurityManager
 from Acquisition import (
@@ -17,6 +18,7 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.Archetypes.interfaces import IBaseContent
 from bda.plone.finder.interfaces import IPloneContent
 from bda.plone.finder.interfaces import IFinder
+from bda.plone.finder.interfaces import IAction
 
 class OverlayViewlet(ViewletBase):
     
@@ -35,6 +37,25 @@ class Finder(BrowserView):
     implements(IFinder)
     
     __call__ = ViewPageTemplateFile('templates/finder.pt')
+    
+    @property
+    def actions(self):
+        groups = dict()
+        actions = list(getAdapters((self.context, ), IAction))
+        for id, action in actions:
+            if not groups.get(action.group):
+                groups[action.group] = list()
+            groups[action.group].append({
+                'id': id,
+                'title': action.title,
+                'order': action.order,
+                'dropdown': action.dropdown,
+            })
+        ret = list()
+        for key in sorted(groups.keys()):
+            ret.append(sorted(groups[key],
+                        cmp=lambda x, y: x['order'] > y['order'] and 1 or -1))
+        return ret
     
     @property
     def columns(self):
