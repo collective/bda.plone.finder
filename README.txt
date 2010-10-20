@@ -164,6 +164,8 @@ Changes
 1.0b5
 -----
 
+  * Check for 'Modify portal content' permission in ``EditAction.enabled``.
+  
   * Only show control panel and addon configuration links in root column if
     user is manager.
   

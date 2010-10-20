@@ -191,7 +191,9 @@ class EditAction(Action):
         cp_item = ControlPanelItems(self.context).item_by_id(uid)
         if cp_item:
             return False
-        # XXX: check edit permissions for authenticated user
+        # check permission
+        if not has_permission('Modify portal content', self.context):
+            return False
         return True
     
     @property
