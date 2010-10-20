@@ -4,7 +4,7 @@
     <browser:page
         for="bda.plone.finder.interfaces.IPloneContent"
         name="finder_column"
-        class=".column.PloneContent"
+        class=".folderish.PloneContent"
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="cmf.ManagePortal"
     />
@@ -12,7 +12,7 @@
     <browser:page
         for="bda.plone.finder.interfaces.IPloneRoot"
         name="finder_column"
-        class=".column.PloneRoot"
+        class=".folderish.PloneRoot"
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="cmf.ManagePortal"
     />
@@ -20,7 +20,7 @@
     <browser:page
         for="bda.plone.finder.interfaces.IPloneControlPanel"
         name="finder_column"
-        class=".column.PloneControlPanel"
+        class=".folderish.PloneControlPanel"
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="cmf.ManagePortal"
     />
@@ -28,7 +28,7 @@
     <browser:page
         for="bda.plone.finder.interfaces.IPloneAddons"
         name="finder_column"
-        class=".column.PloneAddons"
+        class=".folderish.PloneAddons"
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="cmf.ManagePortal"
     />
@@ -36,7 +36,7 @@
     <browser:page
         for="Products.Archetypes.interfaces.IBaseFolder"
         name="finder_column"
-        class=".column.FolderColumn"
+        class=".folderish.FolderColumn"
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="cmf.ManagePortal"
     />
