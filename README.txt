@@ -164,6 +164,9 @@ Changes
 1.0b5
 -----
 
+  * Only show control panel and addon configuration links in root column if
+    user is manager.
+  
   * Protect browser views from within against anonymous user.
 
   * Bind finder trigger to ``View`` permission.

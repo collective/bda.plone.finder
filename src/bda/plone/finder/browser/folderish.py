@@ -8,10 +8,11 @@ from plone.app.layout.icons.interfaces import IContentIcon
 from Products.CMFPlone import PloneMessageFactory as _
 from Products.CMFPlone.utils import typesToList
 from bda.plone.finder.interfaces import IFolderishColumn
-from utils import (
+from bda.plone.finder.browser.utils import (
     col_id,
     item_id,
     nav_item,
+    has_permission,
 )
 
 class FolderColumn(BrowserView):
@@ -90,10 +91,16 @@ class PloneRoot(FolderColumn):
         ret = list()
         if self.request.getURL()[:-17] != self.context.absolute_url():
             uid = 'plone_content'
-        for id, title, icon in [
-                ('plone_content', _('Content'), 'logoIcon.gif'),
+        items = [
+            ('plone_content', _('Content'), 'logoIcon.gif'),
+        ]
+        if has_permission('Manage portal', self.context):
+            items += [
                 ('plone_control_panel', _('Control Panel'), 'site_icon.gif'),
-                ('plone_addons', _('Addon Configuration'), 'product_icon.gif')]:
+                ('plone_addons', _('Addon Configuration'), 'product_icon.gif'),
+            ]
+        
+        for id, title, icon in items:
             ret.append(nav_item(item_id(id),
                                 icon,
                                 title,
