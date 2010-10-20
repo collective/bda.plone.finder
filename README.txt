@@ -142,12 +142,28 @@ is included.
     https://svn.plone.org/svn/collective/bda.plone.finder/trunk/
 
 
-Note
-====
+Compatibility
+=============
 
-  * Plone 4 only
+Plone Versions
+--------------
+
+  * Plone 4
   
-  * Testet in Firefox, Chrome, Safari, IE6, IE7, IE8
+Browser
+-------
+  
+  * Firefox
+  
+  * Chrome
+  
+  * Safari
+  
+  * IE6 (looks ugly due to png images, but works)
+  
+  * IE7
+  
+  * IE8
 
 
 Credits
