@@ -271,7 +271,8 @@ class OFSCutAction(CutAction):
 
     @property
     def enabled(self):
-        if not has_permission('Copy or Move', self.context):
+        if not has_permission('Copy or Move', self.context) \
+          or not has_permission('Delete objects', self.context):
             return False
         return True
     
@@ -366,6 +367,8 @@ class OFSPasteAction(PasteAction):
 
     @property
     def enabled(self):
+        if not has_permission('Add portal content', self.context):
+            return False
         if self.context.cb_dataValid:
             return True
         return False

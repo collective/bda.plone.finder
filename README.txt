@@ -126,6 +126,7 @@ action is executed, and after action has been executed.
                 // do something
             }
         }
+    });
 
 If you want to skip one ore another hook, set it to ``null``.
 
@@ -180,6 +181,10 @@ Changes
 1.0b5
 -----
 
+  * Check for 'Add portal content' permission in ``OFSPasteAction.enabled``
+  
+  * Check for 'Delete objects' permission in ``OFSCutAction.enabled``
+  
   * Check for 'Modify portal content' permission in ``EditAction.enabled``.
   
   * Only show control panel and addon configuration links in root column if
