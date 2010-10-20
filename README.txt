@@ -181,9 +181,9 @@ Changes
 1.0b5
 -----
 
-  * Check for 'Add portal content' permission in ``OFSPasteAction.enabled``
+  * Check for 'Add portal content' permission in ``OFSPasteAction.enabled``.
   
-  * Check for 'Delete objects' permission in ``OFSCutAction.enabled``
+  * Check for 'Delete objects' permission in ``OFSCutAction.enabled``.
   
   * Check for 'Modify portal content' permission in ``EditAction.enabled``.
   
