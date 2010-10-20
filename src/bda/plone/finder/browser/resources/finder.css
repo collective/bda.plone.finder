@@ -208,6 +208,7 @@
     position:relative;
     overflow:hidden;
 	height:368px;
+	width:920px;
 }
 .finder_columns div.items { 
     width:20000em; 

@@ -147,7 +147,7 @@ Note
 
   * Plone 4 only
   
-  * Testet in Firefox, Chrome, Safari, IE7
+  * Testet in Firefox, Chrome, Safari, IE6, IE7, IE8
 
 
 Credits
@@ -160,6 +160,11 @@ Credits
 
 Changes
 =======
+
+1.0b5
+-----
+
+  * CSS fix for IE6
 
 1.0b4
 -----
