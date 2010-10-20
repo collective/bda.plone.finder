@@ -76,7 +76,7 @@ class Actions(BrowserView):
             msg = self.context.translate(msg)
         except Exception, e:
             err = True
-            msg = str(e)
+            msg = unicode(e)
         return json.dumps({
             'err': err,
             'msg': msg,
