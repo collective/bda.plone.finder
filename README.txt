@@ -164,7 +164,11 @@ Changes
 1.0b5
 -----
 
-  * Use i18n messages in actions and user ``context.translate``
+  * Bind finder trigger to ``View`` permission.
+
+  * Adopt browser view permissions
+  
+  * Use i18n messages in actions and use ``context.translate``
   
   * CSS fix for IE6
 

@@ -6,7 +6,7 @@
         name="bda.plone.finder.additemsmenu"
         class=".menu.AddItemsMenu"
         layer="bda.plone.finder.interfaces.IFinderLayer"
-        permission="cmf.ManagePortal"
+        permission="zope2.View"
     />
 	
 	<browser:page
@@ -14,7 +14,7 @@
         name="bda.plone.finder.transitionsmenu"
         class=".menu.TransitionsMenu"
         layer="bda.plone.finder.interfaces.IFinderLayer"
-        permission="cmf.ManagePortal"
+        permission="zope2.View"
     />
 
 </configure>

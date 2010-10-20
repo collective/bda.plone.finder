@@ -6,7 +6,7 @@
         name="finder_column"
         class=".folderish.PloneContent"
         layer="bda.plone.finder.interfaces.IFinderLayer"
-        permission="cmf.ManagePortal"
+        permission="zope2.View"
     />
     
     <browser:page
@@ -14,7 +14,7 @@
         name="finder_column"
         class=".folderish.PloneRoot"
         layer="bda.plone.finder.interfaces.IFinderLayer"
-        permission="cmf.ManagePortal"
+        permission="zope2.View"
     />
     
     <browser:page
@@ -38,7 +38,7 @@
         name="finder_column"
         class=".folderish.FolderColumn"
         layer="bda.plone.finder.interfaces.IFinderLayer"
-        permission="cmf.ManagePortal"
+        permission="zope2.View"
     />
 
 </configure>

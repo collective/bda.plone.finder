@@ -27,7 +27,7 @@
         manager="plone.app.layout.viewlets.interfaces.IPortalFooter"
         class=".finder.OverlayViewlet"
 		layer="bda.plone.finder.interfaces.IFinderLayer"
-		permission="cmf.ManagePortal"
+		permission="zope2.View"
     />
 	
 	<browser:page
@@ -35,7 +35,7 @@
         name="bda.plone.finder"
         class=".finder.Finder"
         layer="bda.plone.finder.interfaces.IFinderLayer"
-		permission="cmf.ManagePortal"
+		permission="zope2.View"
     />
 
 </configure>

@@ -6,7 +6,7 @@
         name="finder_details"
         class=".details.Details"
         layer="bda.plone.finder.interfaces.IFinderLayer"
-        permission="cmf.ManagePortal"
+        permission="zope2.View"
     />
     
     <browser:page
@@ -14,7 +14,7 @@
         name="finder_details"
         class=".details.ATDetails"
         layer="bda.plone.finder.interfaces.IFinderLayer"
-        permission="cmf.ManagePortal"
+        permission="zope2.View"
     />
     
     <browser:page
@@ -22,7 +22,7 @@
         name="finder_details"
         class=".details.ContentDetails"
         layer="bda.plone.finder.interfaces.IFinderLayer"
-        permission="cmf.ManagePortal"
+        permission="zope2.View"
     />
     
     <browser:page

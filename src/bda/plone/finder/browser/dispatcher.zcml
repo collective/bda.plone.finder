@@ -7,7 +7,7 @@
         class=".dispatcher.AjaxColumn"
         attribute="expandColumn"
         layer="bda.plone.finder.interfaces.IFinderLayer"
-        permission="cmf.ManagePortal"
+        permission="zope2.View"
     />
     
     <browser:page
@@ -16,7 +16,7 @@
         class=".dispatcher.AjaxColumn"
         attribute="detailsColumn"
         layer="bda.plone.finder.interfaces.IFinderLayer"
-        permission="cmf.ManagePortal"
+        permission="zope2.View"
     />
 	
 	<browser:page
@@ -24,7 +24,7 @@
         name="finder_column"
         class=".dispatcher.PloneColumn"
         layer="bda.plone.finder.interfaces.IFinderLayer"
-        permission="cmf.ManagePortal"
+        permission="zope2.View"
     />
 
 </configure>

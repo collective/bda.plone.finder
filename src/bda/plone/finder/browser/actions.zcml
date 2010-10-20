@@ -8,7 +8,7 @@
         class=".actions.Actions"
         attribute="actionInfo"
         layer="bda.plone.finder.interfaces.IFinderLayer"
-        permission="cmf.ManagePortal"
+        permission="zope2.View"
     />
 	
 	
@@ -19,7 +19,7 @@
         class=".actions.Actions"
         attribute="execute"
         layer="bda.plone.finder.interfaces.IFinderLayer"
-        permission="cmf.ManagePortal"
+        permission="zope2.View"
     />
 		
 	<!-- action view -->
