@@ -68,6 +68,8 @@ Changes
 1.0b4
 -----
 
+  * Check for actions permissions and enable actions only if possible on context
+  
   * Refactor finder actions
 
   * Add View interfaces

@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import simplejson as json
 from zope.interface import implements
+from zope.component import getUtility
 from zope.component import getAdapter
 from zope.component import getAdapters
 from zope.component.interfaces import ComponentLookupError
+from zope.app.publisher.interfaces.browser import IBrowserMenu
 from ZODB.POSException import ConflictError
 from OFS.CopySupport import CopyError
 from AccessControl import Unauthorized
@@ -119,12 +121,10 @@ class ControlPanelItems(object):
         """
         return self.context.portal_controlpanel.enumConfiglets(group=group)
 
-ROOT_UIDS = [
-    'plone_root',
-    'plone_content',
-    'plone_control_panel',
-    'plone_addons'
-]
+ROOT_UID = 'plone_root'
+CONTENT_UID = 'plone_content'
+CP_UID = 'plone_control_panel'
+ADDONS_UID = 'plone_addons'
 
 class Action(object):
     implements(IAction)
@@ -149,9 +149,11 @@ class Action(object):
     def _uid(self):
         return self.request.get('uid')
     
-    def _get_object(self, uid):
-        if uid in ROOT_UIDS:
-            return self.context.portal_url.getPortalObject()
+    @property
+    def _pobj(self):
+        return self.context.portal_url.getPortalObject()
+    
+    def _query_object(self, uid):
         brains = self.context.portal_catalog(UID=uid)
         if not brains:
             return None
@@ -166,14 +168,20 @@ class ViewAction(Action):
     @property
     def url(self):
         uid = self._uid
-        if uid in ['plone_control_panel', 'plone_addons']:
-            url = self.context.portal_url.getPortalObject().absolute_url()
+        # if content root, return portal url
+        if uid == CONTENT_UID:
+            return self._pobj.absolute_url()
+        # if control panel or addons uid return plone_control_panel url
+        if uid in [CP_UID, ADDONS_UID]:
+            url = self._pobj.absolute_url()
             url += '/plone_control_panel'
             return url
+        # if control panel item uid, return it's url
         cp_item = ControlPanelItems(self.context).item_by_id(uid)
         if cp_item:
             return cp_item['url']
-        obj = self._get_object(self._uid)
+        # if object queried from catalog, return it's url
+        obj = self._query_object(uid)
         if not obj:
             return u''
         return obj.absolute_url()
@@ -186,16 +194,24 @@ class EditAction(Action):
     @property
     def enabled(self):
         uid = self._uid
-        if uid in ['plone_control_panel', 'plone_addons']:
+        # if control panel or addons uid, disable edit
+        if uid in [CP_UID, ADDONS_UID]:
             return False
+        # if control panel item uid, disable
         cp_item = ControlPanelItems(self.context).item_by_id(uid)
         if cp_item:
             return False
+        # XXX: check edit permissions for authenticated user
         return True
     
     @property
     def url(self):
-        obj = self._get_object(self._uid)
+        uid = self._uid
+        # if content root, return portal edit url
+        if uid == CONTENT_UID:
+            return self._pobj.absolute_url() + '/edit'
+        # if object queried from catalog, return object edit url
+        obj = self._query_object(uid)
         if obj is not None:
             return obj.absolute_url() + '/edit'
         return None
@@ -208,6 +224,15 @@ class ChangeStateAction(Action):
     
     @property
     def enabled(self):
+        uid = self._uid
+        # if object from catalog and transitions available, enable workflow
+        # management 
+        obj = self._query_object(uid)
+        if obj is not None:
+            pactions = self.context.portal_actions
+            actions = pactions.listFilteredActionsFor(obj)
+            if actions['workflow']:
+                return True
         return False
 
 class AddItemAction(Action):
@@ -218,6 +243,17 @@ class AddItemAction(Action):
     
     @property
     def enabled(self):
+        uid = self._uid
+        if uid == CONTENT_UID:
+            obj = self._pobj
+        else:
+            obj = self._query_object(uid)
+        # if plone content or object from catalog and folderish, enable 
+        # item adding
+        if obj is not None and obj.isPrincipiaFolderish:
+            menu = getUtility(IBrowserMenu, name=u'plone_contentmenu_factory')
+            if menu.getMenuItems(obj, self.request):
+                return True
         return False
 
 class CutAction(Action):
