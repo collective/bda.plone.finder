@@ -164,123 +164,125 @@ Changes
 1.0b5
 -----
 
+  * Protect browser views from within against anonymous user.
+
   * Bind finder trigger to ``View`` permission.
 
-  * Adopt browser view permissions
+  * Adopt browser view's permissions for non managers.
   
-  * Use i18n messages in actions and use ``context.translate``
+  * Use i18n messages in actions and use ``context.translate``.
   
   * CSS fix for IE6
 
 1.0b4
 -----
 
-  * Refactor finder actions
+  * Refactor finder actions.
 
-  * Add View interfaces
+  * Add View interfaces.
   
-  * Fix ``uid`` property in ``ATDetails`` column view
+  * Fix ``uid`` property in ``ATDetails`` column view.
 
-  * Fix initial finder rendering when called on leaf object located in plone
+  * Fix initial finder rendering when called on leaf object located in plone.
     root
 
-  * Enable paste action on plone root content
+  * Enable paste action on plone root content.
 
 1.0b3
 -----
 
-  * Add action hook for view action resetting finder ``bda.plone.finder``
+  * Add action hook for view action resetting finder ``bda.plone.finder``.
     cookie
   
-  * Deliver context URL for ajax calls from server
+  * Deliver context URL for ajax calls from server.
   
   * ``bda.plone.finder`` cookie can contain url's now (beside value 'autoload')
-    which define the actual context to be used as base url for auto load
+    which define the actual context to be used as base url for auto load.
   
   * Rename ``perform_action`` to ``perform_ajax`` and add ``follow_action_link``
-    function as non ajax callback for actions
+    function as non ajax callback for actions.
 
   * Change autoload logic, remove from server side action definitions and let
-    do JS action callbacks the work
+    do JS action callbacks the work.
   
-  * Enable before hooks on non ajax actions
+  * Enable before hooks on non ajax actions.
   
   * Wrap finder JS code inside ``(function($) { ... })(jQuery);`` block
-    and use ``$`` instead of ``jQuery``
+    and use ``$`` instead of ``jQuery``.
   
-  * Refactor actions performing and corresponding hooks
+  * Refactor actions performing and corresponding hooks.
 
-  * Add minified finder.js
+  * Add minified finder.js.
 
 1.0b2
 -----
   
-  * Remove ``li.cut`` dom elems after paste action 
+  * Remove ``li.cut`` dom elems after paste action.
   
-  * Add ``finder.base_url`` in JS to fix ajax request context
+  * Add ``finder.base_url`` in JS to fix ajax request context.
   
-  * Do not cache ajax requests
+  * Do not cache ajax requests.
   
-  * Scroll column to selected item if necessary
+  * Scroll column to selected item if necessary.
   
-  * Disable navigate right arrow on init
+  * Disable navigate right arrow on init.
   
-  * Initially render context column when opening finder on plone root
+  * Initially render context column when opening finder on plone root.
   
-  * JS cleanup and documentation
+  * JS cleanup and documentation.
 
 1.0b1
 -----
 
-  * Improve dialog styles
+  * Improve dialog styles.
   
   * Remove auto fading status message when performing actions. Instead write
-    this information to status bar below columns now
+    this information to status bar below columns now.
   
-  * Reset ``finder._overlay`` and ``finder._scrollable`` on close
+  * Reset ``finder._overlay`` and ``finder._scrollable`` on close.
   
-  * IE7 CSS fix for column items
+  * IE7 CSS fix for column items.
   
-  * Remove dependencies to ``bda.plone.ajax``
+  * Remove dependencies to ``bda.plone.ajax``.
 
 1.0a4
 -----
 
-  * Remove column batching. instead use css overflow
+  * Remove column batching. instead use css overflow.
   
-  * adopt to new jQuery tools scrollable
+  * adopt to new jQuery tools scrollable.
   
-  * make me basically work in IE7
+  * make me basically work in IE7.
   
-  * JS refactoring
+  * JS refactoring.
 
 1.0a3
 -----
 
-  * Change look and feel of batching column pages. Its a vertical slider now
+  * Change look and feel of batching column pages. Its a vertical slider now.
 
-  * Implement auto loading after editing or adding items out of finder
+  * Implement auto loading after editing or adding items out of finder.
 
-  * Implement change state dropdown
+  * Implement change state dropdown.
 
-  * Implement add dropdown
+  * Implement add dropdown.
 
-  * Implement column filtering
+  * Implement column filtering.
 
-  * Remove unused imports from source files
+  * Remove unused imports from source files.
   
-  * Titles for finder controls
+  * Titles for finder controls.
 
 1.0a2
 -----
 
-  * Basic code cleanup
+  * Basic code cleanup.
   
-  * Implement column batching
+  * Implement column batching.
   
-  * Self-contained buildout for plone 3 and plone 4
+  * Self-contained buildout for plone 3 and plone 4.
 
 1.0a1
 -----
 
-  * Make it work
+  * Make it work.

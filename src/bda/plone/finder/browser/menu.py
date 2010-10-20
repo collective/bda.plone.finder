@@ -7,10 +7,15 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone import PloneMessageFactory as _
 from plone.app.contentmenu.interfaces import IContentMenuItem
 from bda.plone.finder.browser.dispatcher import AjaxContext
+from bda.plone.finder.browser.utils import anon
 
 class AddItemsMenu(AjaxContext):
     
     __call__ = ViewPageTemplateFile(u'templates/dropdown.pt')
+    
+    @property
+    def show(self):
+        return not anon()
     
     @property
     def noitems(self):
@@ -36,6 +41,10 @@ class AddItemsMenu(AjaxContext):
 class TransitionsMenu(AjaxContext):
     
     __call__ = ViewPageTemplateFile(u'templates/dropdown.pt')
+    
+    @property
+    def show(self):
+        return not anon()
     
     @property
     def noitems(self):

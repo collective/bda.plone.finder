@@ -6,7 +6,6 @@ from zope.interface import (
 )
 from zope.component import getAdapters
 from zope.component import getMultiAdapter
-from AccessControl import getSecurityManager
 from Acquisition import (
     aq_inner,
     aq_parent,
@@ -16,17 +15,19 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.layout.viewlets.common import ViewletBase
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.Archetypes.interfaces import IBaseContent
-from bda.plone.finder.interfaces import IPloneContent
-from bda.plone.finder.interfaces import IFinder
-from bda.plone.finder.interfaces import IAction
+from bda.plone.finder.interfaces import (
+    IPloneContent,
+    IFinder,
+    IAction,
+)
+from bda.plone.finder.browser.utils import anon
 
 class OverlayViewlet(ViewletBase):
     
     render = ViewPageTemplateFile('templates/overlay.pt')
     
     def update(self):
-        user = getSecurityManager().getUser()
-        self.show = not user.has_role('Anonymous')
+        self.show = not anon()
     
     @property
     def base_url(self):
@@ -37,6 +38,10 @@ class Finder(BrowserView):
     implements(IFinder)
     
     __call__ = ViewPageTemplateFile('templates/finder.pt')
+    
+    @property
+    def show(self):
+        return not anon()
     
     @property
     def actions(self):

@@ -3,9 +3,13 @@ from zope.interface import implements
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.memoize.instance import memoize
+from AccessControl import Unauthorized
 from Products.CMFPlone import PloneMessageFactory as _
 from bda.plone.finder.interfaces import IColumn
-from utils import col_id
+from bda.plone.finder.browser.utils import (
+    col_id,
+    anon,
+)
 
 DETAILS = """
 <div id="%(id)s"
@@ -29,6 +33,8 @@ class Details(BrowserView):
     implements(IColumn)
     
     def __call__(self):
+        if anon():
+            raise Unauthorized, u'Not authenticated'
         return DETAILS % {
             'id': self.uid,
             'details': self.details(),

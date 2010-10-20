@@ -1,4 +1,5 @@
-<tal:items define="items view/items">
+<tal:items define="items view/items"
+           condition="view/show">
   <tal:li repeat="item items">
     <li class="action_dropdown_item">
       <a href=""

@@ -20,6 +20,10 @@ from Products.CMFPlone.utils import (
     safe_unicode,
 )
 from bda.plone.finder.interfaces import IAction
+from bda.plone.finder.browser.utils import (
+    anon,
+    has_permission,
+)
 
 ROOT_UID = 'plone_root'
 CONTENT_UID = 'plone_content'
@@ -29,6 +33,8 @@ ADDONS_UID = 'plone_addons'
 class Actions(BrowserView):
     
     def actionInfo(self):
+        if anon():
+            raise Unauthorized, u'Not authenticated'
         uid = self.request.get(u'uid', u'')
         context = self._execution_context(uid)
         data = dict()
@@ -42,6 +48,8 @@ class Actions(BrowserView):
         return json.dumps(data)
     
     def execute(self):
+        if anon():
+            raise Unauthorized, u'Not authenticated'
         name = self.request.get(u'name', u'')
         uid = self.request.get(u'uid', u'')
         context = self._execution_context(uid)
@@ -261,16 +269,14 @@ class OFSCutAction(CutAction):
 
     @property
     def enabled(self):
-        mtool = self.context.portal_membership
-        if not mtool.checkPermission('Copy or Move', self.context):
+        if not has_permission('Copy or Move', self.context):
             return False
         return True
     
     def __call__(self):
         context = self.context
         title = safe_unicode(context.title_or_id())
-        mtool = context.portal_membership
-        if not mtool.checkPermission('Copy or Move', context):
+        if not has_permission('Copy or Move', context):
             msg = _(u'Permission denied to cut ${title}.',
                     mapping={u'title': title})
             msg = self.context.translate(msg)
@@ -315,16 +321,14 @@ class OFSCopyAction(CopyAction):
     
     @property
     def enabled(self):
-        mtool = self.context.portal_membership
-        if not mtool.checkPermission('Copy or Move', self.context):
+        if not has_permission('Copy or Move', self.context):
             return False
         return True
 
     def __call__(self):
         context = self.context
         title = safe_unicode(context.title_or_id())
-        mtool = context.portal_membership
-        if not mtool.checkPermission('Copy or Move', context):
+        if not has_permission('Copy or Move', context):
             msg = _(u'Permission denied to copy ${title}.',
                     mapping={u'title': title})
             msg = self.context.translate(msg)
@@ -419,8 +423,7 @@ class OFSDeleteAction(DeleteAction):
 
     @property
     def enabled(self):
-        mtool = self.context.portal_membership
-        if not mtool.checkPermission('Delete objects', self.context):
+        if not has_permission('Delete objects', self.context):
             return False
         return True
 

@@ -4,6 +4,7 @@ from zope.interface import (
     noLongerProvides,
 )
 from Acquisition import aq_inner
+from AccessControl import Unauthorized
 from Products.Five import BrowserView
 from Products.CMFPlone import PloneMessageFactory as _
 from bda.plone.finder.interfaces import (
@@ -14,6 +15,7 @@ from bda.plone.finder.interfaces import (
     IPloneAction,
 )
 from bda.plone.finder.browser.folderish import FolderColumn
+from bda.plone.finder.browser.utils import anon
 
 class AjaxContext(BrowserView):
     
@@ -86,6 +88,8 @@ class PloneColumn(FolderColumn):
     """
     
     def __call__(self):
+        if anon():
+            raise Unauthorized, u'Not authenticated'
         uid = self.request.get('uid', 'plone_root')
         for name, iface in [('plone_root', IPloneRoot),
                             ('plone_content', IPloneContent),

@@ -1,4 +1,15 @@
 # -*- coding: utf-8 -*-
+from AccessControl import getSecurityManager
+
+def anon():
+    user = getSecurityManager().getUser()
+    return user.has_role('Anonymous')
+
+def has_permission(permission, context):
+    mtool = context.portal_membership
+    if not mtool.checkPermission(permission, context):
+        return False
+    return True
 
 def col_id(id):
     return 'finder_column_%s' % id
