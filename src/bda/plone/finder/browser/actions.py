@@ -46,9 +46,10 @@ class Actions(BrowserView):
         uid = self.request.get(u'uid', u'')
         context = self._execution_context(uid)
         if not context:
+            msg = _(u'Object not found. Could not continue.')
             return json.dumps({
                 'err': True,
-                'msg': _(u'Object not found. Could not continue.'),
+                'msg': self.context.translate(msg),
             })
         err = False
         ret_uid = None
@@ -59,7 +60,12 @@ class Actions(BrowserView):
                 ret_uid = uid
         except ComponentLookupError, e:
             err = True
-            msg = 'No such action: %s for %s.' % (name, uid)
+            msg = _(u'No such action: ${name} for ${uid}.',
+                    mapping={
+                        u'name': name,
+                        u'uid': uid,
+                    })
+            msg = self.context.translate(msg)
         except Exception, e:
             err = True
             msg = str(e)
@@ -130,10 +136,13 @@ class Action(object):
         return brains[0].getObject()
 
 class ViewAction(Action):
-    title = _('View')
     order = 10
     group = 10
     enabled = True
+    
+    @property
+    def title(self):
+        return self.context.translate(_('View'))
     
     @property
     def url(self):
@@ -157,9 +166,12 @@ class ViewAction(Action):
         return obj.absolute_url()
 
 class EditAction(Action):
-    title = _('Edit')
     order = 20
     group = 10
+    
+    @property
+    def title(self):
+        return self.context.translate(_('Edit'))
     
     @property
     def enabled(self):
@@ -187,10 +199,13 @@ class EditAction(Action):
         return None
 
 class ChangeStateAction(Action):
-    title = _('Change state')
     order = 30
     group = 10
     dropdown = True
+    
+    @property
+    def title(self):
+        return self.context.translate(_('Change state'))
     
     @property
     def enabled(self):
@@ -206,10 +221,13 @@ class ChangeStateAction(Action):
         return False
 
 class AddItemAction(Action):
-    title = _('Add item')
     order = 40
     group = 10
     dropdown = True
+    
+    @property
+    def title(self):
+        return self.context.translate(_('Add item'))
     
     @property
     def enabled(self):
@@ -227,10 +245,13 @@ class AddItemAction(Action):
         return False
 
 class CutAction(Action):
-    title = _('Cut')
     order = 10
     group = 20
     ajax = True
+    
+    @property
+    def title(self):
+        return self.context.translate(_('Cut'))
     
     @property
     def enabled(self):
@@ -250,38 +271,41 @@ class OFSCutAction(CutAction):
         title = safe_unicode(context.title_or_id())
         mtool = context.portal_membership
         if not mtool.checkPermission('Copy or Move', context):
-            #msg = _(u'Permission denied to cut ${title}.',
-            #        mapping={u'title' : title})
-            msg = u'Permission denied to cut %s.' % title
+            msg = _(u'Permission denied to cut ${title}.',
+                    mapping={u'title': title})
+            msg = self.context.translate(msg)
             raise Unauthorized, msg
         try:
             lock_info = context.restrictedTraverse('plone_lock_info')
         except AttributeError:
             lock_info = None
         if lock_info is not None and lock_info.is_locked():
-            #msg = _(u'${title} is locked and cannot be cut.',
-            #        mapping={u'title' : title})
-            msg = u'%s is locked and cannot be cut.' % title
+            msg = _(u'${title} is locked and cannot be cut.',
+                    mapping={u'title': title})
+            msg = self.context.translate(msg)
             raise Exception, msg
         parent = aq_parent(aq_inner(context))
         try:
             parent.manage_cutObjects(context.getId(), self.request)
         except CopyError:
-            #msg = _(u'${title} is not moveable.',
-            #        mapping={u'title' : title})
-            msg = u'%s is not moveable.' % title
+            msg = _(u'${title} is not moveable.',
+                    mapping={u'title': title})
+            msg = self.context.translate(msg)
             raise Exception, msg
         self.request.response.setCookie('__fct', self.context.UID(), path='/')
-        #msg = _(u'${title} cut.', mapping={u'title' : title})
-        msg = u'%s cut.' % title
+        msg = _(u'${title} cut.', mapping={u'title': title})
+        msg = self.context.translate(msg)
         transaction_note('Cut object %s' % context.absolute_url())
         return msg, None
 
 class CopyAction(Action):
-    title = _('Copy')
     order = 20
     group = 20
     ajax = True
+    
+    @property
+    def title(self):
+        return self.context.translate(_('Copy'))
     
     @property
     def enabled(self):
@@ -301,29 +325,32 @@ class OFSCopyAction(CopyAction):
         title = safe_unicode(context.title_or_id())
         mtool = context.portal_membership
         if not mtool.checkPermission('Copy or Move', context):
-            #msg = _(u'Permission denied to copy ${title}.',
-            #        mapping={u'title' : title})
-            msg = u'Permission denied to copy %s.' % title
+            msg = _(u'Permission denied to copy ${title}.',
+                    mapping={u'title': title})
+            msg = self.context.translate(msg)
             raise Unauthorized, msg
         parent = aq_parent(aq_inner(context))
         try:
             parent.manage_copyObjects(context.getId(), self.request)
         except CopyError:
-            #msg = _(u'${title} is not copyable.',
-            #        mapping={u'title' : title})
-            msg = u'%s is not copyable.' % title
+            msg = _(u'${title} is not copyable.',
+                    mapping={u'title': title})
+            msg = self.context.translate(msg)
             raise Exception, msg
-        #msg = _(u'${title} copied.',
-        #        mapping={u'title' : title})
-        msg = u'%s copied.' % title
+        msg = _(u'${title} copied.',
+                mapping={u'title': title})
+        msg = self.context.translate(msg)
         transaction_note('Copied object %s' % context.absolute_url())
         return msg, None
 
 class PasteAction(Action):
-    title = _('Paste')
     order = 30
     group = 20
     ajax = True
+    
+    @property
+    def title(self):
+        return self.context.translate(_('Paste'))
     
     @property
     def enabled(self):
@@ -340,6 +367,7 @@ class OFSPasteAction(PasteAction):
     def __call__(self):
         context = self.context
         msg = _(u'Copy or cut one or more items to paste.')
+        msg = self.context.translate(msg)
         if context.cb_dataValid:
             try:
                 context.manage_pasteObjects(self.request['__cp'])        
@@ -347,15 +375,22 @@ class OFSPasteAction(PasteAction):
                     'Pasted content to %s' % (context.absolute_url()))
                 self.request.response.expireCookie('__fct', path='/')
                 msg = _(u'Item(s) pasted.')
+                msg = self.context.translate(msg)
                 return msg, context.objectValues()[-1].UID()
             except ConflictError, e:
                 raise e
             except ValueError:
-                raise Exception(_(u'Disallowed to paste item(s).'))
+                msg = _(u'Disallowed to paste item(s).')
+                msg = self.context.translate(msg)
+                raise Exception(msg)
             except Unauthorized:
-                raise Exception(_(u'Unauthorized to paste item(s).'))
+                msg = _(u'Unauthorized to paste item(s).')
+                msg = self.context.translate(msg)
+                raise Exception(msg)
             except: # fallback
-                raise Exception(_(u'Paste could not find clipboard content.'))
+                msg = _(u'Paste could not find clipboard content.')
+                msg = self.context.translate(msg)
+                raise Exception(msg)
         return msg, None
 
 class PloneRootPasteAction(OFSPasteAction):
@@ -368,10 +403,13 @@ class PloneRootPasteAction(OFSPasteAction):
         return False
 
 class DeleteAction(Action):
-    title = _('Delete')
     order = 40
     group = 20
     ajax = True
+    
+    @property
+    def title(self):
+        return self.context.translate(_('Delete'))
     
     @property
     def enabled(self):
@@ -395,13 +433,13 @@ class OFSDeleteAction(DeleteAction):
         except AttributeError:
             lock_info = None
         if lock_info is not None and lock_info.is_locked():
-            #msg = _(u'${title} is locked and cannot be deleted.',
-            #        mapping={u'title' : title})
-            msg = u'%s is locked and cannot be deleted.' % title
+            msg = _(u'${title} is locked and cannot be deleted.',
+                    mapping={u'title': title})
+            msg = self.context.translate(msg)
             raise Exception(msg)
         else:
             parent.manage_delObjects(context.getId())
-            #msg = _(u'${title} has been deleted.', mapping={u'title' : title})
-            msg = u'%s has been deleted.' % title
+            msg = _(u'${title} has been deleted.', mapping={u'title': title})
+            msg = self.context.translate(msg)
             transaction_note('Deleted %s' % context.absolute_url())
             return msg, None

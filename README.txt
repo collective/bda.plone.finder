@@ -164,6 +164,8 @@ Changes
 1.0b5
 -----
 
+  * Use i18n messages in actions and user ``context.translate``
+  
   * CSS fix for IE6
 
 1.0b4
