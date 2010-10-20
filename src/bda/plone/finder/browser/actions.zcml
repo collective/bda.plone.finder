@@ -61,7 +61,7 @@
         for="Products.Archetypes.interfaces.IBaseObject
 		     zope.publisher.interfaces.http.IHTTPRequest"
         name="action_cut"
-        factory=".actions.CutAction"
+        factory=".actions.OFSCutAction"
     />
 	
 	<!-- action copy object -->
@@ -75,7 +75,7 @@
         for="Products.Archetypes.interfaces.IBaseObject
 		     zope.publisher.interfaces.http.IHTTPRequest"
         name="action_copy"
-        factory=".actions.CopyAction"
+        factory=".actions.OFSCopyAction"
     />
 	
 	<!-- action paste object -->
@@ -89,14 +89,14 @@
         for="Products.Archetypes.interfaces.IBaseObject
 		     zope.publisher.interfaces.http.IHTTPRequest"
         name="action_paste"
-        factory=".actions.PasteAction"
+        factory=".actions.OFSPasteAction"
     />
     
     <adapter
         for="Products.CMFPlone.interfaces.IPloneSiteRoot
 		     zope.publisher.interfaces.http.IHTTPRequest"
         name="action_paste"
-        factory=".actions.PasteAction"
+        factory=".actions.PloneRootPasteAction"
     />
 	
 	<!-- action delete object -->
@@ -110,7 +110,7 @@
         for="Products.Archetypes.interfaces.IBaseObject
 		     zope.publisher.interfaces.http.IHTTPRequest"
         name="action_delete"
-        factory=".actions.DeleteAction"
+        factory=".actions.OFSDeleteAction"
     />
 
 </configure>

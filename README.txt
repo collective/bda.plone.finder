@@ -10,12 +10,14 @@ browsing in Plone.
 
 .. image:: http://bluedynamics.com/bda.plone.finder.png
 
+
 Installation
 ============
 
   * Make egg available in your Plone site
   
   * Apply corresponding GS profile
+
 
 Usage
 =====
@@ -24,8 +26,9 @@ After installation you have a link named 'Finder' in the document actions.
 The finder gets displayed with focus on triggering context by clicking this
 link.
 
-Behavior
-========
+
+AJAX Views Used by finder JS
+============================
 
 ``bda.plone.finder`` browser view is requested via XML HTTP request and the
 returned markup gets displayed inside the overlay.
@@ -33,11 +36,101 @@ returned markup gets displayed inside the overlay.
 For expanding columns respective rendering details columns the views
 ``bda.plone.finder.expand`` and ``bda.plone.finder.details`` are requested.
 
-The actions configuration for context is requested via
+The actions configuration for focudes context is requested via
 ``bda.plone.finder.actioninfo`` browser view by JSON request.
 
-Execution of actions is done by requesting ``bda.plone.finder.execute``, again
-via JSON
+Execution of ajax actions is done by requesting ``bda.plone.finder.execute``,
+again via JSON
+
+
+Providing Custom Actions
+========================
+
+To add an action to finder, you have to write an
+``bda.plone.finder.interfaces.IAction`` implementation. A base implementation
+exists in ``bda.plone.finder.browser.actions`` which you can derive from.
+::
+
+    >>> from bda.plone.finder.browser.actions import Action
+    >>> class MyAction(Action):
+    ...     title = _('My Action')
+    ...     order = 10
+    ...     group = 10
+    ...     ajax = True
+    ...     
+    ...     @property
+    ...     def enabled(self):
+    ...         return True
+    ... 
+    ...     def __call__(self):
+    ...         # do something
+    ...         return 'foo', None
+
+Register your action via ZCML.
+::
+
+    <adapter for="* zope.publisher.interfaces.http.IHTTPRequest"
+        name="my_action"
+        factory=".mypackage.MyAction"
+    />
+
+``order``, ``group`` and ``title`` attributes are used for action rendering
+in finder menu bar.
+
+The ``enabled`` property defines action availability for focused context and
+is requested during object focus in UI via ``bda.plone.finder.actioninfo`` view.
+
+If ``ajax`` property is set to ``True``, finder JS calls
+``bda.plone.finder.execute`` with appropriate object uid and action id. In this
+case ``__call__`` function must be implemented, which gets triggered by
+``bda.plone.finder.execute`` view.
+
+If ``ajax`` property is set to False, ``url`` property must be provided. On
+non ajax actions finder just follows provided URL.
+
+You can hook custom Javascript on the client side, if some ajax action requires
+this. 3 hooks are provided. After action was loaded by actioninfo view, before
+action is executed, and after action has been executed.
+::
+
+    $.extend(finder.hooks.actions_loaded, {    
+        
+        // after load hooks gets passed ``finder.actions`` object 
+        my_after_load_hook: function(actions) {
+            // do something    
+        }
+    });
+    
+    $.extend(finder.hooks.actions, {
+        
+        // action id
+        my_action: {
+            
+            // hook before action is executed. you can use this i.e. for
+            // validation.
+            //
+            // gets passed focused object uid, container uid and the action
+            // callback, which must be called if action finally should be
+            // executed.
+            before: function(uid, container, callback) {
+                // do something
+                callback();
+            },
+            
+            // hook after action is executed you can use this i.e. for dom
+            // manipulation depending on action result.
+            //
+            // gets passed focused object uid, container uid and the JSON result
+            // from ajax action execution.
+            after: function(uid, container, data) {
+                // do something
+            }
+        }
+
+If you want to skip one ore another hook, set it to ``null``.
+
+Note: on non ajax action, after hooks are never called!
+
 
 Development and evaluation
 ==========================
@@ -48,12 +141,14 @@ is included.
 
     https://svn.plone.org/svn/collective/bda.plone.finder/trunk/
 
+
 Note
 ====
 
   * Plone 4 only
   
   * Testet in Firefox, Chrome, Safari, IE7
+
 
 Credits
 =======
@@ -62,19 +157,18 @@ Credits
   
   * Thanks to the Sprinters at Cathedral Sprint 2010 for ideas and feedback
 
+
 Changes
 =======
 
 1.0b4
 -----
 
-  * Check for actions permissions and enable actions only if possible on context
-  
   * Refactor finder actions
 
   * Add View interfaces
   
-  * Fix ``uid`` property in ATDetails column view
+  * Fix ``uid`` property in ``ATDetails`` column view
 
   * Fix initial finder rendering when called on leaf object located in plone
     root

@@ -2,7 +2,7 @@
 import simplejson as json
 from zope.interface import implements
 from zope.component import getUtility
-from zope.component import getAdapter
+from zope.component import getMultiAdapter
 from zope.component import getAdapters
 from zope.component.interfaces import ComponentLookupError
 from zope.app.publisher.interfaces.browser import IBrowserMenu
@@ -21,11 +21,18 @@ from Products.CMFPlone.utils import (
 )
 from bda.plone.finder.interfaces import IAction
 
+ROOT_UID = 'plone_root'
+CONTENT_UID = 'plone_content'
+CP_UID = 'plone_control_panel'
+ADDONS_UID = 'plone_addons'
+
 class Actions(BrowserView):
     
     def actionInfo(self):
+        uid = self.request.get(u'uid', u'')
+        context = self._execution_context(uid)
         data = dict()
-        actions = list(getAdapters((self.context, self.request), IAction))
+        actions = list(getAdapters((context, self.request), IAction))
         for id, action in actions:
             data[id] = {
                 'enabled': action.enabled,
@@ -33,34 +40,11 @@ class Actions(BrowserView):
                 'ajax': action.ajax,
             }
         return json.dumps(data)
-        
-        # old
-        data = dict()
-        uid = self.request.get('uid')
-        if not uid:
-            return json.dumps(data)
-        brains = self.context.portal_catalog(UID=uid)
-        if not brains:
-            self._set_special_action_url(uid, data)
-            return json.dumps(data)
-        for name in ['action_cut',
-                     'action_copy',
-                     'action_paste',
-                     'action_delete',
-                     'action_change_state',
-                     'action_add_item']:
-            data[name]['enabled'] = True
-        url = brains[0].getURL()
-        data['action_view']['url'] = url
-        data['action_view']['enabled'] = True
-        data['action_edit']['url'] = '%s/edit' % url
-        data['action_edit']['enabled'] = True
-        return json.dumps(data)
     
     def execute(self):
         name = self.request.get(u'name', u'')
         uid = self.request.get(u'uid', u'')
-        context = self._get_object(uid)
+        context = self._execution_context(uid)
         if not context:
             return json.dumps({
                 'err': True,
@@ -69,8 +53,8 @@ class Actions(BrowserView):
         err = False
         ret_uid = None
         try:
-            execution = getAdapter(context, IAction, name=name)
-            msg, ret_uid = execution(self.request)
+            toadapt = (context, self.request)
+            msg, ret_uid = getMultiAdapter(toadapt, IAction, name=name)()
             if ret_uid is None:
                 ret_uid = uid
         except ComponentLookupError, e:
@@ -85,25 +69,16 @@ class Actions(BrowserView):
             'uid': ret_uid,
         })
     
-    def _set_special_action_url(self, uid, data):
-        action = self._action_by_id(uid)
-        if action:
-            data['action_view']['enabled'] = True
-            data['action_view']['url'] = action['url']
-        if uid in ['plone_content',
-                   'plone_control_panel',
-                   'plone_addons']:
-            purl = self.context.portal_url.getPortalObject().absolute_url()
-            data['action_view']['enabled'] = True
-            data['action_view']['url'] = purl
-            if uid == 'plone_content':
-                data['action_add_item']['enabled'] = True
-                data['action_edit']['enabled'] = True
-                data['action_edit']['url'] = purl + '/edit'
-                data['action_paste']['enabled'] = True
-            if uid in ['plone_control_panel', 'plone_addons']:
-                data['action_view']['url'] = purl + '/plone_control_panel'
-        return data
+    def _execution_context(self, uid):
+        if uid in [CONTENT_UID, CP_UID, ADDONS_UID]:
+            return self.context.portal_url.getPortalObject()
+        cp_item = ControlPanelItems(self.context).item_by_id(uid)
+        if cp_item:
+            return self.context.portal_url.getPortalObject()
+        brains = self.context.portal_catalog(UID=uid)
+        if not brains:
+            return None
+        return brains[0].getObject()
 
 class ControlPanelItems(object):
     
@@ -120,11 +95,6 @@ class ControlPanelItems(object):
         """Group 'Plone' or 'Products'
         """
         return self.context.portal_controlpanel.enumConfiglets(group=group)
-
-ROOT_UID = 'plone_root'
-CONTENT_UID = 'plone_content'
-CP_UID = 'plone_control_panel'
-ADDONS_UID = 'plone_addons'
 
 class Action(object):
     implements(IAction)
@@ -265,6 +235,15 @@ class CutAction(Action):
     @property
     def enabled(self):
         return False
+
+class OFSCutAction(CutAction):
+
+    @property
+    def enabled(self):
+        mtool = self.context.portal_membership
+        if not mtool.checkPermission('Copy or Move', self.context):
+            return False
+        return True
     
     def __call__(self):
         context = self.context
@@ -307,7 +286,16 @@ class CopyAction(Action):
     @property
     def enabled(self):
         return False
+
+class OFSCopyAction(CopyAction):
     
+    @property
+    def enabled(self):
+        mtool = self.context.portal_membership
+        if not mtool.checkPermission('Copy or Move', self.context):
+            return False
+        return True
+
     def __call__(self):
         context = self.context
         title = safe_unicode(context.title_or_id())
@@ -340,7 +328,15 @@ class PasteAction(Action):
     @property
     def enabled(self):
         return False
-    
+
+class OFSPasteAction(PasteAction):
+
+    @property
+    def enabled(self):
+        if self.context.cb_dataValid:
+            return True
+        return False
+
     def __call__(self):
         context = self.context
         msg = _(u'Copy or cut one or more items to paste.')
@@ -355,12 +351,21 @@ class PasteAction(Action):
             except ConflictError, e:
                 raise e
             except ValueError:
-                msg = _(u'Disallowed to paste item(s).')
-            except (Unauthorized, 'Unauthorized'):
-                msg = _(u'Unauthorized to paste item(s).')
+                raise Exception(_(u'Disallowed to paste item(s).'))
+            except Unauthorized:
+                raise Exception(_(u'Unauthorized to paste item(s).'))
             except: # fallback
-                msg = _(u'Paste could not find clipboard content.')
+                raise Exception(_(u'Paste could not find clipboard content.'))
         return msg, None
+
+class PloneRootPasteAction(OFSPasteAction):
+
+    @property
+    def enabled(self):
+        if self._uid == CONTENT_UID:
+            if self.context.cb_dataValid:
+                return True
+        return False
 
 class DeleteAction(Action):
     title = _('Delete')
@@ -371,7 +376,16 @@ class DeleteAction(Action):
     @property
     def enabled(self):
         return False
-    
+
+class OFSDeleteAction(DeleteAction):
+
+    @property
+    def enabled(self):
+        mtool = self.context.portal_membership
+        if not mtool.checkPermission('Delete objects', self.context):
+            return False
+        return True
+
     def __call__(self):
         context = self.context
         parent = context.aq_inner.aq_parent

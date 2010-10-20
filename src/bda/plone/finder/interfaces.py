@@ -51,7 +51,7 @@ class IAction(Interface):
     
     order = Attribute(u"Integer defining action position.")
     
-    group = Attribute(u"Group integer for visually grouping actions.")
+    group = Attribute(u"Integer for visually grouping actions.")
     
     dropdown = Attribute(u"Flag wether dropdown ul should be rendered for "
                          u"this action or not.")
