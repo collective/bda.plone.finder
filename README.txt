@@ -178,6 +178,12 @@ Credits
 Changes
 =======
 
+1.0b7
+-----
+
+  * Add content icons to default portal types to make IContentIcon work with
+    catalog brains
+
 1.0b6
 -----
 
