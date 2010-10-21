@@ -21,10 +21,7 @@ from Products.CMFPlone.utils import (
     transaction_note,
     safe_unicode,
 )
-from bda.plone.finder.interfaces import (
-    IUidProvider,
-    IAction,
-)
+from bda.plone.finder.interfaces import IAction
 from bda.plone.finder.browser.utils import (
     anon,
     has_permission,

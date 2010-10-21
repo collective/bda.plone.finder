@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Products.Five import BrowserView
 from bda.plone.finder.browser.utils import get_provider
 from bda.plone.finder.browser.utils import ExecutionInfo

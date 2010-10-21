@@ -1,26 +1,10 @@
 # -*- coding: utf-8 -*-
-from zope.interface import (
-    implements,
-    directlyProvides,
-    noLongerProvides,
-)
-from zope.component import (
-    getAdapters,
-    getMultiAdapter,
-    getUtility,
-)
-from Acquisition import (
-    aq_inner,
-    aq_parent,
-)
-from OFS.Application import IApplication
+from zope.interface import implements
+from zope.component import getAdapters
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.layout.viewlets.common import ViewletBase
-from Products.CMFPlone.interfaces import IPloneSiteRoot
 from bda.plone.finder.interfaces import (
-    IUidProvider,
-    IPloneContent,
     IFinder,
     IAction,
 )

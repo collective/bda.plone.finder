@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 from zope.component import getUtility
 from zope.app.publisher.interfaces.browser import IBrowserMenu
-from Acquisition import aq_inner
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from Products.CMFPlone import PloneMessageFactory as _
-from plone.app.contentmenu.interfaces import IContentMenuItem
 from bda.plone.finder.browser.utils import (
     anon,
     get_provider,
