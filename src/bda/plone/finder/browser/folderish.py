@@ -47,7 +47,7 @@ class FolderColumn(BrowserView):
             cut = self.request.cookies.get('__fct') == uid
             ret.append(nav_item(item_id(uid),
                                 icon.url,
-                                brain.Title,
+                                brain.Title and brain.Title or brain.id,
                                 brain.is_folderish, 
                                 self._item_selected(brain.getURL()),
                                 brain.review_state,

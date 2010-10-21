@@ -1,7 +1,7 @@
 // finder.js
 //
 // author: Robert Niederreiter
-// version: 1.0b6
+// version: 1.0b7
 // license: GPL2
 
 (function($) {

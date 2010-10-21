@@ -181,8 +181,10 @@ Changes
 1.0b7
 -----
 
+  * Use id in column item if title not set.
+
   * Add content icons to default portal types to make IContentIcon work with
-    catalog brains
+    catalog brains.
 
 1.0b6
 -----
