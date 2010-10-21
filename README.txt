@@ -30,37 +30,59 @@ link.
 AJAX Views Used by finder JS
 ============================
 
-``bda.plone.finder`` browser view is requested for initial finder rendering via
-XML HTTP request and the returned markup gets displayed inside the overlay.
+  * ``bda.plone.finder`` browser view is requested for initial finder rendering
+    via XML HTTP request and the returned markup gets displayed inside the
+    overlay.
 
-For expanding columns respective rendering details columns the views
-``bda.plone.finder.expand`` and ``bda.plone.finder.details`` are requested.
+  * For expanding columns respective rendering details columns the views
+    ``bda.plone.finder.expand`` and ``bda.plone.finder.details`` are requested.
 
-The actions configuration for focused context is requested by
-``bda.plone.finder.actioninfo`` browser view as JSON request.
+  * The actions configuration for focused context is requested by
+    ``bda.plone.finder.actioninfo`` browser view as JSON request.
 
-Execution of ajax actions is done by requesting ``bda.plone.finder.execute``,
-again as JSON request.
+  * Execution of ajax actions is done by requesting
+    ``bda.plone.finder.execute``, again as JSON request.
 
 
 Application behavior
 ====================
 
-When requesting a page by URL, on server side the base URL for requesting
-further AJAX calls is rendered by viewlet ``bda.plone.finder.viewlet``.
+Triggering finder
+-----------------
 
-If user is authenticated, she gets displayed the finder triggering link in
-object actions.
+  * When requesting a page by URL, on server side the base URL for requesting
+    further AJAX calls is rendered by viewlet ``bda.plone.finder.viewlet``.
 
-When finder gets triggered, ``bda.plone.finder`` browser view gets requested
-on recent context.
+  * If user is authenticated, she gets displayed the finder triggering link in
+    object actions.
 
-The actions registered for current finder flavor are rendered. At this state
-all actions are disabled.
+  * When finder gets triggered, ``bda.plone.finder`` browser view gets
+    requested on recent context.
 
-Rendering columns is done by ``IColumnProvider`` implementation, which knows
-about the recent rendering context, how to render this context and the initial
-columns to be displayed.
+  * The actions registered for current finder flavor are rendered. At this
+    state all actions are disabled.
+
+  * Rendering columns is done by ``IColumnProvider`` implementation, which
+    knows about the recent rendering context and flavor, how to render this
+    context and the initial columns to be displayed.
+
+  * After hooking result to DOM tree, ``bda.plone.finder.actioninfo`` gets
+    called and finder actions are initialized for recent context and flavor.
+
+Expanding columns
+-----------------
+
+  * XXX
+
+Display details column
+----------------------
+
+  * XXX
+
+Performing actions
+------------------
+
+  * XXX
 
 
 Providing Custom Actions
@@ -94,19 +116,21 @@ Register your action via ZCML.
         factory=".mypackage.MyAction"
     />
 
-``order``, ``group`` and ``title`` attributes are used for action rendering
-in finder menu bar.
 
-The ``enabled`` property defines action availability for focused context and
-is requested during object focus in UI via ``bda.plone.finder.actioninfo`` view.
+  * ``order``, ``group`` and ``title`` attributes are used for action rendering
+    in finder menu bar.
 
-If ``ajax`` property is set to ``True``, finder JS calls
-``bda.plone.finder.execute`` with appropriate object uid and action id. In this
-case ``__call__`` function must be implemented, which gets triggered by
-``bda.plone.finder.execute`` view.
+  * The ``enabled`` property defines action availability for focused context
+    and is requested during object focus in UI via
+    ``bda.plone.finder.actioninfo`` view.
 
-If ``ajax`` property is set to False, ``url`` property must be provided. On
-non ajax actions finder just follows provided URL.
+  * If ``ajax`` property is set to ``True``, finder JS calls
+    ``bda.plone.finder.execute`` with appropriate object uid and action id. In
+    this case ``__call__`` function must be implemented, which gets triggered
+    by ``bda.plone.finder.execute`` view.
+
+  * If ``ajax`` property is set to False, ``url`` property must be provided. On
+    non ajax actions finder just follows provided URL.
 
 You can hook custom Javascript on the client side, if some ajax action requires
 this. 3 hooks are provided. After action was loaded by actioninfo view, before
