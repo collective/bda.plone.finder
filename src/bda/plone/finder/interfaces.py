@@ -11,7 +11,7 @@ class IFinderLayer(Interface):
     """
 
 ###############################################################################
-# Finder column provider interface
+# Finder common interfaces
 ###############################################################################
 
 class IUidProvider(Interface):
@@ -31,7 +31,7 @@ class IColumnProvider(Interface):
     flavor = Attribute(u"Finder flavor this object provides context for.")
     
     def provides(uid):
-        """Return Flag wether context by uid is provided by this object.
+        """Return Flag wether context by uid is provided by this object or not.
         """
     
     def get(uid):
@@ -43,7 +43,7 @@ class IColumnProvider(Interface):
         """
     
     def rendered_columns(uid):
-        """Render initial finder columns as desired starting by object with uid.
+        """Render initial finder columns with object by uid as anchor.
         """
 
 ###############################################################################
@@ -53,6 +53,8 @@ class IColumnProvider(Interface):
 class IFinder(Interface):
     """View interface for finder.
     """
+    
+    show = Attribute(u"Flag wether to dispay finder or not.")
     
     actions = Attribute(u"List of action groups containing ordered action "
                         u"defs.")
@@ -73,7 +75,7 @@ class IFolderishColumn(IColumn):
                               u"``bda.plone.finder.utils.nav_item``")
 
 ###############################################################################
-# Finder action interface
+# Finder actions related interfaces
 ###############################################################################
 
 class IAction(Interface):
@@ -105,8 +107,17 @@ class IAction(Interface):
         """Execute action. Return message. and UID as tuple.
         """
 
+class IDropdown(Interface):
+    
+    show = Attribute(u"Flag wether to display dropdown or not")
+    
+    noitems = Attribute(u"Text to be displyed if dropdown has no items.")
+    
+    items = Attribute(u"List of dicts with keys ``title``, ``url`` and "
+                      u"``style``.")
+
 ###############################################################################
-# Finder root marker
+# Finder root context marker
 ###############################################################################
 
 class IFinderRoot(Interface):
@@ -135,10 +146,4 @@ class IPloneAddons(Interface):
 
 class IPloneConfigItem(Interface):
     """Marker interface for plone configuration items.
-    """
-
-class IPloneAction(Interface):
-    """Marker interface for plone actions column.
-    
-    XXX: remove
     """

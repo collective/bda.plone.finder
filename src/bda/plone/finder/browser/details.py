@@ -9,6 +9,7 @@ from bda.plone.finder.interfaces import IColumn
 from bda.plone.finder.browser.utils import (
     col_id,
     anon,
+    ControlPanelItems,
 )
 
 DETAILS = """
@@ -191,30 +192,28 @@ class PloneConfigItem(PloneDetails):
         return self._action['url']
     
     @property
+    def _raw_uid(self):
+        return self.uid[14:]
+    
+    @property
     def _action(self):
-        return self._action_by_id(self._group, self.uid[14:])
+        cp_items = ControlPanelItems(self.context)
+        return cp_items.item_by_id(self._raw_uid, groups=[self._group])
     
     @property
     def _group(self):
-        if self.uid[14:] in self._cp_actions:
+        if self._raw_uid in self._cp_actions:
             return 'Plone'
-        if self.uid[14:] in self._ac_actions:
+        if self._raw_uid in self._ac_actions:
             return 'Products'
         raise ValueError(_(u'unknown UID'))
     
     @property
     def _cp_actions(self):
-        return [i['id'] for i in self._actions_by_group('Plone')]
+        cp_items = ControlPanelItems(self.context)
+        return [i['id'] for i in cp_items.items_by_group('Plone')]
     
     @property
     def _ac_actions(self):
-        return [i['id'] for i in self._actions_by_group('Products')]
-    
-    def _action_by_id(self, group, id):
-        for item in self._actions_by_group(group):
-            if item['id'] == id:
-                return item
-    
-    def _actions_by_group(self, group):
-        context = self.context
-        return context.portal_controlpanel.enumConfiglets(group=group)
+        cp_items = ControlPanelItems(self.context)
+        return [i['id'] for i in cp_items.items_by_group('Products')]

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+from zope.interface import implements
 from zope.component import getUtility
 from zope.app.publisher.interfaces.browser import IBrowserMenu
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from bda.plone.finder.interfaces import IDropdown
 from bda.plone.finder.browser.utils import (
     anon,
     get_provider,
@@ -10,6 +12,7 @@ from bda.plone.finder.browser.utils import (
 )
 
 class FinderDropdown(BrowserView, ExecutionInfo):
+    implements(IDropdown)
     
     __call__ = ViewPageTemplateFile(u'templates/dropdown.pt')
     
@@ -29,7 +32,6 @@ class FinderDropdown(BrowserView, ExecutionInfo):
 
 class AddItemsMenu(FinderDropdown):
     
-   
     @property
     def noitems(self):
         return u'Nothing to add'
