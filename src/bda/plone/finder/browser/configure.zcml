@@ -1,54 +1,54 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:browser="http://namespaces.zope.org/browser"
-		   xmlns:five="http://namespaces.zope.org/five">
-	
-	<five:implements
-	    interface="bda.plone.finder.interfaces.IFinderRoot"
+           xmlns:five="http://namespaces.zope.org/five">
+    
+    <five:implements
+        interface="bda.plone.finder.interfaces.IFinderRoot"
         class="Products.CMFPlone.Portal.PloneSite"
-	/>
-	
-	<include file="provider.zcml" />
+    />
+    
+    <include file="provider.zcml" />
     <include file="actions.zcml" />
-	<include file="menu.zcml" />
-	<include file="folderish.zcml" />
-	<include file="details.zcml" />
-	
-	<!-- browser resources -->
-	<browser:resource
-	    name="bda.finder.js"
-		file="resources/finder.js"
-	/>
-	
-	<browser:resource
+    <include file="menu.zcml" />
+    <include file="folderish.zcml" />
+    <include file="details.zcml" />
+    
+    <!-- browser resources -->
+    <browser:resource
+        name="bda.finder.js"
+        file="resources/finder.js"
+    />
+    
+    <browser:resource
         name="bda.finder.css"
         file="resources/finder.css"
     />
-	
-	<browser:resourceDirectory
-	    name="bda.plone.finder.images"
-		directory="images"
-	/>
-	
-	<!-- base path viewlet -->
-	<browser:viewlet
+    
+    <browser:resourceDirectory
+        name="bda.plone.finder.images"
+        directory="images"
+    />
+    
+    <!-- base path viewlet -->
+    <browser:viewlet
         name="bda.plone.finder.viewlet"
         manager="plone.app.layout.viewlets.interfaces.IPortalFooter"
         class=".finder.FinderViewlet"
-		layer="bda.plone.finder.interfaces.IFinderLayer"
-		permission="zope2.View"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="zope2.View"
     />
-	
-	<!-- finder initial rendering ajax view -->
-	<browser:page
-	    for="*"
+    
+    <!-- finder initial rendering ajax view -->
+    <browser:page
+        for="*"
         name="bda.plone.finder"
         class=".finder.Finder"
         layer="bda.plone.finder.interfaces.IFinderLayer"
-		permission="zope2.View"
+        permission="zope2.View"
     />
-	
-	<!-- finder column expand ajax view -->
-	<browser:page
+    
+    <!-- finder column expand ajax view -->
+    <browser:page
         for="*"
         name="bda.plone.finder.expand"
         class=".column.AjaxColumn"
@@ -57,7 +57,7 @@
         permission="zope2.View"
     />
     
-	<!-- finder column details ajax view -->
+    <!-- finder column details ajax view -->
     <browser:page
         for="*"
         name="bda.plone.finder.details"

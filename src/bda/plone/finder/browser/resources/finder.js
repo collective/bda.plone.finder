@@ -8,12 +8,12 @@
     
     $(document).ready(function() {
         
-		// add finder overlay to dom tree
-		var elem = '<div class="finder_overlay" id="bda_finder_overlay"></div>';
-		$(elem).insertBefore($('#visual-portal-wrapper'));
+        // add finder overlay to dom tree
+        var elem = '<div class="finder_overlay" id="bda_finder_overlay"></div>';
+        $(elem).insertBefore($('#visual-portal-wrapper'));
         
         // bind finder trigger
-		var selector = '#contentview-bda_plone_finder';
+        var selector = '#contentview-bda_plone_finder';
         var link = $(selector);
         link.attr('rel', '#bda_finder_overlay');
         link.bind('click', function(event) {
@@ -169,9 +169,8 @@
                 finder.scroll_column_to(column, 'li.selected');
                 idx++;
             });
-			finder.current_focused = finder.columns[lastidx];
+            finder.current_focused = finder.columns[lastidx];
             finder.current_item = finder.columns[lastidx];
-			
             finder.actions.load(finder.columns[lastidx],
                                 finder.columns[lastidx - 1]);
             finder.bind_column_filter();
@@ -184,7 +183,7 @@
             var size = finder.columns.length;
             var button = $('a.next', finder.overlay());
             if ((size <= 4) || (index == size - 4)) {
-                // XXX: hack, for some reason on finer load time 'disabled'
+                // XXX: hack, for some reason on finder load time 'disabled'
                 //      class is reset on scrollable.onSeek. So we use custom
                 //      disabled css class 'f_disabled'.
                 button.addClass('f_disabled');

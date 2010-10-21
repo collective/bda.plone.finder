@@ -30,7 +30,7 @@ from bda.plone.finder.browser.utils import (
     ExecutionInfo,
 )
 
-class FinderViewlet(ViewletBase):
+class FinderViewlet(ViewletBase, ExecutionInfo):
     
     render = ViewPageTemplateFile('templates/viewlet.pt')
     
@@ -39,7 +39,7 @@ class FinderViewlet(ViewletBase):
     
     @property
     def base_url(self):
-        return self.context.absolute_url()
+        return self.request['ACTUAL_URL']
 
 class Finder(BrowserView, ExecutionInfo):
     

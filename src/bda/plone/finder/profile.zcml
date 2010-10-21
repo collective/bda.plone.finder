@@ -1,8 +1,8 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-		   xmlns:i18n="http://namespaces.zope.org/i18n"
-		   i18n:domain="bda.plone.finder">
-           	
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n:domain="bda.plone.finder">
+               
     <genericsetup:registerProfile
         name="default"
         title="bda.plone.finder"
@@ -10,5 +10,5 @@
         description='Extension profile for bda.plone.finder.'
         provides="Products.GenericSetup.interfaces.EXTENSION"
     />
-	
+    
 </configure>

@@ -25,11 +25,6 @@ class DefaultUidProvider(object):
     implements(IUidProvider)
     
     def uid(self, context, request):
-        context = aq_inner(context)
-        toadapt = (context, request)
-        #state = getMultiAdapter(toadapt, name=u'plone_context_state')
-        #if state.is_default_page():
-        #    context = aq_parent(context)
         if hasattr(context, 'UID'):
             return context.UID()
         return 'root'

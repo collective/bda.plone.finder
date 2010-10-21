@@ -2,35 +2,35 @@
            xmlns:browser="http://namespaces.zope.org/browser">
 
     <!-- default uid provider -->
-	<utility
-	    name="default"
-		provides="bda.plone.finder.interfaces.IUidProvider"
-		factory=".provider.DefaultUidProvider"
-	/>
+    <utility
+        name="default"
+        provides="bda.plone.finder.interfaces.IUidProvider"
+        factory=".provider.DefaultUidProvider"
+    />
     
-	<!-- column providers -->
-	<adapter
-	    for="*"
-		name="root_provider"
-		factory=".provider.RootProvider"
+    <!-- column providers -->
+    <adapter
+        for="*"
+        name="root_provider"
+        factory=".provider.RootProvider"
     />
   
     <adapter
-	    for="*"
-	    name="control_panel_provider"
-	    factory=".provider.ControlPanelProvider"
+        for="*"
+        name="control_panel_provider"
+        factory=".provider.ControlPanelProvider"
     />
   
     <adapter
-	    for="*"
-	    name="addons_provider"
-	    factory=".provider.AddonsProvider"
+        for="*"
+        name="addons_provider"
+        factory=".provider.AddonsProvider"
     />
   
     <adapter
-	    for="*"
-	    name="catalog_provider"
-	    factory=".provider.CatalogProvider"
+        for="*"
+        name="catalog_provider"
+        factory=".provider.CatalogProvider"
     />
 
 </configure>
