@@ -1,0 +1,3 @@
+<span id="finder_base_url"
+      tal:content="view/base_url"
+      tal:condition="view/show">http://www.example.com</span>

@@ -11,6 +11,32 @@ class IFinderLayer(Interface):
     """
 
 ###############################################################################
+# Finder column provider interface
+###############################################################################
+
+class IColumnProvider(Interface):
+    """Interface for providing and rendering finder columns.
+    """
+    
+    flavor = Attribute(u"Finder flavor this object provides context for.")
+    
+    def provides(uid):
+        """Return Flag wether context by uid is provided by this object.
+        """
+    
+    def get(uid):
+        """Return current context for column rendering.
+        """
+    
+    def render(uid, view):
+        """
+        """
+    
+    def rendered_columns(uid):
+        """
+        """
+
+###############################################################################
 # Finder view interfaces
 ###############################################################################
 
@@ -47,6 +73,8 @@ class IAction(Interface):
     id as name.
     """
     
+    flavor = Attribute(u"Finder flavor this action is provided for.")
+    
     title = Attribute(u"Action title")
     
     order = Attribute(u"Integer defining action position.")
@@ -63,9 +91,17 @@ class IAction(Interface):
     ajax = Attribute(u"Flag wether action is performed via AJAX or not."
                      u"Note - Non AJAX actions always follow ``url``")
     
-    def __call__(self):
+    def __call__():
         """Execute action. Return message. and UID as tuple.
         """
+
+###############################################################################
+# Finder root marker
+###############################################################################
+
+class IFinderRoot(Interface):
+    """Marker interface for finder root object.
+    """
 
 ###############################################################################
 # Finder column markers
@@ -87,6 +123,12 @@ class IPloneAddons(Interface):
     """Marker interface for plone addons column.
     """
 
+class IPloneConfigItem(Interface):
+    """Marker interface for plone configuration items.
+    """
+
 class IPloneAction(Interface):
     """Marker interface for plone actions column.
+    
+    XXX: remove
     """

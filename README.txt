@@ -178,6 +178,13 @@ Credits
 Changes
 =======
 
+1.0b6
+-----
+
+  * Add finder overlay via JS instead of viewlet.
+  
+  * Refactor server side column rendering API.
+
 1.0b5
 -----
 

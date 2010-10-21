@@ -42,9 +42,9 @@
     />
     
     <browser:page
-        for="bda.plone.finder.interfaces.IPloneAction"
+        for="bda.plone.finder.interfaces.IPloneConfigItem"
         name="finder_details"
-        class=".details.ActionDetails"
+        class=".details.PloneConfigItem"
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="cmf.ManagePortal"
     />

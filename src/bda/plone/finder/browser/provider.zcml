@@ -1,0 +1,28 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser">
+
+    <adapter
+	    for="*"
+		name="root_provider"
+		factory=".provider.RootProvider"
+    />
+  
+    <adapter
+	    for="*"
+	    name="control_panel_provider"
+	    factory=".provider.ControlPanelProvider"
+    />
+  
+    <adapter
+	    for="*"
+	    name="addons_provider"
+	    factory=".provider.AddonsProvider"
+    />
+  
+    <adapter
+	    for="*"
+	    name="catalog_provider"
+	    factory=".provider.CatalogProvider"
+    />
+
+</configure>

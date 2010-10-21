@@ -13,6 +13,7 @@ from bda.plone.finder.browser.utils import (
     item_id,
     nav_item,
     has_permission,
+    ControlPanelItems,
 )
 
 class FolderColumn(BrowserView):
@@ -84,7 +85,7 @@ class PloneRoot(FolderColumn):
     
     @property
     def uid(self):
-        return col_id('plone_root')
+        return col_id('root')
     
     @property
     def items(self):
@@ -100,7 +101,6 @@ class PloneRoot(FolderColumn):
                 ('plone_control_panel', _('Control Panel'), 'site_icon.gif'),
                 ('plone_addons', _('Addon Configuration'), 'product_icon.gif'),
             ]
-        
         for id, title, icon in items:
             ret.append(nav_item(item_id(id),
                                 icon,
@@ -119,9 +119,9 @@ class ControlPanelColumn(FolderColumn):
     
     def items_by_configlets(self, group):
         ret = list()
-        context = self.context
-        pu = context.plone_utils
-        configlets = context.portal_controlpanel.enumConfiglets(group=group)
+        pu = self.context.plone_utils
+        cp_items = ControlPanelItems(self.context)
+        configlets = cp_items.items_by_group(group)
         for item in configlets:
             if not item['available'] or not item['allowed']:
                 continue

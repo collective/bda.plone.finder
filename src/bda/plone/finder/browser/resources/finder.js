@@ -1,15 +1,19 @@
 // finder.js
 //
 // author: Robert Niederreiter
-// version: 1.0b5
+// version: 1.0b6
 // license: GPL2
 
 (function($) {
     
     $(document).ready(function() {
-        var selector = '#contentview-bda_plone_finder';
+        
+		// add finder overlay to dom tree
+		var elem = '<div class="finder_overlay" id="bda_finder_overlay"></div>';
+		$(elem).insertBefore($('#visual-portal-wrapper'));
         
         // bind finder trigger
+		var selector = '#contentview-bda_plone_finder';
         var link = $(selector);
         link.attr('rel', '#bda_finder_overlay');
         link.bind('click', function(event) {

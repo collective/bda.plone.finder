@@ -175,7 +175,7 @@ class AddOnDetails(PloneDetails):
     def link(self):
         return self._url(resource=u'plone_control_panel')
 
-class ActionDetails(PloneDetails):
+class PloneConfigItem(PloneDetails):
     
     @property
     def title(self):

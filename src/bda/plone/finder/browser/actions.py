@@ -23,6 +23,7 @@ from bda.plone.finder.interfaces import IAction
 from bda.plone.finder.browser.utils import (
     anon,
     has_permission,
+    ControlPanelItems,
 )
 
 ROOT_UID = 'plone_root'
@@ -94,25 +95,10 @@ class Actions(BrowserView):
             return None
         return brains[0].getObject()
 
-class ControlPanelItems(object):
-    
-    def __init__(self, context):
-        self.context = context
-    
-    def item_by_id(self, id):
-        for group in ['Plone', 'Products']:
-            for item in self.items_by_group(group):
-                if item['id'] == id:
-                    return item
-    
-    def items_by_group(self, group):
-        """Group 'Plone' or 'Products'
-        """
-        return self.context.portal_controlpanel.enumConfiglets(group=group)
-
 class Action(object):
     implements(IAction)
     
+    flavor = 'default'
     title = None
     order = 0
     group = None

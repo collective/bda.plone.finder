@@ -10,21 +10,25 @@ from Acquisition import (
     aq_inner,
     aq_parent,
 )
+from OFS.Application import IApplication
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.layout.viewlets.common import ViewletBase
 from Products.CMFPlone.interfaces import IPloneSiteRoot
-from Products.Archetypes.interfaces import IBaseContent
 from bda.plone.finder.interfaces import (
     IPloneContent,
     IFinder,
     IAction,
 )
-from bda.plone.finder.browser.utils import anon
+from bda.plone.finder.browser.utils import (
+    anon,
+    get_provider,
+    ExecutionInfo,
+)
 
-class OverlayViewlet(ViewletBase):
+class FinderViewlet(ViewletBase):
     
-    render = ViewPageTemplateFile('templates/overlay.pt')
+    render = ViewPageTemplateFile('templates/viewlet.pt')
     
     def update(self):
         self.show = not anon()
@@ -33,7 +37,7 @@ class OverlayViewlet(ViewletBase):
     def base_url(self):
         return self.context.absolute_url()
 
-class Finder(BrowserView):
+class Finder(BrowserView, ExecutionInfo):
     
     implements(IFinder)
     
@@ -44,10 +48,25 @@ class Finder(BrowserView):
         return not anon()
     
     @property
+    def uid(self):
+        context = aq_inner(self.context)
+        toadapt = (context, self.request)
+        state = getMultiAdapter(toadapt, name=u'plone_context_state')
+        if state.is_default_page():
+            context = aq_parent(context)
+        
+        if hasattr(context, 'UID'):
+            return self.context.UID()
+        return 'root'
+    
+    @property
     def actions(self):
+        flavor = self.flavor
         groups = dict()
         actions = list(getAdapters((self.context, self.request), IAction))
         for id, action in actions:
+            if flavor != action.flavor:
+                continue
             if not groups.get(action.group):
                 groups[action.group] = list()
             groups[action.group].append({
@@ -65,33 +84,10 @@ class Finder(BrowserView):
     @property
     def columns(self):
         ret = list()
-        for obj in self._next_parent:
-            try:
-                ret.append(obj.restrictedTraverse('finder_column')())
-            except AttributeError, e:
-                ret.append(obj.restrictedTraverse('finder_details')())
-        ret.reverse()
-        if len(ret) == 1:
-            self.request['uid'] = 'plone_content'
-            ret.append(obj.restrictedTraverse('finder_column')())
+        uid = self.uid
+        provider = get_provider(self.context, self.flavor, uid)
+        if provider is not None:
+            ret = provider.rendered_columns(uid)
         while len(ret) < 4:
             ret.append('<div class="finder_column">&nbsp;</div>')
         return ret
-    
-    @property
-    def _next_parent(self):
-        context = aq_inner(self.context)
-        while not IPloneSiteRoot.providedBy(context):
-            toadapt = (context, self.request)
-            state = getMultiAdapter(toadapt, name=u'plone_context_state')
-            if state.is_default_page():
-                context = aq_parent(context)
-            yield context
-            child = context
-            context = aq_parent(aq_inner(context))
-            if IPloneSiteRoot.providedBy(context) \
-              and IBaseContent.providedBy(child):
-                directlyProvides(context, IPloneContent)
-                yield context
-                noLongerProvides(context, IPloneContent)
-        yield context

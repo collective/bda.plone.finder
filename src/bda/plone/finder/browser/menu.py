@@ -6,10 +6,13 @@ from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone import PloneMessageFactory as _
 from plone.app.contentmenu.interfaces import IContentMenuItem
-from bda.plone.finder.browser.dispatcher import AjaxContext
-from bda.plone.finder.browser.utils import anon
+from bda.plone.finder.browser.utils import (
+    anon,
+    get_provider,
+    ExecutionInfo
+)
 
-class AddItemsMenu(AjaxContext):
+class FinderDropdown(BrowserView, ExecutionInfo):
     
     __call__ = ViewPageTemplateFile(u'templates/dropdown.pt')
     
@@ -19,13 +22,30 @@ class AddItemsMenu(AjaxContext):
     
     @property
     def noitems(self):
+        raise NotImplementedError(u'Abstract FinderDropdown does not ',
+                                  u'implement ``noitems``.')
+    
+    @property
+    def items(self):
+        raise NotImplementedError(u'Abstract FinderDropdown does not ',
+                                  u'implement ``items``.')
+
+class AddItemsMenu(FinderDropdown):
+    
+   
+    @property
+    def noitems(self):
         return u'Nothing to add'
     
     @property
     def items(self):
-        menu = getUtility(IBrowserMenu, name=u'plone_contentmenu_factory')
         ret = list()
-        for item in menu.getMenuItems(self.current_context, self.request):
+        uid = self.uid
+        provider = get_provider(self.context, self.flavor, uid)
+        if provider is None:
+            return ret
+        menu = getUtility(IBrowserMenu, name=u'plone_contentmenu_factory')
+        for item in menu.getMenuItems(provider.get(uid), self.request):
             icon = item['icon']
             if icon:
                 icon = 'background:url(\'' + icon + '\') no-repeat;'
@@ -38,13 +58,7 @@ class AddItemsMenu(AjaxContext):
             })
         return ret
 
-class TransitionsMenu(AjaxContext):
-    
-    __call__ = ViewPageTemplateFile(u'templates/dropdown.pt')
-    
-    @property
-    def show(self):
-        return not anon()
+class TransitionsMenu(FinderDropdown):
     
     @property
     def noitems(self):
@@ -52,9 +66,13 @@ class TransitionsMenu(AjaxContext):
     
     @property
     def items(self):
-        pactions = self.context.portal_actions
-        actions = pactions.listFilteredActionsFor(self.current_context)
         ret = list()
+        uid = self.uid
+        provider = get_provider(self.context, self.flavor, uid)
+        if provider is None:
+            return ret
+        pactions = self.context.portal_actions
+        actions = pactions.listFilteredActionsFor(provider.get(uid))
         for transition in actions['workflow']:
             ret.append({
                 'title': transition['title'],
