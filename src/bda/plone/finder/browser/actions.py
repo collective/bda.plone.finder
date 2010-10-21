@@ -23,21 +23,22 @@ from bda.plone.finder.interfaces import IAction
 from bda.plone.finder.browser.utils import (
     anon,
     has_permission,
+    get_provider,
     ControlPanelItems,
+    ExecutionInfo,
 )
 
-ROOT_UID = 'plone_root'
+ROOT_UID = 'root'
 CONTENT_UID = 'plone_content'
 CP_UID = 'plone_control_panel'
 ADDONS_UID = 'plone_addons'
 
-class Actions(BrowserView):
+class Actions(BrowserView, ExecutionInfo):
     
     def actionInfo(self):
         if anon():
             raise Unauthorized, u'Not authenticated'
-        uid = self.request.get(u'uid', u'')
-        context = self._execution_context(uid)
+        context = self._execution_context()
         data = dict()
         actions = list(getAdapters((context, self.request), IAction))
         for id, action in actions:
@@ -52,8 +53,8 @@ class Actions(BrowserView):
         if anon():
             raise Unauthorized, u'Not authenticated'
         name = self.request.get(u'name', u'')
-        uid = self.request.get(u'uid', u'')
-        context = self._execution_context(uid)
+        uid = self.uid
+        context = self._execution_context()
         if not context:
             msg = _(u'Object not found. Could not continue.')
             return json.dumps({
@@ -84,16 +85,11 @@ class Actions(BrowserView):
             'uid': ret_uid,
         })
     
-    def _execution_context(self, uid):
-        if uid in [CONTENT_UID, CP_UID, ADDONS_UID]:
-            return self.context.portal_url.getPortalObject()
-        cp_item = ControlPanelItems(self.context).item_by_id(uid)
-        if cp_item:
-            return self.context.portal_url.getPortalObject()
-        brains = self.context.portal_catalog(UID=uid)
-        if not brains:
+    def _execution_context(self):
+        provider = get_provider(self.context, self.flavor, self.uid)
+        if provider is None:
             return None
-        return brains[0].getObject()
+        return provider.get(self.uid)
 
 class Action(object):
     implements(IAction)

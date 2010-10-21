@@ -1,14 +1,11 @@
 from Products.Five import BrowserView
 from bda.plone.finder.browser.utils import get_provider
+from bda.plone.finder.browser.utils import ExecutionInfo
 
-class AjaxColumn(BrowserView):
+class AjaxColumn(BrowserView, ExecutionInfo):
     """Class to render a navigation or details column by uid via XML HTTP
     request.
     """
-    
-    @property
-    def flavor(self):
-        return self.request.get('flavor', 'default')
     
     def expandColumn(self):
         self.request['_skip_selection_check'] = True # XXX: ?? get rid of

@@ -18,10 +18,7 @@ from bda.plone.finder.interfaces import (
     IPloneConfigItem,
     IFinderRoot,
 )
-from bda.plone.finder.browser.utils import (
-    has_permission, # XXX ??
-    ControlPanelItems,
-)
+from bda.plone.finder.browser.utils import ControlPanelItems
 
 class ColumnProvider(object):
     """Abstract column provider.
@@ -83,12 +80,13 @@ class RootProvider(ColumnProvider):
     def rendered_columns(self, uid):
         ret = list()
         if uid == 'root':
-            ret.append(self.render(uid, 'finder_column'))
+            ret.append(self.render('root', 'finder_column'))
+            ret.append(self.render('plone_content', 'finder_column'))
             return ret
         for name, iface in self.PROVIDED:
             if uid == name:
-                ret.append(self.render(uid, 'finder_column'))
                 ret.append(self.render('root', 'finder_column'))
+                ret.append(self.render(uid, 'finder_column'))
                 break
         return ret
 
@@ -163,7 +161,7 @@ class CatalogProvider(ColumnProvider):
     
     def rendered_columns(self, uid):
         ret = list()
-        context = self.get(uid)
+        context = aq_inner(self.get(uid))
         while context is not None and not IFinderRoot.providedBy(context):
             toadapt = (context, context.REQUEST) # XXX REQUEST
             state = getMultiAdapter(toadapt, name=u'plone_context_state')
@@ -171,10 +169,11 @@ class CatalogProvider(ColumnProvider):
                 context = aq_parent(context)
             ret.append(self._render(context))
             child = context
-            context = aq_parent(aq_inner(context))
+            context = aq_parent(context)
             if IFinderRoot.providedBy(context) \
               and IBaseContent.providedBy(child):
-                root = RootProvider(self.context)
+                root = RootProvider(context)
                 ret.append(root.render('plone_content', 'finder_column'))
+                ret.append(root.render('root', 'finder_column'))
         ret.reverse()
         return ret

@@ -57,6 +57,10 @@ class ExecutionInfo(object):
     @property
     def uid(self):
         return self.request.get('uid')
+    
+    @property
+    def pobj(self):
+        return self.context.portal_url.getPortalObject()
 
 class ControlPanelItems(object):
     
