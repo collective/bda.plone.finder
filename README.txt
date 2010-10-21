@@ -30,17 +30,37 @@ link.
 AJAX Views Used by finder JS
 ============================
 
-``bda.plone.finder`` browser view is requested via XML HTTP request and the
-returned markup gets displayed inside the overlay.
+``bda.plone.finder`` browser view is requested for initial finder rendering via
+XML HTTP request and the returned markup gets displayed inside the overlay.
 
 For expanding columns respective rendering details columns the views
 ``bda.plone.finder.expand`` and ``bda.plone.finder.details`` are requested.
 
-The actions configuration for focudes context is requested via
-``bda.plone.finder.actioninfo`` browser view by JSON request.
+The actions configuration for focused context is requested by
+``bda.plone.finder.actioninfo`` browser view as JSON request.
 
 Execution of ajax actions is done by requesting ``bda.plone.finder.execute``,
-again via JSON
+again as JSON request.
+
+
+Application behavior
+====================
+
+When requesting a page by URL, on server side the base URL for requesting
+further AJAX calls is rendered by viewlet ``bda.plone.finder.viewlet``.
+
+If user is authenticated, she gets displayed the finder triggering link in
+object actions.
+
+When finder gets triggered, ``bda.plone.finder`` browser view gets requested
+on recent context.
+
+The actions registered for current finder flavor are rendered. At this state
+all actions are disabled.
+
+Rendering columns is done by ``IColumnProvider`` implementation, which knows
+about the recent rendering context, how to render this context and the initial
+columns to be displayed.
 
 
 Providing Custom Actions
