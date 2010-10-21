@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import simplejson as json
 from zope.interface import implements
-from zope.component import getUtility
-from zope.component import getMultiAdapter
-from zope.component import getAdapters
+from zope.component import (
+    getUtility,
+    getMultiAdapter,
+    getAdapters,
+)
 from zope.component.interfaces import ComponentLookupError
 from zope.app.publisher.interfaces.browser import IBrowserMenu
 from ZODB.POSException import ConflictError
@@ -19,7 +21,10 @@ from Products.CMFPlone.utils import (
     transaction_note,
     safe_unicode,
 )
-from bda.plone.finder.interfaces import IAction
+from bda.plone.finder.interfaces import (
+    IUidProvider,
+    IAction,
+)
 from bda.plone.finder.browser.utils import (
     anon,
     has_permission,

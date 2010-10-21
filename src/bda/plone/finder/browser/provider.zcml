@@ -1,7 +1,15 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:browser="http://namespaces.zope.org/browser">
 
-    <adapter
+    <!-- default uid provider -->
+	<utility
+	    name="default"
+		provides="bda.plone.finder.interfaces.IUidProvider"
+		factory=".provider.DefaultUidProvider"
+	/>
+    
+	<!-- column providers -->
+	<adapter
 	    for="*"
 		name="root_provider"
 		factory=".provider.RootProvider"

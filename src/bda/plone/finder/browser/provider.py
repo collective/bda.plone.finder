@@ -10,6 +10,7 @@ from zope.interface import (
 from zope.component import getMultiAdapter
 from Products.Archetypes.interfaces import IBaseContent
 from bda.plone.finder.interfaces import (
+    IUidProvider,
     IColumnProvider,
     IPloneRoot,
     IPloneContent,
@@ -19,6 +20,19 @@ from bda.plone.finder.interfaces import (
     IFinderRoot,
 )
 from bda.plone.finder.browser.utils import ControlPanelItems
+
+class DefaultUidProvider(object):
+    implements(IUidProvider)
+    
+    def uid(self, context, request):
+        context = aq_inner(context)
+        toadapt = (context, request)
+        #state = getMultiAdapter(toadapt, name=u'plone_context_state')
+        #if state.is_default_page():
+        #    context = aq_parent(context)
+        if hasattr(context, 'UID'):
+            return context.UID()
+        return 'root'
 
 class ColumnProvider(object):
     """Abstract column provider.
@@ -163,10 +177,6 @@ class CatalogProvider(ColumnProvider):
         ret = list()
         context = aq_inner(self.get(uid))
         while context is not None and not IFinderRoot.providedBy(context):
-            toadapt = (context, context.REQUEST) # XXX REQUEST
-            state = getMultiAdapter(toadapt, name=u'plone_context_state')
-            if state.is_default_page():
-                context = aq_parent(context)
             ret.append(self._render(context))
             child = context
             context = aq_parent(context)

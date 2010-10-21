@@ -4,8 +4,11 @@ from zope.interface import (
     directlyProvides,
     noLongerProvides,
 )
-from zope.component import getAdapters
-from zope.component import getMultiAdapter
+from zope.component import (
+    getAdapters,
+    getMultiAdapter,
+    getUtility,
+)
 from Acquisition import (
     aq_inner,
     aq_parent,
@@ -16,6 +19,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.layout.viewlets.common import ViewletBase
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from bda.plone.finder.interfaces import (
+    IUidProvider,
     IPloneContent,
     IFinder,
     IAction,
@@ -46,18 +50,6 @@ class Finder(BrowserView, ExecutionInfo):
     @property
     def show(self):
         return not anon()
-    
-    @property
-    def uid(self):
-        context = aq_inner(self.context)
-        toadapt = (context, self.request)
-        state = getMultiAdapter(toadapt, name=u'plone_context_state')
-        if state.is_default_page():
-            context = aq_parent(context)
-        
-        if hasattr(context, 'UID'):
-            return self.context.UID()
-        return 'root'
     
     @property
     def actions(self):

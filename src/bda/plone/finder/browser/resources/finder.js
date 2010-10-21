@@ -169,6 +169,9 @@
                 finder.scroll_column_to(column, 'li.selected');
                 idx++;
             });
+			finder.current_focused = finder.columns[lastidx];
+            finder.current_item = finder.columns[lastidx];
+			
             finder.actions.load(finder.columns[lastidx],
                                 finder.columns[lastidx - 1]);
             finder.bind_column_filter();

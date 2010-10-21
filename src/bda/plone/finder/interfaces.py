@@ -14,6 +14,16 @@ class IFinderLayer(Interface):
 # Finder column provider interface
 ###############################################################################
 
+class IUidProvider(Interface):
+    """Interface providing uid for initial finder rendering.
+    
+    An implementation is registered as utility by flavor name.
+    """
+    
+    def uid(context, request):
+        """Return initial finder uid.
+        """
+
 class IColumnProvider(Interface):
     """Interface for providing and rendering finder columns.
     """
@@ -25,15 +35,15 @@ class IColumnProvider(Interface):
         """
     
     def get(uid):
-        """Return current context for column rendering.
+        """Return context by uid.
         """
     
     def render(uid, view):
-        """
+        """Render column with context by uid with view.
         """
     
     def rendered_columns(uid):
-        """
+        """Render initial finder columns as desired starting by object with uid.
         """
 
 ###############################################################################

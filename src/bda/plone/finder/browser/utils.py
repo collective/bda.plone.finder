@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 from AccessControl import getSecurityManager
-from zope.component import getAdapters
-from bda.plone.finder.interfaces import IColumnProvider
+from zope.component import (
+    getAdapters,
+    getUtility,
+)
+from bda.plone.finder.interfaces import (
+    IUidProvider,
+    IColumnProvider,
+)
 
 def anon():
     user = getSecurityManager().getUser()
@@ -56,7 +62,10 @@ class ExecutionInfo(object):
     
     @property
     def uid(self):
-        return self.request.get('uid')
+        if self.request.get('uid'):
+            return self.request['uid']
+        uid_provider = getUtility(IUidProvider, name=self.flavor)
+        return uid_provider.uid(self.context, self.request)
     
     @property
     def pobj(self):
