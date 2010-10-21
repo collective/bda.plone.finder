@@ -181,7 +181,10 @@ Changes
 1.0b7
 -----
 
-  * Use id in column item if title not set.
+  * Check for ``INonStructuralFolder`` in ``AddItemAction.enabled`` if context
+    is folderish.
+  
+  * Use id in column item if title not set in ``FolderColumn``.
 
   * Add content icons to default portal types to make IContentIcon work with
     catalog brains.

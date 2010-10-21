@@ -2,12 +2,10 @@
 import simplejson as json
 from zope.interface import implements
 from zope.component import (
-    getUtility,
     getMultiAdapter,
     getAdapters,
 )
 from zope.component.interfaces import ComponentLookupError
-from zope.app.publisher.interfaces.browser import IBrowserMenu
 from ZODB.POSException import ConflictError
 from OFS.CopySupport import CopyError
 from AccessControl import Unauthorized
@@ -16,11 +14,12 @@ from Acquisition import (
     aq_parent,
 )
 from Products.Five import BrowserView
-from Products.CMFPlone import PloneMessageFactory as _
+from Products.CMFPlone.interfaces import INonStructuralFolder
 from Products.CMFPlone.utils import (
     transaction_note,
     safe_unicode,
 )
+from Products.CMFPlone import PloneMessageFactory as _
 from bda.plone.finder.interfaces import IAction
 from bda.plone.finder.browser.utils import (
     anon,
@@ -230,11 +229,8 @@ class AddItemAction(Action):
             obj = self._pobj
         else:
             obj = self._query_object(uid)
-        # if plone content or object from catalog and folderish, enable 
-        # item adding
         if obj is not None and obj.isPrincipiaFolderish:
-            menu = getUtility(IBrowserMenu, name=u'plone_contentmenu_factory')
-            if menu.getMenuItems(obj, self.request):
+            if not INonStructuralFolder.providedBy(obj):
                 return True
         return False
 
