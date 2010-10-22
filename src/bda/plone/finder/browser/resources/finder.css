@@ -305,24 +305,36 @@
 }
 
 /* css for default content types background images in finder column */
+li.action_dropdown_item .contenttype-document,
 div.finder_column .contenttype-document {
-    background: no-repeat transparent 0px 0px url(contenttypes-sprite.png);
+    background: no-repeat transparent 0px 0px url(contenttypes-sprite.png) !important;
 }
+li.action_dropdown_item .contenttype-event,
 div.finder_column .contenttype-event {
-    background: no-repeat transparent 0px -216px url(contenttypes-sprite.png);
+    background: no-repeat transparent 0px -216px url(contenttypes-sprite.png) !important;
 }
+li.action_dropdown_item .contenttype-folder,
 div.finder_column .contenttype-folder {
-    background: no-repeat transparent 0px -648px url(contenttypes-sprite.png);
+    background: no-repeat transparent 0px -648px url(contenttypes-sprite.png) !important;
 }
+li.action_dropdown_item .contenttype-link,
 div.finder_column .contenttype-link {
-    background: no-repeat transparent 0px -1080px url(contenttypes-sprite.png);
+    background: no-repeat transparent 0px -1080px url(contenttypes-sprite.png) !important;
 }
+li.action_dropdown_item .contenttype-news-item,
 div.finder_column .contenttype-news-item {
-    background: no-repeat transparent 0px -1296px url(contenttypes-sprite.png);
+    background: no-repeat transparent 0px -1296px url(contenttypes-sprite.png) !important;
 }
+li.action_dropdown_item .contenttype-topic,
 div.finder_column .contenttype-topic {
-    background: no-repeat transparent 0px -1728px url(contenttypes-sprite.png);
+    background: no-repeat transparent 0px -1728px url(contenttypes-sprite.png) !important;
 }
+li.action_dropdown_item .contenttype-document,
+li.action_dropdown_item .contenttype-event,
+li.action_dropdown_item .contenttype-folder,
+li.action_dropdown_item .contenttype-link,
+li.action_dropdown_item .contenttype-news-item,
+li.action_dropdown_item .contenttype-topic,
 div.finder_column .contenttype-document,
 div.finder_column .contenttype-event,
 div.finder_column .contenttype-folder,

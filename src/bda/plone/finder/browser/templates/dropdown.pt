@@ -5,8 +5,13 @@
       <a href=""
          style=""
          class="action_dropdown_link"
+         tal:define="css python: 'action_dropdown_link';
+                     css python: item['css'] \
+                                 and '%s %s' % (css, item['css']) \
+                                 or css;"
          tal:attributes="href item/url;
-                         style item/style"
+                         style item/style|nothing;
+                         class css;"
          tal:content="item/title">
         Title
       </a>

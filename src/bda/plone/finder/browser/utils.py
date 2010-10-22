@@ -25,6 +25,21 @@ def col_id(id):
 def item_id(id):
     return 'finder_nav_item_%s' % id
 
+PLONE_DEFAULT_TYPES = [
+    'Document',
+    'Event',
+    'Folder',
+    'Link',
+    'News Item',
+    'Topic',
+]
+
+def default_type_css(portal_type):
+    if portal_type in PLONE_DEFAULT_TYPES:
+        type = portal_type.lower().replace(' ', '-')
+        return 'contenttype-%s' % type
+    return None
+
 def nav_item(uid,
              icon,
              title,
