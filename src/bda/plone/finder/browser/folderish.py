@@ -16,6 +16,17 @@ from bda.plone.finder.browser.utils import (
     ControlPanelItems,
 )
 
+PLONE_DEFAULT_TYPES = [
+    'Document',
+    'Event',
+#    'File',
+    'Folder',
+#    'Image',
+    'Link',
+    'News Item',
+    'Topic',
+]
+
 class FolderColumn(BrowserView):
     
     implements(IFolderishColumn)
@@ -45,13 +56,18 @@ class FolderColumn(BrowserView):
             icon = layout.getIcon(brain)
             uid = brain.UID
             cut = self.request.cookies.get('__fct') == uid
+            contenttype = None
+            if brain.portal_type in PLONE_DEFAULT_TYPES:
+                type = brain.portal_type.lower().replace(' ', '-')
+                contenttype = 'contenttype-%s' % type
             ret.append(nav_item(item_id(uid),
                                 icon.url,
                                 brain.Title and brain.Title or brain.id,
                                 brain.is_folderish, 
                                 self._item_selected(brain.getURL()),
                                 brain.review_state,
-                                cut))
+                                cut,
+                                contenttype))
         self._items = ret
         return ret
     

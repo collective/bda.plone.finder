@@ -49,6 +49,7 @@
 }
 .finder_container div.finder_dialog .text {
     min-height:60px;
+	font-size:16px;
 }
 .finder_container div.finder_dialog button {
     border:#000 1px solid;
@@ -209,6 +210,7 @@
     overflow:hidden;
 	height:368px;
 	width:920px;
+	font-size:16px;
 }
 .finder_columns div.items { 
     width:20000em; 
@@ -300,4 +302,33 @@
 	background-color:#fff;
     -moz-border-radius:3px;
     -webkit-border-radius:3px;
+}
+
+/* css for default content types background images in finder column */
+div.finder_column .contenttype-document {
+    background: no-repeat transparent 0px 0px url(contenttypes-sprite.png);
+}
+div.finder_column .contenttype-event {
+    background: no-repeat transparent 0px -216px url(contenttypes-sprite.png);
+}
+div.finder_column .contenttype-folder {
+    background: no-repeat transparent 0px -648px url(contenttypes-sprite.png);
+}
+div.finder_column .contenttype-link {
+    background: no-repeat transparent 0px -1080px url(contenttypes-sprite.png);
+}
+div.finder_column .contenttype-news-item {
+    background: no-repeat transparent 0px -1296px url(contenttypes-sprite.png);
+}
+div.finder_column .contenttype-topic {
+    background: no-repeat transparent 0px -1728px url(contenttypes-sprite.png);
+}
+div.finder_column .contenttype-document,
+div.finder_column .contenttype-event,
+div.finder_column .contenttype-folder,
+div.finder_column .contenttype-link,
+div.finder_column .contenttype-news-item,
+div.finder_column .contenttype-topic {
+	padding-left:16px !important;
+	line-height:1em;
 }

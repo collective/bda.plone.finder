@@ -225,13 +225,12 @@ Changes
 1.0b7
 -----
 
+  * Provide CSS for default plone content types.
+
   * Check for ``INonStructuralFolder`` in ``AddItemAction.enabled`` if context
     is folderish.
   
   * Use id in column item if title not set in ``FolderColumn``.
-
-  * Add content icons to default portal types to make IContentIcon work with
-    catalog brains.
 
 1.0b6
 -----

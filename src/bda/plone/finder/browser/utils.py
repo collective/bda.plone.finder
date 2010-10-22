@@ -31,7 +31,8 @@ def nav_item(uid,
              folderish=False,
              selected=False,
              state=None,
-             cut=False):
+             cut=False,
+             contenttype=None):
     if len(title) > 29:
         title = title.decode('utf-8')
         title = '%s...%s' % (title[:12], title[-12:])
@@ -43,6 +44,7 @@ def nav_item(uid,
         'selected': selected,
         'state': state,
         'cut': cut,
+        'contenttype': contenttype,
     }
 
 def get_provider(context, flavor, uid):
