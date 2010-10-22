@@ -21,9 +21,22 @@ class FinderViewlet(ViewletBase, ExecutionInfo):
     def update(self):
         self.show = not anon()
     
+    # XXX: improve this
+    VIEW_BLACKLIST = [
+        '/folder_contents',
+        '/view',
+        '/@@sharing',
+        '/@@manage-content-rules',
+    ]
+    
     @property
     def base_url(self):
-        return self.request['ACTUAL_URL']
+        # XXX: improve this
+        url = self.request['ACTUAL_URL']
+        for view in self.VIEW_BLACKLIST:
+            if url.find(view) != -1:
+                return url[:url.find(view)]
+        return url
 
 class Finder(BrowserView, ExecutionInfo):
     
