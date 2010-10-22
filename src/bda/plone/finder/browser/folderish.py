@@ -19,9 +19,7 @@ from bda.plone.finder.browser.utils import (
 PLONE_DEFAULT_TYPES = [
     'Document',
     'Event',
-#    'File',
     'Folder',
-#    'Image',
     'Link',
     'News Item',
     'Topic',

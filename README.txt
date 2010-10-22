@@ -225,7 +225,7 @@ Changes
 1.0b7
 -----
 
-  * Provide CSS for default plone content types.
+  * Provide CSS for default plone content types icons.
 
   * Check for ``INonStructuralFolder`` in ``AddItemAction.enabled`` if context
     is folderish.
