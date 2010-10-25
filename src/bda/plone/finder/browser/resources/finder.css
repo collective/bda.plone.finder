@@ -303,7 +303,6 @@
     -moz-border-radius:3px;
     -webkit-border-radius:3px;
 }
-
 /* css for default content types background images in finder column */
 li.action_dropdown_item .contenttype-document,
 div.finder_column .contenttype-document {
@@ -328,6 +327,13 @@ div.finder_column .contenttype-news-item {
 li.action_dropdown_item .contenttype-topic,
 div.finder_column .contenttype-topic {
     background: no-repeat transparent 0px -1728px url(contenttypes-sprite.png) !important;
+}
+/* extra in add menu */
+li.action_dropdown_item .contenttype-file {
+    background: no-repeat transparent 0px -432px url(contenttypes-sprite.png) !important;
+}
+li.action_dropdown_item .contenttype-image {
+    background: no-repeat transparent 0px -864px url(contenttypes-sprite.png) !important;
 }
 li.action_dropdown_item .contenttype-document,
 li.action_dropdown_item .contenttype-event,

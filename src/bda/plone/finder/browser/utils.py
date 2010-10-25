@@ -32,6 +32,8 @@ PLONE_DEFAULT_TYPES = [
     'Link',
     'News Item',
     'Topic',
+    'Image',
+    'File',
 ]
 
 def default_type_css(portal_type):
