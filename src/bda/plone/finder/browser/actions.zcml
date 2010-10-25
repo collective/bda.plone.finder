@@ -1,4 +1,5 @@
 <configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:zcml="http://namespaces.zope.org/zcml"
            xmlns:browser="http://namespaces.zope.org/browser">
 
     <!-- ajax view for querying action info for context -->
@@ -58,7 +59,16 @@
     />
     
     <adapter
+	    zcml:condition="installed Products.Archetypes"
         for="Products.Archetypes.interfaces.IBaseObject
+             zope.publisher.interfaces.http.IHTTPRequest"
+        name="action_cut"
+        factory=".actions.OFSCutAction"
+    />
+	
+	<adapter
+	    zcml:condition="installed plone.dexterity"
+        for="plone.dexterity.interfaces.IDexterityContent
              zope.publisher.interfaces.http.IHTTPRequest"
         name="action_cut"
         factory=".actions.OFSCutAction"
@@ -72,7 +82,16 @@
     />
     
     <adapter
+	    zcml:condition="installed Products.Archetypes"
         for="Products.Archetypes.interfaces.IBaseObject
+             zope.publisher.interfaces.http.IHTTPRequest"
+        name="action_copy"
+        factory=".actions.OFSCopyAction"
+    />
+	
+	<adapter
+        zcml:condition="installed plone.dexterity"
+        for="plone.dexterity.interfaces.IDexterityContent
              zope.publisher.interfaces.http.IHTTPRequest"
         name="action_copy"
         factory=".actions.OFSCopyAction"
@@ -84,19 +103,28 @@
         name="action_paste"
         factory=".actions.PasteAction"
     />
+	
+	<adapter
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot
+             zope.publisher.interfaces.http.IHTTPRequest"
+        name="action_paste"
+        factory=".actions.PloneRootPasteAction"
+    />
     
     <adapter
+	    zcml:condition="installed Products.Archetypes"
         for="Products.Archetypes.interfaces.IBaseObject
              zope.publisher.interfaces.http.IHTTPRequest"
         name="action_paste"
         factory=".actions.OFSPasteAction"
     />
-    
-    <adapter
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot
+	
+	<adapter
+        zcml:condition="installed plone.dexterity"
+        for="plone.dexterity.interfaces.IDexterityContent
              zope.publisher.interfaces.http.IHTTPRequest"
         name="action_paste"
-        factory=".actions.PloneRootPasteAction"
+        factory=".actions.OFSPasteAction"
     />
     
     <!-- action delete object -->
@@ -107,7 +135,16 @@
     />
     
     <adapter
+	    zcml:condition="installed Products.Archetypes"
         for="Products.Archetypes.interfaces.IBaseObject
+             zope.publisher.interfaces.http.IHTTPRequest"
+        name="action_delete"
+        factory=".actions.OFSDeleteAction"
+    />
+	
+	<adapter
+        zcml:condition="installed plone.dexterity"
+        for="plone.dexterity.interfaces.IDexterityContent
              zope.publisher.interfaces.http.IHTTPRequest"
         name="action_delete"
         factory=".actions.OFSDeleteAction"

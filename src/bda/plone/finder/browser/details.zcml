@@ -1,18 +1,11 @@
 <configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:zcml="http://namespaces.zope.org/zcml"
            xmlns:browser="http://namespaces.zope.org/browser">
 
     <browser:page
         for="*"
         name="finder_details"
         class=".details.Details"
-        layer="bda.plone.finder.interfaces.IFinderLayer"
-        permission="zope2.View"
-    />
-    
-    <browser:page
-        for="Products.Archetypes.interfaces.IBaseObject"
-        name="finder_details"
-        class=".details.ATDetails"
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="zope2.View"
     />
@@ -47,6 +40,24 @@
         class=".details.PloneConfigItem"
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="cmf.ManagePortal"
+    />
+	
+	<browser:page
+        zcml:condition="installed Products.Archetypes"
+        for="Products.Archetypes.interfaces.IBaseObject"
+        name="finder_details"
+        class=".details.DefaultDetails"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="zope2.View"
+    />
+    
+    <browser:page
+        zcml:condition="installed plone.dexterity"
+        for="plone.dexterity.interfaces.IDexterityItem"
+        name="finder_details"
+        class=".details.DefaultDetails"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="zope2.View"
     />
 
 </configure>

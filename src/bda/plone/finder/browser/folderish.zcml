@@ -1,4 +1,5 @@
 <configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:zcml="http://namespaces.zope.org/zcml"
            xmlns:browser="http://namespaces.zope.org/browser">
 
     <browser:page
@@ -34,7 +35,17 @@
     />
     
     <browser:page
+	    zcml:condition="installed Products.Archetypes"
         for="Products.Archetypes.interfaces.IBaseFolder"
+        name="finder_column"
+        class=".folderish.FolderColumn"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="zope2.View"
+    />
+	
+	<browser:page
+        zcml:condition="installed plone.dexterity"
+        for="plone.dexterity.interfaces.IDexterityContainer"
         name="finder_column"
         class=".folderish.FolderColumn"
         layer="bda.plone.finder.interfaces.IFinderLayer"

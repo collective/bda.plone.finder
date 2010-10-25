@@ -65,9 +65,9 @@ class Details(BrowserView):
                                         self.context,
                                         domain='plonelocales')
 
-class ATDetails(Details):
+class DefaultDetails(Details):
     
-    details = ViewPageTemplateFile('templates/at_details.pt')
+    details = ViewPageTemplateFile('templates/default_details.pt')
     
     @property
     def uid(self):

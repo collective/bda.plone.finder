@@ -19,6 +19,15 @@ Installation
   * Apply corresponding GS profile
 
 
+Restrictions
+============
+
+Currently only Archetypes based content can be browsed. Dexterity is not
+supported yet due to missing UID indexing in portal_catalog. This will be
+changed in future when ``plone.uuid`` is available and an indexable attribute
+can hook missing information.
+
+
 Usage
 =====
 
@@ -225,6 +234,9 @@ Changes
 1.0b7
 -----
 
+  * Basically bind dexterity compatible views. Dexterity support not finished
+    yet due to missing UID indexing support.
+  
   * Provide CSS for default plone content types icons.
 
   * Check for ``INonStructuralFolder`` in ``AddItemAction.enabled`` if context
