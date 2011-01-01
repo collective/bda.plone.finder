@@ -41,9 +41,12 @@ class FolderColumn(BrowserView):
                 'depth': 1,
             },
         })
-        layout = getMultiAdapter((context, self.request), name=u'plone_layout')
+        # plone_layout not available in plone3
+        #layout = getMultiAdapter((context, self.request), name=u'plone_layout')
         for brain in brains:
-            icon = layout.getIcon(brain)
+            icon = getMultiAdapter((self.context, self.request, brain),
+                                   IContentIcon)
+            #icon = layout.getIcon(brain)
             uid = brain.UID
             cut = self.request.cookies.get('__fct') == uid
             ret.append(nav_item(item_id(uid),

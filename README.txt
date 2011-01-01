@@ -202,6 +202,8 @@ Compatibility
 Plone Versions
 --------------
 
+  * Plone 3
+
   * Plone 4
   
 Browser
@@ -220,16 +222,23 @@ Browser
   * IE8
 
 
-Credits
-=======
+Contributors
+============
 
   * Robert Niederreiter <dev@bluedynamics.com>
+  
+  * Sven Plage
   
   * Thanks to the Sprinters at Cathedral Sprint 2010 for ideas and feedback
 
 
 Changes
 =======
+
+1.0b8
+-----
+
+  * Plone 3 Compatibility.
 
 1.0b7
 -----
