@@ -29,11 +29,20 @@
         directory="images"
     />
     
-    <!-- base path viewlet -->
+    <!-- finder trigger viewlet -->
     <browser:viewlet
-        name="bda.plone.finder.viewlet"
+        name="bda.plone.finder.trigger"
+        manager="plone.app.layout.viewlets.interfaces.IPortalTop"
+        class=".finder.TriggerViewlet"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="zope2.View"
+    />
+	
+	<!-- base path viewlet -->
+    <browser:viewlet
+        name="bda.plone.finder.path"
         manager="plone.app.layout.viewlets.interfaces.IPortalFooter"
-        class=".finder.FinderViewlet"
+        class=".finder.PathViewlet"
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="zope2.View"
     />

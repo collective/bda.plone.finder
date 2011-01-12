@@ -1,3 +1,14 @@
+.findertrigger {
+	position:absolute;
+	top:20px;
+	right:26px;
+	z-index:1000;
+}
+.findertrigger a {
+	color:#aaa;
+	text-decoration:none;
+	font-weight:bold;
+}
 #finder_base_url {
 	display:none;
 }

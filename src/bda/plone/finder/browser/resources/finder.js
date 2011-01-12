@@ -13,7 +13,7 @@
         $(elem).insertBefore($('#visual-portal-wrapper'));
         
         // bind finder trigger
-        var selector = '#contentview-bda_plone_finder';
+        var selector = '.findertrigger a';
         var link = $(selector);
         link.attr('rel', '#bda_finder_overlay');
         link.bind('click', function(event) {

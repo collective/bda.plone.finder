@@ -1,0 +1,4 @@
+<div class="findertrigger"
+     tal:condition="view/show">
+  <a href="">finder</a>
+</div>

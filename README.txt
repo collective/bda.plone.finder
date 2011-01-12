@@ -22,16 +22,17 @@ Installation
 Restrictions
 ============
 
-Currently only Archetypes based content can be browsed. Dexterity is not
-supported yet due to missing UID indexing in portal_catalog. This will be
-changed in future when ``plone.uuid`` is available and an indexable attribute
-can hook missing information.
+If you want to browse Dexterity contents, consider to provide a UID by your
+dexterity types in order to make them work with finder.
 
 
 Usage
 =====
 
-After installation you have a link named 'Finder' in the document actions.
+After installation you have a link named 'Finder' at the top right of your
+plone site. This link is provided by a viewlet and is positioned absolute. Use
+CSS of your theme to put it wherever you like.
+
 The finder gets displayed with focus on triggering context by clicking this
 link.
 
@@ -237,6 +238,8 @@ Changes
 
 1.0b8
 -----
+
+  * Remove trigger link from object actions and provide it by viewlet instead.
 
   * Plone 3 Compatibility.
 

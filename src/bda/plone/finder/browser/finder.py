@@ -14,9 +14,17 @@ from bda.plone.finder.browser.utils import (
     ExecutionInfo,
 )
 
-class FinderViewlet(ViewletBase, ExecutionInfo):
+class TriggerViewlet(ViewletBase):
     
-    render = ViewPageTemplateFile('templates/viewlet.pt')
+    render = ViewPageTemplateFile('templates/trigger.pt')
+    
+    @property
+    def show(self):
+        return not anon()
+
+class PathViewlet(ViewletBase, ExecutionInfo):
+    
+    render = ViewPageTemplateFile('templates/basepath.pt')
     
     def update(self):
         self.show = not anon()
