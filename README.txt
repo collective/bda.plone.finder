@@ -239,6 +239,9 @@ Changes
 1.0b8
 -----
 
+  * Add seperate conditional css for plone4, needed for displaying default
+    content type icons correctly.
+  
   * Remove trigger link from object actions and provide it by viewlet instead.
 
   * Plone 3 Compatibility.

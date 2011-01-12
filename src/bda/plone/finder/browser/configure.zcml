@@ -23,6 +23,11 @@
         name="bda.finder.css"
         file="resources/finder.css"
     />
+	
+	<browser:resource
+        name="bda.finder.p4.css"
+        file="resources/p4.css"
+    />
     
     <browser:resourceDirectory
         name="bda.plone.finder.images"
