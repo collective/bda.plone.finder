@@ -239,6 +239,8 @@ Changes
 1.0
 ---
 
+  * Shorten title in listing to avoid line break
+  
   * Do not display items without UID.
   
   * Add separate conditional CSS for Plone 3 + 4.

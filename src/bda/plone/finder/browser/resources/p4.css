@@ -1,7 +1,7 @@
 .findertrigger {
     position:absolute;
-    top:20px;
-    right:26px;
+    top:2px;
+    right:80px;
     z-index:1000;
 }
 .findertrigger a {
@@ -9,7 +9,6 @@
     text-decoration:none;
     font-weight:bold;
 }
-
 /* css for default content types background images in finder column */
 li.action_dropdown_item .contenttype-document,
 div.finder_column .contenttype-document {

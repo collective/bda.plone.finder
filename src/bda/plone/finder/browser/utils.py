@@ -50,9 +50,8 @@ def nav_item(uid,
              state=None,
              cut=False,
              contenttype=None):
-    if len(title) > 29:
-        title = title.decode('utf-8')
-        title = '%s...%s' % (title[:12], title[-12:])
+    if len(title) > 23:
+        title = u'%s...%s' % (title[:10], title[-10:])
     return {
         'uid': uid,
         'icon': icon,
