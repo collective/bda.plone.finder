@@ -25,6 +25,11 @@
     />
 	
 	<browser:resource
+        name="bda.finder.p3.css"
+        file="resources/p3.css"
+    />
+	
+	<browser:resource
         name="bda.finder.p4.css"
         file="resources/p4.css"
     />

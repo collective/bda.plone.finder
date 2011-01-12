@@ -5,6 +5,10 @@
         expression="not:portal/portal_membership/isAnonymousUser"
     />
 	<stylesheet
+        id="++resource++bda.finder.p3.css"
+        expression="python:not portal.portal_membership.isAnonymousUser() and portal.portal_migration.getInstanceVersion().startswith('3')"
+    />
+	<stylesheet
         id="++resource++bda.finder.p4.css"
         expression="python:not portal.portal_membership.isAnonymousUser() and portal.portal_migration.getInstanceVersion().startswith('4')"
     />

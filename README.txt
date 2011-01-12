@@ -239,10 +239,9 @@ Changes
 1.0
 ---
 
-  * Do not display items without UID
+  * Do not display items without UID.
   
-  * Add seperate conditional css for plone4, needed for displaying default
-    content type icons correctly.
+  * Add separate conditional CSS for Plone 3 + 4.
   
   * Remove trigger link from object actions and provide it by viewlet instead.
 

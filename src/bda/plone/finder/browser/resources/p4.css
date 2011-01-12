@@ -1,3 +1,15 @@
+.findertrigger {
+    position:absolute;
+    top:20px;
+    right:26px;
+    z-index:1000;
+}
+.findertrigger a {
+    color:#aaa;
+    text-decoration:none;
+    font-weight:bold;
+}
+
 /* css for default content types background images in finder column */
 li.action_dropdown_item .contenttype-document,
 div.finder_column .contenttype-document {
