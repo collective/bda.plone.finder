@@ -9,3 +9,6 @@
     text-decoration:none;
     font-weight:bold;
 }
+div.finder_container a {
+    line-height:1em;
+}
