@@ -48,6 +48,9 @@ class FolderColumn(BrowserView):
                                    IContentIcon)
             #icon = layout.getIcon(brain)
             uid = brain.UID
+            if not uid:
+                # don't display items without UID
+                continue
             cut = self.request.cookies.get('__fct') == uid
             ret.append(nav_item(item_id(uid),
                                 icon.url,

@@ -236,9 +236,11 @@ Contributors
 Changes
 =======
 
-1.0b8
------
+1.0
+---
 
+  * Do not display items without UID
+  
   * Add seperate conditional css for plone4, needed for displaying default
     content type icons correctly.
   
