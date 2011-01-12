@@ -239,7 +239,9 @@ Changes
 1.0
 ---
 
-  * Shorten title in listing to avoid line break
+  * Fix base_url detection in viewlet. 
+  
+  * Shorten title in listing to avoid line break.
   
   * Do not display items without UID.
   

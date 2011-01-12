@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 from zope.interface import implements
 from zope.component import getAdapters
+from Acquisition import (
+    aq_inner,
+    aq_parent,
+)
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.layout.viewlets.common import ViewletBase
+from plone.app.layout.navigation.defaultpage import isDefaultPage
 from bda.plone.finder.interfaces import (
     IFinder,
     IAction,
@@ -29,22 +34,16 @@ class PathViewlet(ViewletBase, ExecutionInfo):
     def update(self):
         self.show = not anon()
     
-    # XXX: improve this
-    VIEW_BLACKLIST = [
-        '/folder_contents',
-        '/view',
-        '/@@sharing',
-        '/@@manage-content-rules',
-    ]
-    
     @property
     def base_url(self):
-        # XXX: improve this
-        url = self.request['ACTUAL_URL']
-        for view in self.VIEW_BLACKLIST:
-            if url.find(view) != -1:
-                return url[:url.find(view)]
-        return url
+        context = aq_inner(self.context)
+        parent = aq_parent(context)
+        request_url = self.request['ACTUAL_URL']
+        context_url = context.absolute_url()
+        if isDefaultPage(parent, context) \
+          and not request_url.startswith(context_url):
+            context = parent
+        return context.absolute_url()
 
 class Finder(BrowserView, ExecutionInfo):
     
