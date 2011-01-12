@@ -50,12 +50,16 @@ def nav_item(uid,
              state=None,
              cut=False,
              contenttype=None):
-    if len(title) > 23:
-        title = u'%s...%s' % (title[:10], title[-10:])
+    if not isinstance(title, unicode):
+        title = title.decode('utf-8')
+    tooltip = title
+    if len(title) > 19:
+        title = u'%s...%s' % (title[:8], title[-8:])
     return {
         'uid': uid,
         'icon': icon,
         'title': title,
+        'tooltip': tooltip,
         'is_folderish': folderish,
         'selected': selected,
         'state': state,

@@ -25,7 +25,8 @@
                                    and '%s %s' % (css, item['contenttype']) \
                                    or css;"
            tal:attributes="rel python: '#%s' % view.uid;
-                           class css">
+                           class css;
+                           title item/tooltip">
           Title
         </a>
         <a rel="#"
