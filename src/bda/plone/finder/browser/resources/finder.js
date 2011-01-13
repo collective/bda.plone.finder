@@ -394,7 +394,7 @@
                     $('a', dropdown).unbind();
                 });
                 $(document).unbind('mousedown')
-				           .bind('mousedown', function(event) {
+                           .bind('mousedown', function(event) {
                     if (!event) {
                         var event = window.event;
                     }
@@ -450,7 +450,7 @@
                         action.attr('href', url);
                         if (enabled) {
                             actions.enable(action);
-							action.unbind();
+                            action.unbind();
                             action.bind('click', function(event) {
                                 actions.execute(this);
                                 event.preventDefault();
@@ -498,40 +498,40 @@
             },
             
             // execute action
-			//
-			// action: the action link
-			// options: optional execution info, if given, action is ignored.
+            //
+            // action: the action link
+            // options: optional execution info, if given, action is ignored.
             execute: function(action, options) {
-				var name, ajax, href;
-				if (options) {
-					name = options.name;
-					ajax = options.ajax;
-					href = options.href;
-				} else {
-					action = $(action);
-					name = action.parent().attr('class');
-					ajax = action.hasClass('ajax');
-					href = action.attr('href');
-				}
+                var name, ajax, href;
+                if (options) {
+                    name = options.name;
+                    ajax = options.ajax;
+                    href = options.href;
+                } else {
+                    action = $(action);
+                    name = action.parent().attr('class');
+                    ajax = action.hasClass('ajax');
+                    href = action.attr('href');
+                }
                 finder.actions.name = name;
                 
                 // set action url. value depends if ajax action or not
                 var cb;
-				if (ajax) {
+                if (ajax) {
                     cb = finder.actions.perform_ajax;
                     finder.actions.url = 'bda.plone.finder.execute?uid=';
                     finder.actions.url += finder.actions.uid;
                     finder.actions.url += '&name=' + finder.actions.name;
-					
-					// consider optional parameters if execute is called 
-					// manually
-					if (options && options.params) {
-						var params = options.params;
-						for (param in params) {
-							finder.actions.url += 
-							    '&' + param + '=' + params[param];
-						}
-					}
+                    
+                    // consider optional parameters if execute is called 
+                    // manually
+                    if (options && options.params) {
+                        var params = options.params;
+                        for (param in params) {
+                            finder.actions.url += 
+                                '&' + param + '=' + params[param];
+                        }
+                    }
                 } else {
                     cb = finder.actions.follow_action_link;
                     finder.actions.url = action.attr('href');
@@ -639,16 +639,16 @@
                 var view = 'bda.plone.finder.transitionsmenu';
                 finder.dropdown.elem = dropdown;
                 finder.dropdown.show(view, uid, function(target) {
-					var url = $(target).attr('href');
-					var idx = url.indexOf('=') + 1;
-					var workflow_action = url.substring(idx, url.length);
-					var options = {
-						name: 'action_change_state',
+                    var url = $(target).attr('href');
+                    var idx = url.indexOf('=') + 1;
+                    var workflow_action = url.substring(idx, url.length);
+                    var options = {
+                        name: 'action_change_state',
                         ajax: true,
                         href: '',
-						params: { workflow_action: workflow_action }
-					};
-					finder.actions.execute(null, options);
+                        params: { workflow_action: workflow_action }
+                    };
+                    finder.actions.execute(null, options);
                 });
             }
         }
@@ -656,47 +656,47 @@
     
     // set finder hooks for specific actions
     $.extend(finder.hooks.actions, {
-		
-		// change state action
+        
+        // change state action
         action_change_state: {
-			
-			// no action before change state
-			before: null,
-			
-			// reload after change state action
-			after: function(uid, container, data) {
-				
-				// XXX: remove item and no column rendering if wf change caused
-				//      context to be inaccessable (postbox style)
-				
-				// query new wf state and alter css class
-				var url = 'bda.plone.finder.review_state?uid=' + uid;
-				finder.request_html(url, function(data) {
-					if (!data) {
-						return;
-					}
-					var parts = data.split(':');
-					var selector = '#finder_nav_item_' + parts[0];
-					var overlay = finder.overlay();
-					elem = $(selector, overlay);
-					var classes = elem.attr('class').split(' ');
-					$(classes).each(function() {
-						if (this.indexOf('state-') != -1) {
-							elem.removeClass(this);
-						}
-					});
-					elem.addClass('state-' + parts[1]);
-				});
-				
-				// render column if details available only
-				var overlay = finder.overlay();
-				var selector = '#finder_nav_item_' + uid + ' a';
-				var elem = $($(selector, overlay).get(0));
-				if (elem.hasClass('column_expand')) {
-					return;
-				} else {
-					url = 'bda.plone.finder.details?uid=' + uid;
-				}
+            
+            // no action before change state
+            before: null,
+            
+            // reload after change state action
+            after: function(uid, container, data) {
+                
+                // XXX: remove item and no column rendering if wf change caused
+                //      context to be inaccessable (postbox style)
+                
+                // query new wf state and alter css class
+                var url = 'bda.plone.finder.review_state?uid=' + uid;
+                finder.request_html(url, function(data) {
+                    if (!data) {
+                        return;
+                    }
+                    var parts = data.split(':');
+                    var selector = '#finder_nav_item_' + parts[0];
+                    var overlay = finder.overlay();
+                    elem = $(selector, overlay);
+                    var classes = elem.attr('class').split(' ');
+                    $(classes).each(function() {
+                        if (this.indexOf('state-') != -1) {
+                            elem.removeClass(this);
+                        }
+                    });
+                    elem.addClass('state-' + parts[1]);
+                });
+                
+                // render column if details available only
+                var overlay = finder.overlay();
+                var selector = '#finder_nav_item_' + uid + ' a';
+                var elem = $($(selector, overlay).get(0));
+                if (elem.hasClass('column_expand')) {
+                    return;
+                } else {
+                    url = 'bda.plone.finder.details?uid=' + uid;
+                }
                 finder.request_html(url, function(data) {
                     for (var i = 0; i < finder.columns.length; i++) {
                         if (finder.columns[i] == container) {
@@ -705,8 +705,8 @@
                         }
                     }
                 });
-	        }
-		},
+            }
+        },
         
         // cut action
         action_cut: {
@@ -729,9 +729,9 @@
             
             // reload column after delete action
             after: function(uid, container, data) {
-				// XXX: check if base URL is of deleted object
-				finder.utils.reload_column_hook(uid, container, data);
-			}
+                // XXX: check if base URL is of deleted object
+                finder.utils.reload_column_hook(uid, container, data);
+            }
         },
         
         // paste action
