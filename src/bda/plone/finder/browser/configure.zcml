@@ -86,11 +86,11 @@
         permission="zope2.View"
     />
 	
-	<!-- wf states utility -->
+	<!-- review state utility -->
 	<browser:page
 	    for="*"
 		name="bda.plone.finder.review_state"
-		class=".utils.WFStates"
+		class=".utils.AjaxUtils"
 		attribute="review_state"
 		layer="bda.plone.finder.interfaces.IFinderLayer"
 		permission="zope2.View"

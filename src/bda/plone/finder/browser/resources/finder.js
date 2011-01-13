@@ -728,7 +728,10 @@
             },
             
             // reload column after delete action
-            after: finder.utils.reload_column_hook
+            after: function(uid, container, data) {
+				// XXX: check if base URL is of deleted object
+				finder.utils.reload_column_hook(uid, container, data);
+			}
         },
         
         // paste action

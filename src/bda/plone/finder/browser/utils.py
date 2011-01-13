@@ -110,9 +110,11 @@ class ControlPanelItems(object):
         """
         return self.context.portal_controlpanel.enumConfiglets(group=group)
 
-class WFStates(BrowserView, ExecutionInfo):
+class AjaxUtils(BrowserView, ExecutionInfo):
     
     def review_state(self):
+        if anon():
+            return
         uid = self.request.get('uid')
         brains = self.context.portal_catalog(UID=uid)
         if not brains:
