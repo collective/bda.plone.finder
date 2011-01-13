@@ -1,0 +1,13 @@
+*.pyc
+*.pyo
+.installed.cfg
+.mr.developer.cfg
+.project
+.pydevproject
+.settings
+bin
+develop-eggs
+eggs
+parts
+var
+src/bda.plone.finder.egg-info

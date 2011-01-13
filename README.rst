@@ -87,6 +87,11 @@ Contributors
 Changes
 =======
 
+1.0rc2 (dev)
+------
+
+
+
 1.0rc1
 ------
 

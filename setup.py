@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '1.0rc1'
+version = '1.0rc2'
 shortdesc ="Mac Finder like view for Plone."
-longdesc = open(os.path.join(os.path.dirname(__file__), 'README.txt')).read()
+longdesc = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
 
 setup(name='bda.plone.finder',
       version=version,
