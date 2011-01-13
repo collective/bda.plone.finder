@@ -87,8 +87,8 @@ Contributors
 Changes
 =======
 
-1.0
----
+1.0rc1
+------
 
   * Fix bug with base URL after delete item, if finder was called from deleted
     item.
