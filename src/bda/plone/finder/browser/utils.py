@@ -120,3 +120,12 @@ class AjaxUtils(BrowserView, ExecutionInfo):
         if not brains:
             return
         return uid + ':' + brains[0].review_state
+    
+    def base_url(self):
+        if anon():
+            return
+        uid = self.request.get('uid')
+        brains = self.context.portal_catalog(UID=uid)
+        if not brains:
+            return self.pobj.absolute_url()
+        return brains[0].getObject().absolute_url()

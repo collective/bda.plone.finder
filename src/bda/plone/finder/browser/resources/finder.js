@@ -721,16 +721,43 @@
         // delete action
         action_delete: {
             
+            // before hook sets original base url, after hook overwrites finder
+            // base url if necessary.
+            _base_url: null,
+            
             // confirm_delete, display confirmation dialog
             before: function(uid, container, callback) {
                 finder.dialog.msg = 'Do you really want to delete this item?';
-                finder.dialog.show(callback);
+                $.ajax({
+                    dataType: 'html',
+                    url: 'bda.plone.finder.base_url?uid=' + uid,
+                    cache: false,
+                    success: function(url) {
+                        finder.hooks.actions.action_delete._base_url = url;
+                        finder.dialog.show(callback);
+                    }
+                });
             },
             
             // reload column after delete action
             after: function(uid, container, data) {
-                // XXX: check if base URL is of deleted object
-                finder.utils.reload_column_hook(uid, container, data);
+                var del_url = finder.hooks.actions.action_delete._base_url;
+                if (finder.base_url() == del_url) {
+                    $.ajax({
+                        dataType: 'html',
+                        url: 'bda.plone.finder.base_url?uid=' + container,
+                        cache: false,
+                        success: function(url) {
+                            finder._base_url = null;
+                            $('#finder_base_url').html(url);
+                            finder.current_focused = container;
+                            finder.utils.reload_column_hook(
+                                uid, container, data);
+                        }
+                    });
+                } else {
+                    finder.utils.reload_column_hook(uid, container, data);
+                }
             }
         },
         

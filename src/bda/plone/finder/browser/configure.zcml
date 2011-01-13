@@ -95,5 +95,15 @@
 		layer="bda.plone.finder.interfaces.IFinderLayer"
 		permission="zope2.View"
 	/>
+	
+	<!-- base url utility -->
+    <browser:page
+        for="*"
+        name="bda.plone.finder.base_url"
+        class=".utils.AjaxUtils"
+        attribute="base_url"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="zope2.View"
+    />
 
 </configure>

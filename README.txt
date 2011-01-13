@@ -90,6 +90,9 @@ Changes
 1.0
 ---
 
+  * Fix bug with base URL after delete item, if finder was called from deleted
+    item.
+  
   * Remove autoload behavior.
   
   * Change workflow state action ajaxified.
