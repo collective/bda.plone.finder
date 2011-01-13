@@ -20,17 +20,6 @@
             event.preventDefault();
             $(selector).finder();
         });
-        
-        // autoload finder if cookie set and not portal_factory context
-        var cookie = readCookie('bda.plone.finder');
-        if (cookie) {
-            var cur_url = document.location.href;
-            if (cur_url.indexOf('/portal_factory/') == -1 &&
-                cur_url.substring(cur_url.lastIndexOf('/') + 1,
-                                  cur_url.length) != 'edit') {
-                link.finder();
-            }
-        }
     });
     
     // query and show finder
@@ -64,7 +53,6 @@
                 });
             },
             onClose: function() {
-                createCookie('bda.plone.finder', '');
                 $('.finder_container', overlay).remove();
                 finder.reset();
             },
@@ -97,13 +85,6 @@
         
         // base url for ajax requests
         base_url: function() {
-            
-            // return value of bda.plone.finder cookie. this cookie is expected
-            // to be a url if present, not '' and not 'autoload'
-            var cookie = readCookie('bda.plone.finder');
-            if (cookie && cookie != 'autoload') {
-                return cookie;
-            }
             if (!finder._base_url) {
                 finder._base_url = $('#finder_base_url').text();
             }
@@ -652,7 +633,6 @@
                 if ($(action).hasClass('disabled')) {
                     return false;
                 }
-                createCookie('bda.plone.finder', 'autoload');
                 var parent = $(action).parent();
                 var dropdown = $('.action_dropdown', parent);
                 var uid = finder.current_item;
@@ -676,35 +656,6 @@
     
     // set finder hooks for specific actions
     $.extend(finder.hooks.actions, {
-        
-        // action view
-        action_view: {
-            
-            // reset cookie
-            before: function(uid, container, callback) {
-                createCookie('bda.plone.finder', '');
-                callback();
-            },
-            
-            // view action is a non ajax action, after hooks are never called
-            after: null
-        },
-        
-        // edit action
-        action_edit: {
-            
-            // write object location to re-open finder with after edit to
-            // cookie
-            before: function(uid, container, callback) {
-                var url = finder.actions.url;
-                url = url.substring(0, url.indexOf('/edit'));
-                createCookie('bda.plone.finder', url);
-                callback();
-            },
-            
-            // edit action is a non ajax action, after hooks are never called
-            after: null
-        },
 		
 		// change state action
         action_change_state: {
@@ -814,7 +765,6 @@
                 if ($(this).hasClass('disabled')) {
                     return false;
                 }
-                createCookie('bda.plone.finder', 'autoload');
                 var parent = $(this).parent();
                 var dropdown = $('.action_dropdown', parent);
                 var uid = finder.current_focused;

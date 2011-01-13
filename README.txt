@@ -90,6 +90,8 @@ Changes
 1.0
 ---
 
+  * Remove autoload behavior.
+  
   * Change workflow state action ajaxified.
   
   * Fix base_url detection in viewlet. 
@@ -101,7 +103,7 @@ Changes
   * Add separate conditional CSS for Plone 3 + 4.
   
   * Remove trigger link from object actions and provide it by viewlet instead.
-
+  
   * Plone 3 Compatibility.
 
 1.0b7
