@@ -42,9 +42,16 @@ Development and evaluation
 
 you can checkout and install from source code. Plone 4 buildout configuration
 is included.
+
+Checkout with write access:
 ::
 
-    https://svn.plone.org/svn/collective/bda.plone.finder/trunk/
+    git clone git@github.com:collective/bda.plone.finder.git
+
+Anonymous checkout:
+::
+
+    git clone git://github.com/collective/bda.plone.finder.git
 
 
 Compatibility
@@ -86,11 +93,6 @@ Contributors
 
 Changes
 =======
-
-1.0rc2 (dev)
-------
-
-
 
 1.0rc1
 ------
