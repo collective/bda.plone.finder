@@ -412,7 +412,8 @@
                     dropdown.html(data);
                     $('a', dropdown).unbind();
                 });
-                $(document).bind('mousedown', function(event) {
+                $(document).unbind('mousedown')
+				           .bind('mousedown', function(event) {
                     if (!event) {
                         var event = window.event;
                     }
@@ -468,6 +469,7 @@
                         action.attr('href', url);
                         if (enabled) {
                             actions.enable(action);
+							action.unbind();
                             action.bind('click', function(event) {
                                 actions.execute(this);
                                 event.preventDefault();
@@ -515,18 +517,40 @@
             },
             
             // execute action
-            execute: function(action) {
-                action = $(action);
-                finder.actions.name = action.parent().attr('class');
-                var ajax = action.hasClass('ajax');
-                var cb;
+			//
+			// action: the action link
+			// options: optional execution info, if given, action is ignored.
+            execute: function(action, options) {
+				var name, ajax, href;
+				if (options) {
+					name = options.name;
+					ajax = options.ajax;
+					href = options.href;
+				} else {
+					action = $(action);
+					name = action.parent().attr('class');
+					ajax = action.hasClass('ajax');
+					href = action.attr('href');
+				}
+                finder.actions.name = name;
                 
                 // set action url. value depends if ajax action or not
-                if (ajax) {
+                var cb;
+				if (ajax) {
                     cb = finder.actions.perform_ajax;
                     finder.actions.url = 'bda.plone.finder.execute?uid=';
                     finder.actions.url += finder.actions.uid;
                     finder.actions.url += '&name=' + finder.actions.name;
+					
+					// consider optional parameters if execute is called 
+					// manually
+					if (options && options.params) {
+						var params = options.params;
+						for (param in params) {
+							finder.actions.url += 
+							    '&' + param + '=' + params[param];
+						}
+					}
                 } else {
                     cb = finder.actions.follow_action_link;
                     finder.actions.url = action.attr('href');
@@ -598,8 +622,8 @@
         
         // set autoload and load function
         
-        // cut_delete_entry_hook, reload column after cut or delete action
-        cut_delete_entry_hook: function(uid, container, data) {
+        // reload column after action, see below at action hooks
+        reload_column_hook: function(uid, container, data) {
             var overlay = finder.overlay();
             var selector = '#finder_nav_item_' + container + ' a.column_expand';
             var elem = $(selector, overlay).get(0);
@@ -635,8 +659,16 @@
                 var view = 'bda.plone.finder.transitionsmenu';
                 finder.dropdown.elem = dropdown;
                 finder.dropdown.show(view, uid, function(target) {
-                    // XXX: ajaxify
-                    document.location.href = target.href;
+					var url = $(target).attr('href');
+					var idx = url.indexOf('=') + 1;
+					var workflow_action = url.substring(idx, url.length);
+					var options = {
+						name: 'action_change_state',
+                        ajax: true,
+                        href: '',
+						params: { workflow_action: workflow_action }
+					};
+					finder.actions.execute(null, options);
                 });
             }
         }
@@ -673,6 +705,57 @@
             // edit action is a non ajax action, after hooks are never called
             after: null
         },
+		
+		// change state action
+        action_change_state: {
+			
+			// no action before change state
+			before: null,
+			
+			// reload after change state action
+			after: function(uid, container, data) {
+				
+				// XXX: remove item and no column rendering if wf change caused
+				//      context to be inaccessable (postbox style)
+				
+				// query new wf state and alter css class
+				var url = 'bda.plone.finder.review_state?uid=' + uid;
+				finder.request_html(url, function(data) {
+					if (!data) {
+						return;
+					}
+					var parts = data.split(':');
+					var selector = '#finder_nav_item_' + parts[0];
+					var overlay = finder.overlay();
+					elem = $(selector, overlay);
+					var classes = elem.attr('class').split(' ');
+					$(classes).each(function() {
+						if (this.indexOf('state-') != -1) {
+							elem.removeClass(this);
+						}
+					});
+					elem.addClass('state-' + parts[1]);
+				});
+				
+				// render column if details available only
+				var overlay = finder.overlay();
+				var selector = '#finder_nav_item_' + uid + ' a';
+				var elem = $($(selector, overlay).get(0));
+				if (elem.hasClass('column_expand')) {
+					return;
+				} else {
+					url = 'bda.plone.finder.details?uid=' + uid;
+				}
+                finder.request_html(url, function(data) {
+                    for (var i = 0; i < finder.columns.length; i++) {
+                        if (finder.columns[i] == container) {
+                            finder.actions.load(uid, container);
+                            finder.apply_column(container, data, i);
+                        }
+                    }
+                });
+	        }
+		},
         
         // cut action
         action_cut: {
@@ -680,9 +763,8 @@
             // no action before cut
             before: null,
             
-            // reload column after cut or delete action
-            // XXX: seperate cut and delete
-            after: finder.utils.cut_delete_entry_hook
+            // reload column after cut action
+            after: finder.utils.reload_column_hook
         },
         
         // delete action
@@ -694,9 +776,8 @@
                 finder.dialog.show(callback);
             },
             
-            // reload column after cut or delete action
-            // XXX: seperate cut and delete
-            after: finder.utils.cut_delete_entry_hook
+            // reload column after delete action
+            after: finder.utils.reload_column_hook
         },
         
         // paste action

@@ -239,6 +239,8 @@ Changes
 1.0
 ---
 
+  * Change workflow state action ajaxified.
+  
   * Fix base_url detection in viewlet. 
   
   * Shorten title in listing to avoid line break.

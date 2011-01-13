@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from AccessControl import getSecurityManager
+from Products.Five import BrowserView
 from zope.component import (
     getAdapters,
     getUtility,
@@ -108,3 +109,12 @@ class ControlPanelItems(object):
         """Group 'Plone' or 'Products'
         """
         return self.context.portal_controlpanel.enumConfiglets(group=group)
+
+class WFStates(BrowserView, ExecutionInfo):
+    
+    def review_state(self):
+        uid = self.request.get('uid')
+        brains = self.context.portal_catalog(UID=uid)
+        if not brains:
+            return
+        return uid + ':' + brains[0].review_state

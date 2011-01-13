@@ -85,5 +85,15 @@
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="zope2.View"
     />
+	
+	<!-- wf states utility -->
+	<browser:page
+	    for="*"
+		name="bda.plone.finder.review_state"
+		class=".utils.WFStates"
+		attribute="review_state"
+		layer="bda.plone.finder.interfaces.IFinderLayer"
+		permission="zope2.View"
+	/>
 
 </configure>

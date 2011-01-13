@@ -212,6 +212,15 @@ class ChangeStateAction(Action):
             if actions['workflow']:
                 return True
         return False
+    
+    def __call__(self):
+        context = self.context
+        workflow_action = self.request.get('workflow_action')
+        if not workflow_action:
+            raise Exception(u"No workflow action given")
+        context.portal_workflow.doActionFor(context, workflow_action)
+        msg = self.context.translate(_(u'Item state changed.'))
+        return msg, None
 
 class AddItemAction(Action):
     order = 40
