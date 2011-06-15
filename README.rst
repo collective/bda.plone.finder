@@ -94,6 +94,15 @@ Contributors
 Changes
 =======
 
+1.0rc2
+------
+
+  * Add image preview
+  
+  * Add event preview
+  
+  * Show items of all languages if LinguaPlone is installed.
+
 1.0rc1
 ------
 

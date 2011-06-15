@@ -1,0 +1,13 @@
+<ul class="image_preview">
+  <li>
+    <img tal:replace="structure python:context.tag(scale='thumb')" />
+  </li>
+  <li>
+    <strong i18n:translate="">Width</strong>
+    <span tal:content="string:${context/getWidth}px">100px</span>
+  </li>
+  <li>
+    <strong i18n:translate="">Height</strong>
+    <span tal:content="string:${context/getHeight}px">100px</span>
+  </li>
+</ul>

@@ -2,10 +2,9 @@
            xmlns:browser="http://namespaces.zope.org/browser"
            xmlns:five="http://namespaces.zope.org/five">
     
-    <five:implements
-        interface="bda.plone.finder.interfaces.IFinderRoot"
-        class="Products.CMFPlone.Portal.PloneSite"
-    />
+    <class class="Products.CMFPlone.Portal.PloneSite">
+        <implements interface="bda.plone.finder.interfaces.IFinderRoot" />
+    </class>
     
     <include file="provider.zcml" />
     <include file="actions.zcml" />

@@ -1,0 +1,34 @@
+<ul class="event_preview">
+  <li>
+    <strong i18n:translate="">Start</strong>
+    <span tal:replace="view/startDate">1.1.2011</span>
+  </li>
+  <li>
+    <strong i18n:translate="">End</strong>
+    <span tal:replace="view/endDate">1.1.2011</span>
+  </li>
+  <li tal:condition="view/location">
+    <strong i18n:translate="">Location</strong>
+    <span tal:replace="view/location">Location</span>
+  </li>
+  <li tal:condition="view/attendees">
+    <strong i18n:translate="">Attendees</strong>
+    <span tal:replace="view/attendees">Attendees</span>
+  </li>
+  <li tal:condition="view/eventUrl">
+    <strong i18n:translate="">Event URL</strong>
+    <span tal:replace="view/eventUrl">http://www.example.com</span>
+  </li>
+  <li tal:condition="view/contactName">
+    <strong i18n:translate="">Contact name</strong>
+    <span tal:replace="view/contactName">Max Mustermann</span>
+  </li>
+  <li tal:condition="view/contactEmail">
+    <strong i18n:translate="">Contact E-Mail</strong>
+    <span tal:replace="view/contactEmail">max@example.com</span>
+  </li>
+  <li tal:condition="view/contactPhone">
+    <strong i18n:translate="">Contact Phone</strong>
+    <span tal:replace="view/contactPhone">+43 123 4567890</span>
+  </li>
+</ul>

@@ -68,6 +68,7 @@ class Details(BrowserView):
 class DefaultDetails(Details):
     
     details = ViewPageTemplateFile('templates/default_details.pt')
+    preview_template = None
     
     @property
     def uid(self):
@@ -109,12 +110,54 @@ class DefaultDetails(Details):
     
     @property
     def preview(self):
-        return u''
+        if self.preview_template is None:
+            return u''
+        return self.preview_template()
     
     def _date(self, date):
         if date.year() < 1900 or date.year() > 2400:
             return _(u'undefined')
         return self.toLocalizedTime(date, long_format=1)
+
+class ATImageDetails(DefaultDetails):
+    
+    preview_template = ViewPageTemplateFile('templates/image_preview.pt')
+
+class ATEventDetails(DefaultDetails):
+    
+    preview_template = ViewPageTemplateFile('templates/event_preview.pt')
+    
+    @property
+    def startDate(self):
+        return self._date(self.context.start())
+    
+    @property
+    def endDate(self):
+        return self._date(self.context.end())
+    
+    @property
+    def location(self):
+        return self.context.getLocation()
+    
+    @property
+    def attendees(self):
+        return self.context.getAttendees()
+    
+    @property
+    def eventUrl(self):
+        return self.context.event_url()
+    
+    @property
+    def contactName(self):
+        return self.context.contact_name()
+    
+    @property
+    def contactEmail(self):
+        return self.context.contact_email()
+    
+    @property
+    def contactPhone(self):
+        return self.context.contact_phone()
 
 class PloneDetails(Details):
     

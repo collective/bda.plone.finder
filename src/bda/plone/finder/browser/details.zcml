@@ -52,6 +52,24 @@
     />
     
     <browser:page
+        zcml:condition="installed Products.Archetypes"
+        for="Products.ATContentTypes.interfaces.IATImage"
+        name="finder_details"
+        class=".details.ATImageDetails"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="zope2.View"
+    />
+    
+    <browser:page
+        zcml:condition="installed Products.Archetypes"
+        for="Products.ATContentTypes.interfaces.IATEvent"
+        name="finder_details"
+        class=".details.ATEventDetails"
+        layer="bda.plone.finder.interfaces.IFinderLayer"
+        permission="zope2.View"
+    />
+    
+    <browser:page
         zcml:condition="installed plone.dexterity"
         for="plone.dexterity.interfaces.IDexterityItem"
         name="finder_details"

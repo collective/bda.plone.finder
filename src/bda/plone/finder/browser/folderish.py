@@ -40,6 +40,7 @@ class FolderColumn(BrowserView):
                 'query': '/'.join(self.context.getPhysicalPath()),
                 'depth': 1,
             },
+            'Language': 'all',
         })
         # plone_layout not available in plone3
         #layout = getMultiAdapter((context, self.request), name=u'plone_layout')
