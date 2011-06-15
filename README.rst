@@ -94,14 +94,20 @@ Contributors
 Changes
 =======
 
-1.0rc2
-------
+1.0
+---
 
   * Add image preview
   
   * Add event preview
   
   * Show items of all languages if LinguaPlone is installed.
+  
+  * Fix bug with css class manipulation and column reloading after workflow
+    state changed.
+  
+  * Use zope:class and zope:implements directives to set marker interface for
+    finder root instead of five:implements
 
 1.0rc1
 ------

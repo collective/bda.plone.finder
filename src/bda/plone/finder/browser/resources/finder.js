@@ -679,24 +679,23 @@
                     var selector = '#finder_nav_item_' + parts[0];
                     var overlay = finder.overlay();
                     elem = $(selector, overlay);
-                    var classes = elem.attr('class').split(' ');
-                    $(classes).each(function() {
-                        if (this.indexOf('state-') != -1) {
-                            elem.removeClass(this);
+                    var classes = '';
+                    $(elem.attr('class').split(' ')).each(function() {
+                        if (this.indexOf('state-') == -1) {
+                            classes += this + ' ';
                         }
                     });
-                    elem.addClass('state-' + parts[1]);
+                    elem.attr('class', classes + 'state-' + parts[1]);
                 });
                 
-                // render column if details available only
+                // render details column. skip if details view is actually not
+                // shown
                 var overlay = finder.overlay();
-                var selector = '#finder_nav_item_' + uid + ' a';
-                var elem = $($(selector, overlay).get(0));
-                if (elem.hasClass('column_expand')) {
+                var selector = '#finder_column_' + uid + ' ul.columnitems';
+                if ($(selector, overlay).length) {
                     return;
-                } else {
-                    url = 'bda.plone.finder.details?uid=' + uid;
                 }
+                url = 'bda.plone.finder.details?uid=' + uid;
                 finder.request_html(url, function(data) {
                     for (var i = 0; i < finder.columns.length; i++) {
                         if (finder.columns[i] == container) {
