@@ -10,4 +10,5 @@ develop-eggs
 eggs
 parts
 var
+dist
 src/bda.plone.finder.egg-info
