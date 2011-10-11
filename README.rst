@@ -14,9 +14,9 @@ browsing in Plone.
 Installation
 ============
 
-  * Make egg available in your Plone site
+- Make egg available in your Plone site
   
-  * Apply corresponding GS profile
+- Apply corresponding GS profile
 
 
 Restrictions
@@ -43,13 +43,11 @@ Development and evaluation
 you can checkout and install from source code. Plone 4 buildout configuration
 is included.
 
-Checkout with write access:
-:::::::::::::::::::::::::::
+Checkout with write access::
 
     git clone git@github.com:collective/bda.plone.finder.git
 
-Anonymous checkout:
-:::::::::::::::::::
+Anonymous checkout::
 
     git clone git://github.com/collective/bda.plone.finder.git
 
@@ -60,35 +58,35 @@ Compatibility
 Plone Versions
 --------------
 
-  * Plone 3
+- Plone 3
 
-  * Plone 4
+- Plone 4
 
 
 Browser
 -------
   
-  * Firefox
+- Firefox
   
-  * Chrome
+- Chrome
   
-  * Safari
+- Safari
   
-  * IE6 (looks ugly due to png images, but works)
+- IE6 (looks ugly due to png images, but works)
   
-  * IE7
+- IE7
   
-  * IE8
+- IE8
 
 
 Contributors
 ============
 
-  * Robert Niederreiter <dev@bluedynamics.com>
+- Robert Niederreiter <dev@bluedynamics.com>
   
-  * Sven Plage
+- Sven Plage
   
-  * Thanks to the Sprinters at Cathedral Sprint 2010 for ideas and feedback
+- Thanks to the Sprinters at Cathedral Sprint 2010 for ideas and feedback
 
 
 Changes
@@ -97,196 +95,196 @@ Changes
 1.0.1
 -----
 
-  * Add ``p3`` and ``p4`` profile for different CSS registration
+- Add ``p3`` and ``p4`` profile for different CSS registration
 
 1.0
 ---
 
-  * Add image preview
+- Add image preview
   
-  * Add event preview
+- Add event preview
   
-  * Show items of all languages if LinguaPlone is installed.
+- Show items of all languages if LinguaPlone is installed.
   
-  * Fix bug with css class manipulation and column reloading after workflow
-    state changed.
+- Fix bug with css class manipulation and column reloading after workflow
+  state changed.
   
-  * Use zope:class and zope:implements directives to set marker interface for
-    finder root instead of five:implements
+- Use zope:class and zope:implements directives to set marker interface for
+  finder root instead of five:implements
 
 1.0rc1
 ------
 
-  * Fix bug with base URL after delete item, if finder was called from deleted
-    item.
+- Fix bug with base URL after delete item, if finder was called from deleted
+  item.
   
-  * Remove autoload behavior.
+- Remove autoload behavior.
   
-  * Change workflow state action ajaxified.
+- Change workflow state action ajaxified.
   
-  * Fix base_url detection in viewlet. 
+- Fix base_url detection in viewlet. 
   
-  * Shorten title in listing to avoid line break.
+- Shorten title in listing to avoid line break.
   
-  * Do not display items without UID.
+- Do not display items without UID.
   
-  * Add separate conditional CSS for Plone 3 + 4.
+- Add separate conditional CSS for Plone 3 + 4.
   
-  * Remove trigger link from object actions and provide it by viewlet instead.
+- Remove trigger link from object actions and provide it by viewlet instead.
   
-  * Plone 3 Compatibility.
+- Plone 3 Compatibility.
 
 1.0b7
 -----
 
-  * Basically bind dexterity compatible views. Dexterity support not finished
-    yet due to missing UID indexing support.
+- Basically bind dexterity compatible views. Dexterity support not finished
+  yet due to missing UID indexing support.
   
-  * Provide CSS for default plone content types icons.
+- Provide CSS for default plone content types icons.
 
-  * Check for ``INonStructuralFolder`` in ``AddItemAction.enabled`` if context
-    is folderish.
+- Check for ``INonStructuralFolder`` in ``AddItemAction.enabled`` if context
+  is folderish.
   
-  * Use id in column item if title not set in ``FolderColumn``.
+- Use id in column item if title not set in ``FolderColumn``.
 
 1.0b6
 -----
 
-  * Add finder overlay via JS instead of viewlet.
+- Add finder overlay via JS instead of viewlet.
   
-  * Refactor server side column rendering API.
+- Refactor server side column rendering API.
 
 1.0b5
 -----
 
-  * Check for 'Add portal content' permission in ``OFSPasteAction.enabled``.
+- Check for 'Add portal content' permission in ``OFSPasteAction.enabled``.
   
-  * Check for 'Delete objects' permission in ``OFSCutAction.enabled``.
+- Check for 'Delete objects' permission in ``OFSCutAction.enabled``.
   
-  * Check for 'Modify portal content' permission in ``EditAction.enabled``.
+- Check for 'Modify portal content' permission in ``EditAction.enabled``.
   
-  * Only show control panel and addon configuration links in root column if
-    user is manager.
+- Only show control panel and addon configuration links in root column if
+  user is manager.
   
-  * Protect browser views from within against anonymous user.
+- Protect browser views from within against anonymous user.
 
-  * Bind finder trigger to ``View`` permission.
+- Bind finder trigger to ``View`` permission.
 
-  * Adopt browser view's permissions for non managers.
+- Adopt browser view's permissions for non managers.
   
-  * Use i18n messages in actions and use ``context.translate``.
+- Use i18n messages in actions and use ``context.translate``.
   
-  * CSS fix for IE6
+- CSS fix for IE6
 
 1.0b4
 -----
 
-  * Refactor finder actions.
+- Refactor finder actions.
 
-  * Add View interfaces.
+- Add View interfaces.
   
-  * Fix ``uid`` property in ``ATDetails`` column view.
+- Fix ``uid`` property in ``ATDetails`` column view.
 
-  * Fix initial finder rendering when called on leaf object located in plone.
+- Fix initial finder rendering when called on leaf object located in plone.
     root
 
-  * Enable paste action on plone root content.
+- Enable paste action on plone root content.
 
 1.0b3
 -----
 
-  * Add action hook for view action resetting finder ``bda.plone.finder``.
-    cookie
+- Add action hook for view action resetting finder ``bda.plone.finder``.
+  cookie
   
-  * Deliver context URL for ajax calls from server.
+- Deliver context URL for ajax calls from server.
   
-  * ``bda.plone.finder`` cookie can contain url's now (beside value 'autoload')
-    which define the actual context to be used as base url for auto load.
+- ``bda.plone.finder`` cookie can contain url's now (beside value 'autoload')
+  which define the actual context to be used as base url for auto load.
   
-  * Rename ``perform_action`` to ``perform_ajax`` and add ``follow_action_link``
-    function as non ajax callback for actions.
+- Rename ``perform_action`` to ``perform_ajax`` and add ``follow_action_link``
+  function as non ajax callback for actions.
 
-  * Change autoload logic, remove from server side action definitions and let
-    do JS action callbacks the work.
+- Change autoload logic, remove from server side action definitions and let
+  do JS action callbacks the work.
   
-  * Enable before hooks on non ajax actions.
+- Enable before hooks on non ajax actions.
   
-  * Wrap finder JS code inside ``(function($) { ... })(jQuery);`` block
-    and use ``$`` instead of ``jQuery``.
+- Wrap finder JS code inside ``(function($) { ... })(jQuery);`` block
+  and use ``$`` instead of ``jQuery``.
   
-  * Refactor actions performing and corresponding hooks.
+- Refactor actions performing and corresponding hooks.
 
-  * Add minified finder.js.
+- Add minified finder.js.
 
 1.0b2
 -----
   
-  * Remove ``li.cut`` dom elems after paste action.
+- Remove ``li.cut`` dom elems after paste action.
   
-  * Add ``finder.base_url`` in JS to fix ajax request context.
+- Add ``finder.base_url`` in JS to fix ajax request context.
   
-  * Do not cache ajax requests.
+- Do not cache ajax requests.
   
-  * Scroll column to selected item if necessary.
+- Scroll column to selected item if necessary.
   
-  * Disable navigate right arrow on init.
+- Disable navigate right arrow on init.
   
-  * Initially render context column when opening finder on plone root.
+- Initially render context column when opening finder on plone root.
   
-  * JS cleanup and documentation.
+- JS cleanup and documentation.
 
 1.0b1
 -----
 
-  * Improve dialog styles.
+- Improve dialog styles.
   
-  * Remove auto fading status message when performing actions. Instead write
-    this information to status bar below columns now.
+- Remove auto fading status message when performing actions. Instead write
+  this information to status bar below columns now.
   
-  * Reset ``finder._overlay`` and ``finder._scrollable`` on close.
+- Reset ``finder._overlay`` and ``finder._scrollable`` on close.
   
-  * IE7 CSS fix for column items.
+- IE7 CSS fix for column items.
   
-  * Remove dependencies to ``bda.plone.ajax``.
+- Remove dependencies to ``bda.plone.ajax``.
 
 1.0a4
 -----
 
-  * Remove column batching. instead use css overflow.
+- Remove column batching. instead use css overflow.
   
-  * adopt to new jQuery tools scrollable.
+- adopt to new jQuery tools scrollable.
   
-  * make me basically work in IE7.
+- make me basically work in IE7.
   
-  * JS refactoring.
+- JS refactoring.
 
 1.0a3
 -----
 
-  * Change look and feel of batching column pages. Its a vertical slider now.
+- Change look and feel of batching column pages. Its a vertical slider now.
 
-  * Implement auto loading after editing or adding items out of finder.
+- Implement auto loading after editing or adding items out of finder.
 
-  * Implement change state dropdown.
+- Implement change state dropdown.
 
-  * Implement add dropdown.
+- Implement add dropdown.
 
-  * Implement column filtering.
+- Implement column filtering.
 
-  * Remove unused imports from source files.
+- Remove unused imports from source files.
   
-  * Titles for finder controls.
+- Titles for finder controls.
 
 1.0a2
 -----
 
-  * Basic code cleanup.
+- Basic code cleanup.
   
-  * Implement column batching.
+- Implement column batching.
   
-  * Self-contained buildout for plone 3 and plone 4.
+- Self-contained buildout for plone 3 and plone 4.
 
 1.0a1
 -----
 
-  * Make it work.
+- Make it work.
