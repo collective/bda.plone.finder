@@ -44,12 +44,12 @@ you can checkout and install from source code. Plone 4 buildout configuration
 is included.
 
 Checkout with write access:
-::
+:::::::::::::::::::::::::::
 
     git clone git@github.com:collective/bda.plone.finder.git
 
 Anonymous checkout:
-::
+:::::::::::::::::::
 
     git clone git://github.com/collective/bda.plone.finder.git
 
@@ -93,6 +93,11 @@ Contributors
 
 Changes
 =======
+
+1.0.1
+-----
+
+  * Add ``p3`` and ``p4`` profile for different CSS registration
 
 1.0
 ---

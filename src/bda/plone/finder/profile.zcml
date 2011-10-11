@@ -6,8 +6,24 @@
     <genericsetup:registerProfile
         name="default"
         title="bda.plone.finder"
-        directory="profile"
+        directory="profile/default"
         description='Extension profile for bda.plone.finder.'
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+    />
+    
+    <genericsetup:registerProfile
+        name="p3"
+        title="bda.plone.finder"
+        directory="profile/p3"
+        description='Extension profile for bda.plone.finder Plone 3.'
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+    />
+    
+    <genericsetup:registerProfile
+        name="p4"
+        title="bda.plone.finder"
+        directory="profile/p4"
+        description='Extension profile for bda.plone.finder Plone 4.'
         provides="Products.GenericSetup.interfaces.EXTENSION"
     />
     
