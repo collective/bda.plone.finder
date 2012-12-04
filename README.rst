@@ -92,6 +92,11 @@ Contributors
 Changes
 =======
 
+1.1
+---
+
+- Add specific permission to trigger finder
+
 1.0.1
 -----
 

@@ -1,6 +1,11 @@
 <configure xmlns="http://namespaces.zope.org/zope">
-    
+
     <include package=".browser" />
     <include file="profile.zcml" />
-    
+
+    <permission
+      id="bda.plone.finder.TriggerFinder"
+      title="bda.plone.finder: Trigger Finder"
+    />
+
 </configure>

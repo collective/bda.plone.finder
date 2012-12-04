@@ -5,6 +5,7 @@ from Acquisition import (
     aq_inner,
     aq_parent,
 )
+from AccessControl import getSecurityManager
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.layout.viewlets.common import ViewletBase
@@ -25,7 +26,9 @@ class TriggerViewlet(ViewletBase):
     
     @property
     def show(self):
-        return not anon()
+        sm = getSecurityManager()
+        return sm.checkPermission('bda.plone.finder: Trigger Finder',
+                                  self.context)
 
 class PathViewlet(ViewletBase, ExecutionInfo):
     
