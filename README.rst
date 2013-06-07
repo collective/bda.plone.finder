@@ -98,7 +98,9 @@ Changes
 - Add specific permission to trigger finder
 
 - Add ``p3`` and ``p4`` profile dependencies so that only one profile
-  need be selected.
+  need be selected
+
+- Support Diazo/plone.app.theming headers and parameters
 
 1.0.1
 -----

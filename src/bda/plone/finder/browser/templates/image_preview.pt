@@ -1,4 +1,5 @@
-<ul class="image_preview">
+<ul tal:define="unused python:request.RESPONSE.setHeader('X-Theme-Disabled', 1);"
+    class="image_preview">
   <li>
     <img tal:replace="structure python:context.tag(scale='thumb')" />
   </li>

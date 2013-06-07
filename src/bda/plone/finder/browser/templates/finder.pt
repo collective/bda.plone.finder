@@ -1,4 +1,5 @@
 <div class="finder_container"
+     tal:define="unused python:request.RESPONSE.setHeader('X-Theme-Disabled', 1);"
      tal:condition="view/show">
   
   <div class="finder_dialog">

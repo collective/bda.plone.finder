@@ -112,6 +112,7 @@
             $.ajax({
                 dataType: 'html',
                 url: finder.base_url() + '/' + url,
+                data: {ajax_load: 1},
                 cache: false,
                 success: callback
             });

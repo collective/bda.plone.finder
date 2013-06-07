@@ -1,4 +1,4 @@
-<ul>
+<ul tal:define="unused python:request.RESPONSE.setHeader('X-Theme-Disabled', 1);">
   <li>
     <strong i18n:translate="">Type</strong>
     <span tal:replace="view/type">Folder</span>

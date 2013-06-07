@@ -1,6 +1,7 @@
 <div id=""
      class="finder_column"
-     tal:define="items view/filtereditems"
+     tal:define="unused python:request.RESPONSE.setHeader('X-Theme-Disabled', 1);
+                 items view/filtereditems;"
      tal:attributes="id view/uid">
   
   <ul class="columnitems"

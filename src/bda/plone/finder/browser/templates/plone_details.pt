@@ -1,4 +1,4 @@
-<ul>
+<ul tal:define="unused python:request.RESPONSE.setHeader('X-Theme-Disabled', 1);">
   <li>
     <strong tal:content="view/title">Title</strong>
   </li>

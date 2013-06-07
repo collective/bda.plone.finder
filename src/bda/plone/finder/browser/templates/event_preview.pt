@@ -1,4 +1,5 @@
-<ul class="event_preview">
+<ul tal:define="unused python:request.RESPONSE.setHeader('X-Theme-Disabled', 1);"
+    class="event_preview">
   <li>
     <strong i18n:translate="">Start</strong>
     <span tal:replace="view/startDate">1.1.2011</span>
