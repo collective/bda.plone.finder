@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from zope.interface import implements
 from zope.component import getUtility
-from zope.app.publisher.interfaces.browser import IBrowserMenu
+from zope.browsermenu.interfaces import IBrowserMenu
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from bda.plone.finder.interfaces import IDropdown
