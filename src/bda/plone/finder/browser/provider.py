@@ -22,39 +22,42 @@ from bda.plone.finder.interfaces import (
 )
 from bda.plone.finder.browser.utils import ControlPanelItems
 
+
 class DefaultUidProvider(object):
     implements(IUidProvider)
-    
+
     def uid(self, context, request):
         if hasattr(context, 'UID'):
             return context.UID()
         return 'root'
 
+
 class ColumnProvider(object):
     """Abstract column provider.
     """
     implements(IColumnProvider)
-    
+
     flavor = 'default'
-    
+
     def __init__(self, context):
         self.context = context
-    
+
     def provides(self, uid):
         raise NotImplementedError(u'Abstract FinderContext does not ',
                                   u'implement ``provides``.')
-    
+
     def get(self, uid):
         raise NotImplementedError(u'Abstract FinderContext does not ',
                                   u'implement ``get``.')
-    
+
     def render(self, uid, view):
         raise NotImplementedError(u'Abstract FinderContext does not ',
                                   u'implement ``render``.')
-    
+
     def rendered_columns(self, uid):
         raise NotImplementedError(u'Abstract FinderContext does not ',
                                   u'implement ``rendered_columns``.')
+
 
 class RootProvider(ColumnProvider):
     """Handle finder context for plone root.
@@ -65,18 +68,18 @@ class RootProvider(ColumnProvider):
         ('plone_control_panel', IPloneControlPanel),
         ('plone_addons', IPloneAddons),
     ]
-    
+
     def provides(self, uid):
         for name, iface in self.PROVIDED:
             if uid == name:
                 return True
         return False
-    
+
     def get(self, uid):
         if self.provides(uid):
             return self.context.portal_url.getPortalObject()
         return None
-    
+
     def render(self, uid, view):
         for name, iface in self.PROVIDED:
             if uid == name:
@@ -86,7 +89,7 @@ class RootProvider(ColumnProvider):
                 noLongerProvides(context, iface)
                 return rendered
         return None
-    
+
     def rendered_columns(self, uid):
         ret = list()
         if uid == 'root':
@@ -100,24 +103,25 @@ class RootProvider(ColumnProvider):
                 break
         return ret
 
+
 class ControlPanelProvider(ColumnProvider):
     """Handle finder control panel context.
     """
     CONFIGLET_GROUPS = ['Plone']
     PARENT_UID = 'plone_control_panel'
-    
+
     def provides(self, uid):
         cp_items = ControlPanelItems(self.context)
         cp_item = cp_items.item_by_id(uid, groups=self.CONFIGLET_GROUPS)
         if cp_item:
             return True
         return False
-    
+
     def get(self, uid):
         if self.provides(uid):
             return self.context.portal_url.getPortalObject()
         return None
-    
+
     def render(self, uid, view):
         if self.provides(uid):
             context = self.get(uid)
@@ -126,7 +130,7 @@ class ControlPanelProvider(ColumnProvider):
             noLongerProvides(context, IPloneConfigItem)
             return rendered
         return None
-    
+
     def rendered_columns(self, uid):
         return [
             RootProvider(self.context).render(self.PARENT_UID,
@@ -134,32 +138,34 @@ class ControlPanelProvider(ColumnProvider):
             self.render(uid, 'finder_details'),
         ]
 
+
 class AddonsProvider(ControlPanelProvider):
     """Handle finder addon configuration context.
     """
     CONFIGLET_GROUPS = ['Products']
     PARENT_UID = 'plone_addons'
 
+
 class CatalogProvider(ColumnProvider):
     """Handle finder context from portal catalog
     """
-    
+
     def provides(self, uid):
         if len(self.context.portal_catalog(UID=uid)) == 1:
             return True
         return False
-    
+
     def get(self, uid):
         brains = self.context.portal_catalog(UID=uid)
         if brains:
             return brains[0].getObject()
         return None
-    
+
     def render(self, uid, view):
         context = self.get(uid)
         if context is not None:
             return context.restrictedTraverse(view)()
-    
+
     def _render(self, context):
         try:
             ret = context.restrictedTraverse('finder_column')()
@@ -168,7 +174,7 @@ class CatalogProvider(ColumnProvider):
         except Exception, e:
             ret = u'<div class="finder_column">%s</div>' % unicode(e)
         return ret
-    
+
     def rendered_columns(self, uid):
         ret = list()
         context = aq_inner(self.get(uid))

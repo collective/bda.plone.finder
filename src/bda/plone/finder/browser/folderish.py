@@ -17,16 +17,17 @@ from bda.plone.finder.browser.utils import (
     ControlPanelItems,
 )
 
+
 class FolderColumn(BrowserView):
-    
+
     implements(IFolderishColumn)
-    
+
     __call__ = ViewPageTemplateFile('templates/column.pt')
-    
+
     @property
     def uid(self):
         return col_id(self.context.UID())
-    
+
     @property
     def items(self):
         if hasattr(self, '_items'):
@@ -63,7 +64,7 @@ class FolderColumn(BrowserView):
                                 default_type_css(brain.portal_type)))
         self._items = ret
         return ret
-    
+
     @property
     def filtereditems(self):
         if hasattr(self, '_filtereditems'):
@@ -78,24 +79,25 @@ class FolderColumn(BrowserView):
                 filtered.append(item)
         self._filtereditems = filtered
         return filtered
-    
+
     def _item_selected(self, url):
         if self.request.get('_skip_selection_check', False):
             return False
         requested = self.request.getURL()[:-17]
         return requested.startswith(url)
-    
+
     def strip_title(self, title):
         if len(title) > 24:
             return '%s...%s' % (title[:10], title[-10:])
         return title
 
+
 class PloneRoot(FolderColumn):
-    
+
     @property
     def uid(self):
         return col_id('root')
-    
+
     @property
     def items(self):
         uid = self.request.get('uid', 'plone_content')
@@ -118,14 +120,16 @@ class PloneRoot(FolderColumn):
                                 uid == id and True or False))
         return ret
 
+
 class PloneContent(FolderColumn):
-    
+
     @property
     def uid(self):
         return col_id('plone_content')
 
+
 class ControlPanelColumn(FolderColumn):
-    
+
     def items_by_configlets(self, group):
         ret = list()
         pu = self.context.plone_utils
@@ -145,22 +149,24 @@ class ControlPanelColumn(FolderColumn):
                                 False)) # XXX selected.
         return ret
 
+
 class PloneControlPanel(ControlPanelColumn):
-    
+
     @property
     def uid(self):
         return col_id('plone_control_panel')
-    
+
     @property
     def items(self):
         return self.items_by_configlets('Plone')
 
+
 class PloneAddons(ControlPanelColumn):
-    
+
     @property
     def uid(self):
         return col_id('plone_addons')
-    
+
     @property
     def items(self):
         return self.items_by_configlets('Products')

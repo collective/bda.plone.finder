@@ -29,13 +29,15 @@ from bda.plone.finder.browser.utils import (
     ExecutionInfo,
 )
 
+
 ROOT_UID = 'root'
 CONTENT_UID = 'plone_content'
 CP_UID = 'plone_control_panel'
 ADDONS_UID = 'plone_addons'
 
+
 class Actions(BrowserView, ExecutionInfo):
-    
+
     def actionInfo(self):
         if anon():
             raise Unauthorized, u'Not authenticated'
@@ -49,7 +51,7 @@ class Actions(BrowserView, ExecutionInfo):
                 'ajax': action.ajax,
             }
         return json.dumps(data)
-    
+
     def execute(self):
         if anon():
             raise Unauthorized, u'Not authenticated'
@@ -85,16 +87,17 @@ class Actions(BrowserView, ExecutionInfo):
             'msg': msg,
             'uid': ret_uid,
         })
-    
+
     def _execution_context(self):
         provider = get_provider(self.context, self.flavor, self.uid)
         if provider is None:
             return None
         return provider.get(self.uid)
 
+
 class Action(object):
     implements(IAction)
-    
+
     flavor = 'default'
     title = None
     order = 0
@@ -103,38 +106,39 @@ class Action(object):
     enabled = False
     url = u''
     ajax = False
-    
+
     def __init__(self, context, request):
         self.context = context
         self.request = request
-    
+
     def __call__(self, request):
         raise NotImplementedError(u'Abstract Action does not ',
                                   u'implement ``__call__``.')
-    
+
     @property
     def _uid(self):
         return self.request.get('uid')
-    
+
     @property
     def _pobj(self):
         return self.context.portal_url.getPortalObject()
-    
+
     def _query_object(self, uid):
         brains = self.context.portal_catalog(UID=uid)
         if not brains:
             return None
         return brains[0].getObject()
 
+
 class ViewAction(Action):
     order = 10
     group = 10
     enabled = True
-    
+
     @property
     def title(self):
         return self.context.translate(_('View'))
-    
+
     @property
     def url(self):
         uid = self._uid
@@ -156,14 +160,15 @@ class ViewAction(Action):
             return u''
         return obj.absolute_url()
 
+
 class EditAction(Action):
     order = 20
     group = 10
-    
+
     @property
     def title(self):
         return self.context.translate(_('Edit'))
-    
+
     @property
     def enabled(self):
         uid = self._uid
@@ -178,7 +183,7 @@ class EditAction(Action):
         if not has_permission('Modify portal content', self.context):
             return False
         return True
-    
+
     @property
     def url(self):
         uid = self._uid
@@ -191,15 +196,16 @@ class EditAction(Action):
             return obj.absolute_url() + '/edit'
         return None
 
+
 class ChangeStateAction(Action):
     order = 30
     group = 10
     dropdown = True
-    
+
     @property
     def title(self):
         return self.context.translate(_('Change state'))
-    
+
     @property
     def enabled(self):
         uid = self._uid
@@ -212,7 +218,7 @@ class ChangeStateAction(Action):
             if actions['workflow']:
                 return True
         return False
-    
+
     def __call__(self):
         context = self.context
         workflow_action = self.request.get('workflow_action')
@@ -222,15 +228,16 @@ class ChangeStateAction(Action):
         msg = self.context.translate(_(u'Item state changed.'))
         return msg, None
 
+
 class AddItemAction(Action):
     order = 40
     group = 10
     dropdown = True
-    
+
     @property
     def title(self):
         return self.context.translate(_('Add item'))
-    
+
     @property
     def enabled(self):
         uid = self._uid
@@ -243,18 +250,20 @@ class AddItemAction(Action):
                 return True
         return False
 
+
 class CutAction(Action):
     order = 10
     group = 20
     ajax = True
-    
+
     @property
     def title(self):
         return self.context.translate(_('Cut'))
-    
+
     @property
     def enabled(self):
         return False
+
 
 class OFSCutAction(CutAction):
 
@@ -264,7 +273,7 @@ class OFSCutAction(CutAction):
           or not has_permission('Delete objects', self.context):
             return False
         return True
-    
+
     def __call__(self):
         context = self.context
         title = safe_unicode(context.title_or_id())
@@ -296,21 +305,23 @@ class OFSCutAction(CutAction):
         transaction_note('Cut object %s' % context.absolute_url())
         return msg, None
 
+
 class CopyAction(Action):
     order = 20
     group = 20
     ajax = True
-    
+
     @property
     def title(self):
         return self.context.translate(_('Copy'))
-    
+
     @property
     def enabled(self):
         return False
 
+
 class OFSCopyAction(CopyAction):
-    
+
     @property
     def enabled(self):
         if not has_permission('Copy or Move', self.context):
@@ -339,18 +350,20 @@ class OFSCopyAction(CopyAction):
         transaction_note('Copied object %s' % context.absolute_url())
         return msg, None
 
+
 class PasteAction(Action):
     order = 30
     group = 20
     ajax = True
-    
+
     @property
     def title(self):
         return self.context.translate(_('Paste'))
-    
+
     @property
     def enabled(self):
         return False
+
 
 class OFSPasteAction(PasteAction):
 
@@ -391,6 +404,7 @@ class OFSPasteAction(PasteAction):
                 raise Exception(msg)
         return msg, None
 
+
 class PloneRootPasteAction(OFSPasteAction):
 
     @property
@@ -400,18 +414,20 @@ class PloneRootPasteAction(OFSPasteAction):
                 return True
         return False
 
+
 class DeleteAction(Action):
     order = 40
     group = 20
     ajax = True
-    
+
     @property
     def title(self):
         return self.context.translate(_('Delete'))
-    
+
     @property
     def enabled(self):
         return False
+
 
 class OFSDeleteAction(DeleteAction):
 

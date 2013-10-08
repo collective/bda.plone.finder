@@ -20,23 +20,25 @@ from bda.plone.finder.browser.utils import (
     ExecutionInfo,
 )
 
+
 class TriggerViewlet(ViewletBase):
-    
+
     render = ViewPageTemplateFile('templates/trigger.pt')
-    
+
     @property
     def show(self):
         sm = getSecurityManager()
         return sm.checkPermission('bda.plone.finder: Trigger Finder',
                                   self.context)
 
+
 class PathViewlet(ViewletBase, ExecutionInfo):
-    
+
     render = ViewPageTemplateFile('templates/basepath.pt')
-    
+
     def update(self):
         self.show = not anon()
-    
+
     @property
     def base_url(self):
         context = aq_inner(self.context)
@@ -48,16 +50,17 @@ class PathViewlet(ViewletBase, ExecutionInfo):
             context = parent
         return context.absolute_url()
 
+
 class Finder(BrowserView, ExecutionInfo):
-    
+
     implements(IFinder)
-    
+
     __call__ = ViewPageTemplateFile('templates/finder.pt')
-    
+
     @property
     def show(self):
         return not anon()
-    
+
     @property
     def actions(self):
         flavor = self.flavor
@@ -79,7 +82,7 @@ class Finder(BrowserView, ExecutionInfo):
             ret.append(sorted(groups[key],
                         cmp=lambda x, y: x['order'] > y['order'] and 1 or -1))
         return ret
-    
+
     @property
     def columns(self):
         ret = list()

@@ -9,7 +9,7 @@
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="zope2.View"
     />
-    
+
     <browser:page
         for="bda.plone.finder.interfaces.IPloneRoot"
         name="finder_column"
@@ -17,7 +17,7 @@
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="zope2.View"
     />
-    
+
     <browser:page
         for="bda.plone.finder.interfaces.IPloneControlPanel"
         name="finder_column"
@@ -25,7 +25,7 @@
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="cmf.ManagePortal"
     />
-    
+
     <browser:page
         for="bda.plone.finder.interfaces.IPloneAddons"
         name="finder_column"
@@ -33,17 +33,17 @@
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="cmf.ManagePortal"
     />
-    
+
     <browser:page
-	    zcml:condition="installed Products.Archetypes"
+        zcml:condition="installed Products.Archetypes"
         for="Products.Archetypes.interfaces.IBaseFolder"
         name="finder_column"
         class=".folderish.FolderColumn"
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="zope2.View"
     />
-	
-	<browser:page
+
+    <browser:page
         zcml:condition="installed plone.dexterity"
         for="plone.dexterity.interfaces.IDexterityContainer"
         name="finder_column"

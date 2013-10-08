@@ -8,7 +8,7 @@
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="zope2.View"
     />
-    
+
     <browser:page
         for="*"
         name="bda.plone.finder.transitionsmenu"

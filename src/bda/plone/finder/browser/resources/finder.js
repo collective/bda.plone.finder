@@ -1,17 +1,17 @@
 // finder.js
 //
 // author: Robert Niederreiter
-// version: 1.0b7
+// version: 1.2
 // license: GPL2
 
 (function($) {
-    
+
     $(document).ready(function() {
-        
+
         // add finder overlay to dom tree
         var elem = '<div class="finder_overlay" id="bda_finder_overlay"></div>';
         $(elem).insertBefore($('#visual-portal-wrapper'));
-        
+
         // bind finder trigger
         var selector = '.findertrigger a';
         var link = $(selector);
@@ -21,7 +21,7 @@
             $(selector).finder();
         });
     });
-    
+
     // query and show finder
     $.fn.finder = function() {
         var overlay = finder.overlay();
@@ -62,12 +62,12 @@
         finder.overlay_api = elem.data('overlay');
         finder.overlay_api.load();
     };
-    
+
     // finder object
     finder = {
-    
+
         /* object members */
-        
+
         // set by jQuery finder extension
         overlay_api: null,
         // set by jQuery finder extension
@@ -80,9 +80,9 @@
         current_item: null,
         // extend this when you need finder specific helper stuff
         utils: {},
-        
+
         /* object functions */
-        
+
         // base url for ajax requests
         base_url: function() {
             if (!finder._base_url) {
@@ -90,7 +90,7 @@
             }
             return finder._base_url;
         },
-        
+
         // return overlay dom elem as jQuery object
         overlay: function() {
             if (!finder._overlay) {
@@ -98,7 +98,7 @@
             }
             return finder._overlay;
         },
-        
+
         // return columns dom elem as jQuery object
         scrollable: function() {
             if (!finder._scrollable) {
@@ -106,7 +106,7 @@
             }
             return finder._scrollable;
         },
-        
+
         // uncached html ajax request
         request_html: function(url, callback) {
             $.ajax({
@@ -117,7 +117,7 @@
                 success: callback
             });
         },
-        
+
         // uncached json ajax request
         request_json: function(url, callback) {
             $.ajax({
@@ -127,14 +127,14 @@
                 success: callback
             });
         },
-        
+
         // reset finder dom elem references
         reset: function() {
             finder._overlay = null;
             finder._scrollable = null;
             finder._base_url = null;
         },
-        
+
         // initialize finder
         initialize: function() {
             var idx = 0;
@@ -159,7 +159,7 @@
             var index = finder.scroll_api.getSize() - 4;
             finder.scroll_api.seekTo(index, 1);
         },
-        
+
         // initialize column navigation UI callback
         prepare_navigation: function(event, index) {
             var size = finder.columns.length;
@@ -174,18 +174,18 @@
                 button.removeClass('disabled');
             }
         },
-        
+
         // bind focus and keyup events on column filter input field
         bind_column_filter: function() {
             var overlay = finder.overlay();
-            
+
             // reset filter input field
             $('input.column_filter', overlay).bind('focus', function() {
                 finder.current_filter = null;
                 this.value = '';
                 $(this).css('color', '#000');
             });
-            
+
             // refresh focused column with filtered listing
             $('input.column_filter', overlay).bind('keyup', function() {
                 finder.current_filter = this.value;
@@ -203,10 +203,10 @@
                 });
             });
         },
-        
+
         // bind click events to column items
         bind_colums_items: function(column) {
-            
+
             // expand contents to the right
             $('a.column_expand', column).bind('click', function() {
                 var uid = finder.column_uid(this);
@@ -214,14 +214,14 @@
                 finder.current_item = uid;
                 finder.query_column(this, 'bda.plone.finder.expand');
             });
-            
+
             // expand details to the right
             $('a.column_details', column).bind('click', function() {
                 finder.current_item = finder.column_uid(this);
                 finder.query_column(this, 'bda.plone.finder.details');
             });
         },
-        
+
         // scroll column to item if necessary
         scroll_column_to: function(column, selector) {
             var selected = $(selector, column);
@@ -239,7 +239,7 @@
                 }
             }
         },
-        
+
         // query finder column
         query_column: function(elem, view) {
             var obj_uid = finder.column_uid(elem);
@@ -255,12 +255,12 @@
                 }
             });
         },
-        
+
         // apply finder column
         apply_column: function(after, data, index) {
             var scroll_api = finder.scroll_api;
             var items = scroll_api.getItems();
-            
+
             // detect after position
             var after_uid;
             var after_position = 0;
@@ -272,7 +272,7 @@
                     break;
                 }
             }
-            
+
             // set column uid's in finder.columns and detect after_col
             var column_uid = $(data).get(0).id;
             column_uid = column_uid.substring(14, column_uid.length);
@@ -289,10 +289,10 @@
                     finder.columns[i] = null;
                 }
             }
-            
+
             // append new column after after_col
             after_col.after(data);
-            
+
             // replace remaining columns with empty column or collect
             // them to be removed 
             var to_remove = [];
@@ -308,7 +308,7 @@
                     remove_count++;
                 }
             }
-            
+
             // remove superfluos columns and finalize
             $(to_remove).remove();
             finder.trim_column_arr(after_position + 1);
@@ -321,7 +321,7 @@
             index = index < 0 ? 0 : index;
             finder.scroll_api.seekTo(index, 1);
         },
-        
+
         // trim finder.columns array
         trim_column_arr: function(count) {
             var new_columns = [];
@@ -333,32 +333,32 @@
             }
             finder.columns = new_columns;
         },
-        
+
         // set selected column item
         set_selected_item: function(column, uid) {
             $('li.selected', column).toggleClass('selected');
             $('#finder_nav_item_' + uid, column).toggleClass('selected');
         },
-        
+
         // extract column uid
         column_uid: function(navitem) {
             var uid = $(navitem).parent().attr('id');
             return uid.substring(16, uid.length);
         },
-        
+
         /* finder member objects */
-        
+
         // yes / no dialog
         dialog: {
-        
+
             // current dialog message
             msg: 'You see a dialog with an unset message',
-            
+
             // dialog dom element
             elem: function() {
                 return $('div.finder_dialog', finder.overlay());
             },
-            
+
             // show dialog and bind callback to ok button click event
             show: function(callback) {
                 var dialog = finder.dialog.elem();
@@ -373,19 +373,19 @@
                 });
                 dialog.fadeIn('fast');
             },
-            
+
             // fade out dialog
             hide: function() {
                 finder.dialog.elem().fadeOut('fast');
             }
         },
-        
+
         // action dropdown menu
         dropdown: {
-        
+
             // dropdown dom element. set before triggered
             elem: null,
-            
+
             // show dropdown menu
             show: function(view, uid, callback) {
                 var dropdown = finder.dropdown.elem;
@@ -419,21 +419,21 @@
                 dropdown.css('display', 'block');
             }
         },
-        
+
         // finder actions object.
         // provide querying and executing of actions for a specific context.
         actions: {
-        
+
             /* actions object members */
-            
+
             uid: null,
             column: null,
             actions: null,
             url: null,
             name: null,
-            
+
             /* actions object functions */
-            
+
             // load actions for current selected item and bind events
             load: function(uid, column) {
                 finder.actions.uid = uid;
@@ -466,7 +466,7 @@
                             }
                         }
                     }
-                    
+
                     // perform after actions load hooks
                     // XXX adopt to $.each
                     for (var hook_name in finder.hooks.actions_loaded) {
@@ -477,7 +477,7 @@
                     }
                 });
             },
-            
+
             // remove disabled css class from action dom element
             enable: function(action) {
                 if (action.hasClass('disabled')) {
@@ -485,7 +485,7 @@
                 }
                 action.unbind();
             },
-            
+
             // add disabled css class from action dom element
             disable: function(action) {
                 if (!action.hasClass('disabled')) {
@@ -497,7 +497,7 @@
                     return false;
                 });
             },
-            
+
             // execute action
             //
             // action: the action link
@@ -515,7 +515,7 @@
                     href = action.attr('href');
                 }
                 finder.actions.name = name;
-                
+
                 // set action url. value depends if ajax action or not
                 var cb;
                 if (ajax) {
@@ -523,7 +523,7 @@
                     finder.actions.url = 'bda.plone.finder.execute?uid=';
                     finder.actions.url += finder.actions.uid;
                     finder.actions.url += '&name=' + finder.actions.name;
-                    
+
                     // consider optional parameters if execute is called 
                     // manually
                     if (options && options.params) {
@@ -537,7 +537,7 @@
                     cb = finder.actions.follow_action_link;
                     finder.actions.url = action.attr('href');
                 }
-                
+
                 // execute befor action hook if exists and return
                 var hook = finder.hooks.actions[finder.actions.name];
                 if (hook) {
@@ -547,7 +547,7 @@
                         return;
                     }
                 }
-                
+
                 // no hook defined for action, execute action performing
                 // callback directly
                 if (ajax) {
@@ -556,12 +556,12 @@
                     finder.actions.follow_action_link();
                 }
             },
-            
+
             // follow action link callback for non ajax actions
             follow_action_link: function() {
                 document.location.href = finder.actions.url;
             },
-            
+
             // ajax action callback, expected to be called by
             // ``finder.actions.execute`` by action callback
             perform_ajax: function() {
@@ -587,23 +587,23 @@
                 });
             }
         },
-        
+
         // object for finder hooks.
         hooks: {
-            
+
             // hooks executed after actions load
             actions_loaded: {},
-            
+
             // before and after hooks for actions by id
             actions: {}
         }
     };
-    
+
     // set action hook utility function
     $.extend(finder.utils, {
-        
+
         // set autoload and load function
-        
+
         // reload column after action, see below at action hooks
         reload_column_hook: function(uid, container, data) {
             var overlay = finder.overlay();
@@ -611,10 +611,10 @@
             var elem = $(selector, overlay).get(0);
             finder.query_column(elem, 'bda.plone.finder.expand');
         },
-        
+
         // transitions action extension
         transitions: {
-        
+
             // bind change state action
             bind: function(actions) {
                 var overlay = finder.overlay();
@@ -628,7 +628,7 @@
                     return false;
                 });
             },
-            
+
             // query transitions and display dropdown
             query_transitions: function(action) {
                 if ($(action).hasClass('disabled')) {
@@ -654,22 +654,22 @@
             }
         }
     });
-    
+
     // set finder hooks for specific actions
     $.extend(finder.hooks.actions, {
-        
+
         // change state action
         action_change_state: {
-            
+
             // no action before change state
             before: null,
-            
+
             // reload after change state action
             after: function(uid, container, data) {
-                
+
                 // XXX: remove item and no column rendering if wf change caused
                 //      context to be inaccessable (postbox style)
-                
+
                 // query new wf state and alter css class
                 var url = 'bda.plone.finder.review_state?uid=' + uid;
                 finder.request_html(url, function(data) {
@@ -688,7 +688,7 @@
                     });
                     elem.attr('class', classes + 'state-' + parts[1]);
                 });
-                
+
                 // render details column. skip if details view is actually not
                 // shown
                 var overlay = finder.overlay();
@@ -707,24 +707,24 @@
                 });
             }
         },
-        
+
         // cut action
         action_cut: {
-            
+
             // no action before cut
             before: null,
-            
+
             // reload column after cut action
             after: finder.utils.reload_column_hook
         },
-        
+
         // delete action
         action_delete: {
-            
+
             // before hook sets original base url, after hook overwrites finder
             // base url if necessary.
             _base_url: null,
-            
+
             // confirm_delete, display confirmation dialog
             before: function(uid, container, callback) {
                 finder.dialog.msg = 'Do you really want to delete this item?';
@@ -738,7 +738,7 @@
                     }
                 });
             },
-            
+
             // reload column after delete action
             after: function(uid, container, data) {
                 var del_url = finder.hooks.actions.action_delete._base_url;
@@ -760,13 +760,13 @@
                 }
             }
         },
-        
+
         // paste action
         action_paste: {
-            
+
             // no action before paste
             before: null,
-            
+
             // paste_entry, reload column after paste action
             after: function(uid, container, data) {
                 var url = 'bda.plone.finder.expand?uid=' + uid;
@@ -782,10 +782,10 @@
             }
         }
     });
-    
+
     // set finder hooks for after actions load
     $.extend(finder.hooks.actions_loaded, {
-        
+
         // rebind add action dropdown with current focused column
         rebind_add_action: function(actions) {
             var overlay = finder.overlay();
@@ -807,7 +807,7 @@
                 return false;
             });
         },
-        
+
         // bind transitions dropdown menu
         bind_tansitions_dropdown: finder.utils.transitions.bind
     });

@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '1.1'
+version = '1.2'
 shortdesc ="Mac Finder like view for Plone."
 longdesc = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
 
@@ -10,11 +10,11 @@ setup(name='bda.plone.finder',
       description=shortdesc,
       long_description=longdesc,
       classifiers=[
-            'Environment :: Web Environment',
-            'License :: OSI Approved :: GNU General Public License (GPL)',
-            'Operating System :: OS Independent',
-            'Programming Language :: Python', 
-            'Topic :: Internet :: WWW/HTTP :: Dynamic Content',        
+          'Environment :: Web Environment',
+          'License :: OSI Approved :: GNU General Public License (GPL)',
+          'Operating System :: OS Independent',
+          'Programming Language :: Python',
+          'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
       ],
       keywords='',
       author='Robert Niederreiter',

@@ -9,7 +9,7 @@
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="zope2.View"
     />
-    
+
     <browser:page
         for="bda.plone.finder.interfaces.IPloneContent"
         name="finder_details"
@@ -17,7 +17,7 @@
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="zope2.View"
     />
-    
+
     <browser:page
         for="bda.plone.finder.interfaces.IPloneControlPanel"
         name="finder_details"
@@ -25,7 +25,7 @@
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="cmf.ManagePortal"
     />
-    
+
     <browser:page
         for="bda.plone.finder.interfaces.IPloneAddons"
         name="finder_details"
@@ -33,7 +33,7 @@
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="cmf.ManagePortal"
     />
-    
+
     <browser:page
         for="bda.plone.finder.interfaces.IPloneConfigItem"
         name="finder_details"
@@ -41,8 +41,8 @@
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="cmf.ManagePortal"
     />
-	
-	<browser:page
+
+    <browser:page
         zcml:condition="installed Products.Archetypes"
         for="Products.Archetypes.interfaces.IBaseObject"
         name="finder_details"
@@ -50,7 +50,7 @@
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="zope2.View"
     />
-    
+
     <browser:page
         zcml:condition="installed Products.Archetypes"
         for="Products.ATContentTypes.interfaces.IATImage"
@@ -59,7 +59,7 @@
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="zope2.View"
     />
-    
+
     <browser:page
         zcml:condition="installed Products.Archetypes"
         for="Products.ATContentTypes.interfaces.IATEvent"
@@ -68,7 +68,7 @@
         layer="bda.plone.finder.interfaces.IFinderLayer"
         permission="zope2.View"
     />
-    
+
     <browser:page
         zcml:condition="installed plone.dexterity"
         for="plone.dexterity.interfaces.IDexterityItem"
