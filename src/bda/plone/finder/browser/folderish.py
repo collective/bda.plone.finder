@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from zope.interface import implements
+from zope.interface import implementer
 from zope.component import getMultiAdapter
 from Acquisition import aq_inner
 from Products.Five import BrowserView
@@ -18,10 +18,8 @@ from bda.plone.finder.browser.utils import (
 )
 
 
+@implementer(IFolderishColumn)
 class FolderColumn(BrowserView):
-
-    implements(IFolderishColumn)
-
     __call__ = ViewPageTemplateFile('templates/column.pt')
 
     @property

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import simplejson as json
-from zope.interface import implements
+from zope.interface import implementer
 from zope.component import (
     getMultiAdapter,
     getAdapters,
@@ -95,9 +95,8 @@ class Actions(BrowserView, ExecutionInfo):
         return provider.get(self.uid)
 
 
+@implementer(IAction)
 class Action(object):
-    implements(IAction)
-
     flavor = 'default'
     title = None
     order = 0

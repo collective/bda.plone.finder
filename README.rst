@@ -88,6 +88,8 @@ Changes
 1.2
 ---
 
+- Use ``zope.interface.implementer`` instead of ``zope.interface.implements``
+
 - Update import for Plone 4.3 compat
 
 - Add profile dependencies so that only one profile need be selected

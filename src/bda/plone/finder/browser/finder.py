@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from zope.interface import implements
+from zope.interface import implementer
 from zope.component import getAdapters
 from Acquisition import (
     aq_inner,
@@ -22,7 +22,6 @@ from bda.plone.finder.browser.utils import (
 
 
 class TriggerViewlet(ViewletBase):
-
     render = ViewPageTemplateFile('templates/trigger.pt')
 
     @property
@@ -33,7 +32,6 @@ class TriggerViewlet(ViewletBase):
 
 
 class PathViewlet(ViewletBase, ExecutionInfo):
-
     render = ViewPageTemplateFile('templates/basepath.pt')
 
     def update(self):
@@ -51,10 +49,8 @@ class PathViewlet(ViewletBase, ExecutionInfo):
         return context.absolute_url()
 
 
+@implementer(IFinder)
 class Finder(BrowserView, ExecutionInfo):
-
-    implements(IFinder)
-
     __call__ = ViewPageTemplateFile('templates/finder.pt')
 
     @property

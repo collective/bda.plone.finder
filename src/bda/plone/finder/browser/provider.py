@@ -4,7 +4,7 @@ from Acquisition import (
     aq_parent,
 )
 from zope.interface import (
-    implements,
+    implementer,
     directlyProvides,
     noLongerProvides,
 )
@@ -23,8 +23,8 @@ from bda.plone.finder.interfaces import (
 from bda.plone.finder.browser.utils import ControlPanelItems
 
 
+@implementer(IUidProvider)
 class DefaultUidProvider(object):
-    implements(IUidProvider)
 
     def uid(self, context, request):
         if hasattr(context, 'UID'):
@@ -32,11 +32,10 @@ class DefaultUidProvider(object):
         return 'root'
 
 
+@implementer(IColumnProvider)
 class ColumnProvider(object):
     """Abstract column provider.
     """
-    implements(IColumnProvider)
-
     flavor = 'default'
 
     def __init__(self, context):

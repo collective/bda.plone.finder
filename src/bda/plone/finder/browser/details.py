@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from zope.interface import implements
+from zope.interface import implementer
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.memoize.instance import memoize
@@ -29,11 +29,10 @@ DETAILS_CONTENT = """
 """
 
 
+@implementer(IColumn)
 class Details(BrowserView):
     """Details base. Used as fallback.
     """
-
-    implements(IColumn)
 
     def __call__(self):
         if anon():
@@ -69,7 +68,6 @@ class Details(BrowserView):
 
 
 class DefaultDetails(Details):
-
     details = ViewPageTemplateFile('templates/default_details.pt')
     preview_template = None
 
@@ -124,12 +122,10 @@ class DefaultDetails(Details):
 
 
 class ATImageDetails(DefaultDetails):
-
     preview_template = ViewPageTemplateFile('templates/image_preview.pt')
 
 
 class ATEventDetails(DefaultDetails):
-
     preview_template = ViewPageTemplateFile('templates/event_preview.pt')
 
     @property
@@ -166,7 +162,6 @@ class ATEventDetails(DefaultDetails):
 
 
 class PloneDetails(Details):
-
     details = ViewPageTemplateFile('templates/plone_details.pt')
 
     @property

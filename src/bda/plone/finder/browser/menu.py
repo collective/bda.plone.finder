@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from zope.interface import implements
+from zope.interface import implementer
 from zope.component import getUtility
 from zope.browsermenu.interfaces import IBrowserMenu
 from Products.Five import BrowserView
@@ -13,9 +13,8 @@ from bda.plone.finder.browser.utils import (
 )
 
 
+@implementer(IDropdown)
 class FinderDropdown(BrowserView, ExecutionInfo):
-    implements(IDropdown)
-
     __call__ = ViewPageTemplateFile(u'templates/dropdown.pt')
 
     @property
