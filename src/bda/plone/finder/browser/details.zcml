@@ -71,7 +71,7 @@
 
     <browser:page
         zcml:condition="installed plone.dexterity"
-        for="plone.dexterity.interfaces.IDexterityItem"
+        for="plone.dexterity.interfaces.IDexterityContent"
         name="finder_details"
         class=".details.DefaultDetails"
         layer="bda.plone.finder.interfaces.IFinderLayer"

@@ -1,9 +1,14 @@
-from setuptools import setup, find_packages
-import sys, os
+import os
+from setuptools import (
+    setup,
+    find_packages,
+)
 
-version = '1.2'
+
+version = '1.2.1dev'
 shortdesc ="Mac Finder like view for Plone."
 longdesc = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
+
 
 setup(name='bda.plone.finder',
       version=version,
@@ -37,7 +42,6 @@ setup(name='bda.plone.finder',
       ),
       entry_points="""
       # -*- Entry points: -*-
-
       [z3c.autoinclude.plugin]
       target = plone
       """,

@@ -85,6 +85,13 @@ Contributors
 Changes
 =======
 
+1.2.1dev
+--------
+
+- bind default details to IDexterityContent instead of IDexterityItem in order
+  to work with dexterity containers
+
+
 1.2
 ---
 
