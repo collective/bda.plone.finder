@@ -2,10 +2,11 @@
 <rolemap>
   <permissions>
 	<permission name="bda.plone.finder: Trigger Finder" acquire="False">
-      <role name="Authenticated"/>
-      <role name="Member"/>
-      <role name="Manager"/>
+      <role name="Editor"/>
+      <role name="Contributor"/>
+      <role name="Reviewer"/>
       <role name="Site Administrator"/>
+      <role name="Manager"/>
     </permission>
   </permissions>
 </rolemap>

@@ -9,7 +9,6 @@ from zope.interface import (
     noLongerProvides,
 )
 from zope.component import getMultiAdapter
-from Products.Archetypes.interfaces import IBaseContent
 from bda.plone.finder.interfaces import (
     IUidProvider,
     IColumnProvider,
@@ -21,6 +20,16 @@ from bda.plone.finder.interfaces import (
     IFinderRoot,
 )
 from bda.plone.finder.browser.utils import ControlPanelItems
+try:
+    from Products.Archetypes.interfaces import IBaseContent
+    AT_INSTALLED = True
+except ImportError:
+    AT_INSTALLED = False
+try:
+    from plone.dexterity.interfaces import IDexterityContent
+    DX_INSTALLED = True
+except ImportError:
+    DX_INSTALLED = False
 
 
 @implementer(IUidProvider)
@@ -174,6 +183,15 @@ class CatalogProvider(ColumnProvider):
             ret = u'<div class="finder_column">%s</div>' % unicode(e)
         return ret
 
+    def _root_child_is_content(self, container, child):
+        if not IFinderRoot.providedBy(container):
+            return False
+        if AT_INSTALLED and IBaseContent.providedBy(child):
+            return True
+        if DX_INSTALLED and IDexterityContent.providedBy(child):
+            return True
+        return False
+
     def rendered_columns(self, uid):
         ret = list()
         context = aq_inner(self.get(uid))
@@ -181,8 +199,7 @@ class CatalogProvider(ColumnProvider):
             ret.append(self._render(context))
             child = context
             context = aq_parent(context)
-            if IFinderRoot.providedBy(context) \
-              and IBaseContent.providedBy(child):
+            if self._root_child_is_content(context, child):
                 root = RootProvider(context)
                 ret.append(root.render('plone_content', 'finder_column'))
                 ret.append(root.render('root', 'finder_column'))

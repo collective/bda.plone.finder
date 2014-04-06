@@ -85,6 +85,20 @@ Contributors
 Changes
 =======
 
+1.3
+---
+
+- Default roles for triggering finder are now Editor, Contributor, Reviewer,
+  Site Administrator and Manager
+
+- Work with either Archetypes and or Dexterity installed
+
+- Fix child check in ``CatalogProvider`` in order to consider direct DX
+  content
+
+- Remove minified version of finder JS
+
+
 1.2.1
 -----
 
