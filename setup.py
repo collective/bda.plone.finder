@@ -5,7 +5,7 @@ from setuptools import (
 )
 
 
-version = '1.3'
+version = '1.3.1'
 shortdesc ="Mac Finder like view for Plone."
 longdesc = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
 

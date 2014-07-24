@@ -103,12 +103,12 @@ class PloneRoot(FolderColumn):
         if self.request.getURL()[:-17] != self.context.absolute_url():
             uid = 'plone_content'
         items = [
-            ('plone_content', _('Content'), 'logoIcon.gif'),
+            ('plone_content', _('Content'), 'logoIcon.png'),
         ]
         if has_permission('Manage portal', self.context):
             items += [
-                ('plone_control_panel', _('Control Panel'), 'site_icon.gif'),
-                ('plone_addons', _('Addon Configuration'), 'product_icon.gif'),
+                ('plone_control_panel', _('Control Panel'), 'site_icon.png'),
+                ('plone_addons', _('Addon Configuration'), 'product_icon.png'),
             ]
         for id, title, icon in items:
             ret.append(nav_item(item_id(id),

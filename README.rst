@@ -85,6 +85,12 @@ Contributors
 Changes
 =======
 
+1.3.1
+-----
+
+- Use png version of logo, site and product icons
+
+
 1.3
 ---
 
